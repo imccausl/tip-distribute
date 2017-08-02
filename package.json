@@ -1,0 +1,17 @@
+{
+  "name": "tip-distribute",
+  "version": "1.0.0",
+  "description": "A react app for distributing tips at sbux",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "react",
+    "tips",
+    "sbux",
+    "mvc"
+  ],
+  "author": "Ian McCausland",
+  "license": "ISC"
+}

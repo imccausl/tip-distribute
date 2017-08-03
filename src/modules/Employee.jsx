@@ -1,3 +1,6 @@
+/* Employee.jsx
+ * Allow editing of Employee name and Hours Worked for tip out calculation
+ */
 import React, { Component } from 'react';
 import Card, { CardActions, CardTitle, CardText } from 'material-ui/Card';
 import RaisedButton from 'material-ui/RaisedButton';

@@ -19,6 +19,13 @@ module.exports = {
         exclude: [/node_modules/],
         use: [{
           loader: 'babel-loader',
+        },
+        {
+          test: /\.jsx$/,
+          exclude: [/node_modules/],
+          use: [{
+            loader: 'babel-loader',
+          }],
         }],
       },
     ],
@@ -28,7 +35,9 @@ module.exports = {
       name: 'vendor',
     }),
     new HtmlWebpackPlugin({
-      template: path.join(__dirname, './src/index.html'),
+      template: './src/index.html',
+      filename: 'index.html',
+      inject: 'body',
     }),
   ],
 };

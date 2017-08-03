@@ -1,5 +1,6 @@
 const path = require('path');
 const webpack = require('webpack');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
   context: path.join(__dirname, 'src'),
@@ -25,6 +26,9 @@ module.exports = {
   plugins: [
     new webpack.optimize.CommonsChunkPlugin({
       name: 'vendor',
+    }),
+    new HtmlWebpackPlugin({
+      template: path.join(__dirname, './src/index.html'),
     }),
   ],
 };

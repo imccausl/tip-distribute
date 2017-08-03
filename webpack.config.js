@@ -5,8 +5,8 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 module.exports = {
   context: path.join(__dirname, 'src'),
   entry: {
-    app: './app.js',
-    vendor: ['react', 'react-dom'],
+    app: './app.jsx',
+    vendor: ['react', 'react-dom', 'material-ui', 'react-tap-event-plugin'],
   },
   output: {
     path: path.join(__dirname, 'dist'),

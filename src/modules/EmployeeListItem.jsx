@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { ListItem } from 'material-ui/List';
 import IconMenu from 'material-ui/IconMenu';
 import MenuItem from 'material-ui/MenuItem';
@@ -24,15 +24,25 @@ const rightIconMenu = (
   </IconMenu>
 );
 
-const EmployeeListItem = () => (
-  <div>
-    <ListItem
-      rightIconButton={rightIconMenu}
-      primaryText="Employee Name"
-      secondaryText="Hours Worked"
-    />
-    <Divider inset={true} />
-  </div>
-);
+class EmployeeListItem extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state.employee = { name, hours };
+  }
+
+  render() {
+    return (
+      <div>
+        <ListItem
+          rightIconButton={rightIconMenu}
+          primaryText="Employee Name"
+          secondaryText="Hours Worked"
+        />
+        <Divider inset={true} />
+      </div>
+    )
+  }
+}
 
 export default EmployeeListItem;

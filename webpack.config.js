@@ -9,8 +9,8 @@ module.exports = {
     vendor: ['react', 'react-dom'],
   },
   output: {
-    path: path.join(__dirname, 'dist/assets'),
-    filename: '[name].bundle.js',
+    path: path.join(__dirname, 'dist'),
+    filename: './assets/[name].bundle.js',
   },
   module: {
     rules: [
@@ -24,7 +24,7 @@ module.exports = {
       {
         test: /\.jsx$/,
         exclude: [/node_modules/],
-        use: [{            
+        use: [{
           loader: 'babel-loader',
         }],
       },
@@ -35,7 +35,7 @@ module.exports = {
       name: 'vendor',
     }),
     new HtmlWebpackPlugin({
-      template: './src/index.html',
+      template: './index.html',
       filename: 'index.html',
       inject: 'body',
     }),

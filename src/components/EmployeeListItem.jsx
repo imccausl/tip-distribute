@@ -6,6 +6,7 @@ import IconButton from 'material-ui/IconButton';
 import Divider from 'material-ui/Divider';
 import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
 import { grey400, darkBlack, lightBlack } from 'material-ui/styles/colors';
+import Employee from './Employee.jsx';
 
 const iconButtonElement = (
   <IconButton
@@ -27,8 +28,6 @@ const rightIconMenu = (
 class EmployeeListItem extends Component {
   constructor(props) {
     super(props);
-
-    this.state.employee = { name, hours };
   }
 
   render() {
@@ -36,12 +35,13 @@ class EmployeeListItem extends Component {
       <div>
         <ListItem
           rightIconButton={rightIconMenu}
-          primaryText="Employee Name"
-          secondaryText="Hours Worked"
+          primaryText={this.props.name}
+          secondaryText={this.props.hours}
+          onTouchTap={this.props.clicked}
         />
         <Divider inset={true} />
       </div>
-    )
+    );
   }
 }
 

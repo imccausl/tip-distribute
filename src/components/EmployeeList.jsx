@@ -11,6 +11,8 @@ import { showModal } from '../actions/modalActions';
 
 class EmployeeList extends Component {
   renderList() {
+    if (!this.props.employees) return null;
+    
     return this.props.employees.map(employee => (
       <EmployeeListItem 
         key={employee.name} 
@@ -30,7 +32,7 @@ class EmployeeList extends Component {
     return (
       <div>
       <List>
-        <Subheader>Employees Involved in This Tip Out</Subheader>
+        <Subheader>Tipout Week Ending: [WeekEnding]</Subheader>
         {this.renderList()}
       </List>
       <Employee open={this.props.open} />

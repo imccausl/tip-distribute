@@ -6,12 +6,13 @@ module.exports = {
   context: path.join(__dirname, 'src'),
   entry: {
     app: './app.jsx',
-    vendor: ['react', 'react-dom', 'material-ui', 'react-tap-event-plugin'],
+    vendor: ['react', 'react-dom', 'material-ui', 'react-tap-event-plugin', 'redux', 'react-redux'],
   },
   output: {
     path: path.join(__dirname, 'dist'),
     filename: './assets/[name].bundle.js',
   },
+  devtool: 'cheap-module-eval-source-map',
   module: {
     rules: [
       {

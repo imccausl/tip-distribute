@@ -36,8 +36,8 @@ class TipOutListItem extends Component {
       <div>
         <ListItem
           rightIconButton={rightIconMenu}
-          primaryText={this.props.week}
-          secondaryText={this.props.cash}
+          primaryText={"Week Ending " + this.props.week}
+          secondaryText={"Total Tipout: $" + this.props.cash}
           onTouchTap={this.props.clicked}
         />
         <Divider inset={true} />
@@ -45,6 +45,5 @@ class TipOutListItem extends Component {
     );
   }
 }
-
 
 export default TipOutListItem;

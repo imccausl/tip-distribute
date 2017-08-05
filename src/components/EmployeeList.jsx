@@ -11,7 +11,6 @@ import { showModal } from '../actions/modalActions';
 
 class EmployeeList extends Component {
   renderList() {
-    console.log(this.props.tipOut.employees); 
     return this.props.tipOut.employees.map(employee => (
       <EmployeeListItem 
         key={employee.name} 
@@ -29,13 +28,12 @@ class EmployeeList extends Component {
 
   render() {
    
-    console.log(this.props.tipOut);
-    if (!this.props.tipOut) return null;    
+    if (!this.props.tipOut) return null;
         
     return (
       <div>
       <List>
-        <Subheader>Tipout Week Ending: [WeekEnding]</Subheader>
+        <Subheader>Tipout Week Ending: {this.props.tipOut.weekEnding}</Subheader>
         {this.renderList()}
       </List>
       <Employee open={this.props.open} />
@@ -46,7 +44,7 @@ class EmployeeList extends Component {
 
 function mapStateToProps(state) {
   return {
-    tipOut: state.tipOut,
+    tipOut: state.activeTipOut,
     open: state.showModal,
   };
 }

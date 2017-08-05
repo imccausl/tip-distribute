@@ -1,7 +1,6 @@
 function populateTipOutList(tipOut) {
-  console.log(tipOut);
   return {
-    type: 'POPULATE_LIST',
+    type: 'TIPOUT_SELECTED',
     payload: tipOut,
   }
 }

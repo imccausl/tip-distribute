@@ -1,17 +1,14 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import AppBar from 'material-ui/AppBar';
 import IconButton from 'material-ui/IconButton';
 import IconMenu from 'material-ui/IconMenu';
 import MenuItem from 'material-ui/MenuItem';
 import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
+import { showDrawer } from '../actions/drawerActions';
 
-class MainMenu extends Component {
-  constructor(props) {
-    super(props);
-  }
-
-  render() {
-    return (
+const MainMenu = () => (
       <IconMenu
         iconButtonElement={<IconButton><MoreVertIcon /></IconButton>}
         targetOrigin={{horizontal: 'right', vertical: 'top'}}
@@ -22,15 +19,32 @@ class MainMenu extends Component {
         <MenuItem primaryText="MenuItem3" />
       </IconMenu>
     );
+
+class TipAppBar extends Component {
+  constructor(props) {
+    super(props);
+  }
+
+  render() {
+    console.log(this.props.drawerOpen);
+    return (
+      <AppBar
+        title="Tip Out Generator"
+        iconElementRight={<MainMenu />}
+        onLeftIconButtonTouchTap={() => this.props.showDrawer()}
+      />
+    );
   }
 }
 
-const TipAppBar = () => (
-  <AppBar
-    ref="leftNav"
-    title="Tip Out Generator"
-    iconElementRight={<MainMenu />}
-  />
-);
+function mapStateToProps(state) {
+  return {
+    drawerOpen: state.showDrawer,
+  };
+}
 
-export default TipAppBar;
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators({ showDrawer }, dispatch);
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(TipAppBar);

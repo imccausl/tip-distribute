@@ -5,16 +5,20 @@ import Subheader from 'material-ui/Subheader';
 import { bindActionCreators } from 'redux';
 import TipOutListItem from './TipOutListItem.jsx';
 import selectTipOut from '../actions/tipOutActions';
+import { hideDrawer } from '../actions/drawerActions';
 
 class TipOutList extends Component {
   renderList() {
     return this.props.tipOuts.map(tipOut => (
-      <TipOutListItem 
-        key={tipOut.date}
-        name={tipOut.date}
-        hours={tipOut.cash}
+      <TipOutListItem
+        key={tipOut.weekEnding}
+        week={tipOut.weekEnding}
+        cash={tipOut.totalCash}
         employees={tipOut.employees}
-        clicked={() => this.props.selectTipOut(tipOut)}
+        clicked={() => {
+          this.props.selectTipOut(tipOut);
+          this.props.hideDrawer();
+        }}
       />
     ),
     );
@@ -24,7 +28,6 @@ class TipOutList extends Component {
     return (
       <div>
       <List>
-        <Subheader>Tipout Week Ending:</Subheader>
         {this.renderList()}
       </List>
       </div>
@@ -35,11 +38,12 @@ class TipOutList extends Component {
 function mapStateToProps(state) {
   return {
     tipOuts: state.tipOuts,
+    drawerOpen: state.showDrawer,
   };
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({ selectTipOut }, dispatch);
+  return bindActionCreators({ selectTipOut, hideDrawer }, dispatch);
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(TipOutList);

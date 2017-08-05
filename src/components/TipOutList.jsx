@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { List } from 'material-ui/List';
-import Subheader from 'material-ui/Subheader';
 import { bindActionCreators } from 'redux';
 import TipOutListItem from './TipOutListItem.jsx';
 import selectTipOut from '../actions/tipOutActions';

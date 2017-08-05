@@ -26,7 +26,6 @@ class TipAppBar extends Component {
   }
 
   render() {
-    console.log(this.props.drawerOpen);
     return (
       <AppBar
         title="Tip Out Generator"

@@ -10,7 +10,6 @@ class TipOutDrawer extends Component {
   }
 
   render() {
-    console.log("Drawer:", this.props.drawerOpen);
     return (
       <div>
         <Drawer

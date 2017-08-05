@@ -15,8 +15,8 @@ const MainMenu = () => (
         targetOrigin={{horizontal: 'right', vertical: 'top'}}
         anchorOrigin={{horizontal: 'right', vertical: 'top'}}
       >
-        <MenuItem primaryText="New Tipout..." />
-        <Divider />
+        <MenuItem primaryText="Add People to Tip Out..." />
+        <Divider /> 
         <MenuItem primaryText="MenuItem2" />
         <MenuItem primaryText="MenuItem3" />
       </IconMenu>
@@ -24,9 +24,15 @@ const MainMenu = () => (
 
 class TipAppBar extends Component {
   render() {
+    let headerText = "";
+    if (!this.props.tipOut) 
+      headerText = "No Tipout Selected";
+    else
+      headerText = "Tip Out for Week Ending " + this.props.tipOut.weekEnding;
+
     return (
       <AppBar
-        title="Tip Out Generator"
+        title={headerText}
         iconElementRight={<MainMenu />}
         onLeftIconButtonTouchTap={() => this.props.showDrawer()}
       />
@@ -37,6 +43,7 @@ class TipAppBar extends Component {
 function mapStateToProps(state) {
   return {
     drawerOpen: state.showDrawer,
+    tipOut: state.activeTipOut,
   };
 }
 

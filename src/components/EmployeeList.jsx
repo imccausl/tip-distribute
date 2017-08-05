@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { List } from 'material-ui/List';
-import Subheader from 'material-ui/Subheader';
 import { bindActionCreators } from 'redux';
 import EmployeeListItem from './EmployeeListItem.jsx';
 import selectEmployee from '../actions/index';
@@ -33,7 +32,6 @@ class EmployeeList extends Component {
     return (
       <div>
       <List>
-        <Subheader>Tipout Week Ending: {this.props.tipOut.weekEnding}</Subheader>
         {this.renderList()}
       </List>
       <Employee open={this.props.open} />

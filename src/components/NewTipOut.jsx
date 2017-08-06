@@ -5,8 +5,6 @@ import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import TextField from 'material-ui/TextField';
 import DatePicker from 'material-ui/DatePicker';
-import Divider from 'material-ui/Divider';
-import Paper from 'material-ui/Paper';
 import { hideNewTipOutDialog } from '../actions/newTipOutDialogActions';
 
 class NewTipOut extends Component {
@@ -52,8 +50,6 @@ class NewTipOut extends Component {
         <TextField
           floatingLabelText="Cash Amount to Distribute"
         />
-        <Divider />
-
       </Dialog>
     );
   }

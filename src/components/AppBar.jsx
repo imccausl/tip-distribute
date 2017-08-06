@@ -16,9 +16,9 @@ const MainMenu = () => (
         anchorOrigin={{horizontal: 'right', vertical: 'top'}}
       >
         <MenuItem primaryText="Add People to Tip Out..." />
-        <Divider /> 
-        <MenuItem primaryText="MenuItem2" />
-        <MenuItem primaryText="MenuItem3" />
+        <MenuItem primaryText="Edit Date and Cash..." />
+         <Divider /> 
+        <MenuItem primaryText="Distribute Tips" />
       </IconMenu>
     );
 
@@ -28,7 +28,7 @@ class TipAppBar extends Component {
     if (!this.props.tipOut) 
       headerText = "No Tipout Selected";
     else
-      headerText = "Tip Out for Week Ending " + this.props.tipOut.weekEnding;
+      headerText = this.props.tipOut.weekEnding;
 
     return (
       <AppBar

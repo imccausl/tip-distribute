@@ -30,11 +30,11 @@ class Employee extends Component {
           <CardText>
             <TextField
               floatingLabelText="Employee Name"
-              value={this.props.employee.name}
+              defaultValue={this.props.employee.name}
             />
             <TextField
               floatingLabelText="Tippable Hours Worked"
-              value={this.props.employee.hours}
+              defaultValue={this.props.employee.hours}
             />
           </CardText>
           <CardActions>

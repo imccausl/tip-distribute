@@ -1,12 +1,10 @@
-let personId = 0;
-
-function addNewPersonToCurrentTipOut(person) {
+export default function addNewPersonToCurrentTipOut(person) {
   return {
     type: 'ADD_NEW_PERSON_TO_CURRENT_TIP_OUT',
-    id: personId++,
-    name: person.name,
-    hours: person.hours,
+    payload: {
+      id: person.id,
+      name: person.name,
+      hours: person.hours,
+    },
   };
 }
-
-export default addNewPersonToCurrentTipOut;

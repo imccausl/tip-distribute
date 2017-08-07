@@ -10,7 +10,7 @@ import SvgIcon from 'material-ui/SvgIcon';
 import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
 import ContentAdd from 'material-ui/svg-icons/content/add';
 import { showDrawer } from '../actions/drawerActions';
-import { showAddPeopleDialog } from '../actions/toggleAddPeopleDialog';
+import addNewPerson from '../actions/addNewPersonToCurrentTipOut';
 
 class TipAppBar extends Component {
 
@@ -33,17 +33,38 @@ class TipAppBar extends Component {
       );
     }
 
+    makeNewId() {
+      const tempId = new Date();
+      const parsedDate = Date.parse(tempId);
+
+      // prevent unique key errors if button is clicked more than once a second
+      const randomizer = Math.floor(Math.random() * parsedDate);
+      return parsedDate + randomizer;
+    }
+
+    addButton() {
+      return (
+        <IconButton
+          toolTip="Add new person to tip out"
+          onTouchTap={() => this.props.addNewPerson({ 
+            id: this.makeNewId(), name: 'New Person', hours: '0' })}
+        >
+          <SvgIcon><ContentAdd /></SvgIcon>
+        </IconButton>
+      )
+    }
+
   render() {
     let headerText = "";
     if (!this.props.tipOut) 
       headerText = "No Tipout Selected";
     else
       headerText = 'Week: ' + this.props.tipOut.weekEnding;
-
+    console.log("AppBAR:", this.props.tipOut);
     return (
       <AppBar
         title={headerText}
-        iconElementRight={this.MainMenu()}
+        iconElementRight={this.addButton()}
         onLeftIconButtonTouchTap={() => this.props.showDrawer()}
       />
     );
@@ -53,13 +74,12 @@ class TipAppBar extends Component {
 function mapStateToProps(state) {
   return {
     drawerOpen: state.showDrawer,
-    showAddPeople: state.toggleAddPeopleDialog,
     tipOut: state.activeTipOut,
   };
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({ showDrawer, showAddPeopleDialog }, dispatch);
+  return bindActionCreators({ showDrawer, addNewPerson }, dispatch);
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(TipAppBar);

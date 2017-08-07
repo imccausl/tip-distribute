@@ -1,4 +1,4 @@
-const EmployeesModel = () => [
+const initialState = [
   {
     weekEnding: 'July 20',
     totalCash: 228,
@@ -54,4 +54,18 @@ const EmployeesModel = () => [
   },
 ];
 
-export default EmployeesModel;
+export default function tipOutsReducer(state = initialState, action){
+  switch (action.type) {
+    case 'ADD_NEW_TIP_OUT':
+      return [
+        ...state,
+        {
+          weekEnding: action.payload.weekEnding,
+          totalCash: action.payload.totalCash,
+          employees: action.payload.employees,
+        },
+      ];
+    default:
+      return state;
+  }
+}

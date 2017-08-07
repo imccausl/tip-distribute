@@ -7,11 +7,35 @@ import SinglePerson from './SinglePerson.jsx';
 import { hideAddPeopleDialog } from '../actions/toggleAddPeopleDialog';
 
 class AddPeople extends Component {
+  constructor(props) {
+    super(props);
+
+    let tempId = 0;
+    const newPeople = [{ id: tempId += 1, name: '', hours: 0 }];
+    this.state = { newPeople };
+    this.addPeopleHandler = this.addPeopleHandler.bind(this);
+  }
+
+  addPeopleHandler(tempId) {
+    const parsedDate = Date.parse(tempId)
+    const randomizer = Math.floor(Math.random() * parsedDate); // prevent unique key errors if button is clicked more than once a second
+    const id = parsedDate + randomizer;
+
+    console.log(parsedDate, randomizer, id);
+    const newElement = this.state.newPeople.concat({ id, name: '', hours: 0 });
+
+    this.setState({ newPeople: newElement });
+  }
+
   render() {
+    const tempId = new Date();
+    const addPeople = this.state.newPeople.map(
+      person => <SinglePerson addPerson={() => this.addPeopleHandler(tempId)} key={person.id} name={person.name} hours={person.hours} />);
+
     const actions = [
       <FlatButton
         label="Cancel"
-        onTouchTap={ () => this.props.hideAddPeopleDialog() }
+        onTouchTap={() => this.props.hideAddPeopleDialog()}
       />,
       <FlatButton
         primary={true}
@@ -24,9 +48,10 @@ class AddPeople extends Component {
       <Dialog
         title="Add People To Tip Out"
         actions={actions}
+        autoScrollBodyContent={true}
         open={this.props.open}
       >
-        <SinglePerson />
+        {addPeople}
       </Dialog>
     );
   }

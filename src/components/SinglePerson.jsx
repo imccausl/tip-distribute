@@ -7,9 +7,14 @@ import ContentAdd from 'material-ui/svg-icons/content/add';
 import ContentRemove from 'material-ui/svg-icons/content/remove';
 
 class SinglePerson extends Component {
+  constructor(props) {
+    super(props);
+  }
+  
   render() {
     const style = {
       padding: '0 10px',
+      margin: '5px 0',
     };
 
     return (
@@ -27,7 +32,7 @@ class SinglePerson extends Component {
         <IconButton tooltip="Remove this person">
           <SvgIcon><ContentRemove /></SvgIcon>
         </IconButton>
-        <IconButton tooltip="Add another person">
+        <IconButton tooltip="Add another person" onTouchTap={this.props.addPerson}>
           <SvgIcon><ContentAdd /></SvgIcon>
         </IconButton>
       </Paper>

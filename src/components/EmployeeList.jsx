@@ -13,7 +13,7 @@ class EmployeeList extends Component {
   renderList() {
     return this.props.tipOut.employees.map(employee => (
       <EmployeeListItem 
-        key={employee.name} 
+        key={employee.id} 
         name={employee.name} 
         hours={employee.hours} 
         clicked={() => {

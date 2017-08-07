@@ -2,9 +2,11 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { List } from 'material-ui/List';
 import { bindActionCreators } from 'redux';
+import NewTipOut from './NewTipOut.jsx';
 import TipOutListItem from './TipOutListItem.jsx';
 import selectTipOut from '../actions/tipOutActions';
 import { hideDrawer } from '../actions/drawerActions';
+import { showNewTipOutDialog } from '../actions/newTipOutDialogActions';
 
 class TipOutList extends Component {
   renderList() {
@@ -24,11 +26,13 @@ class TipOutList extends Component {
   }
 
   render() {
+    console.log("in TipOutList:",this.props.tipOuts);
     return (
       <div>
       <List>
         {this.renderList()}
       </List>
+      <NewTipOut isOpen={this.props.newTipOut} />
       </div>
     );
   }
@@ -38,11 +42,12 @@ function mapStateToProps(state) {
   return {
     tipOuts: state.tipOuts,
     drawerOpen: state.showDrawer,
+    newTipOut: state.showTipOutDialog,
   };
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({ selectTipOut, hideDrawer }, dispatch);
+  return bindActionCreators({ selectTipOut, hideDrawer, showNewTipOutDialog }, dispatch);
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(TipOutList);

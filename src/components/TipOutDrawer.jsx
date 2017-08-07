@@ -9,7 +9,6 @@ import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
 import IconButton from 'material-ui/IconButton';
 import Divider from 'material-ui/Divider';
 import TipOutList from './TipOutList.jsx';
-import NewTipOut from './NewTipOut.jsx';
 import { showNewTipOutDialog } from '../actions/newTipOutDialogActions';
 
 class TipOutDrawer extends Component {
@@ -45,7 +44,6 @@ class TipOutDrawer extends Component {
           </Toolbar>
           <TipOutList />
         </Drawer>
-        <NewTipOut isOpen={this.props.newTipOut} />
       </div>
     );
   }
@@ -54,7 +52,6 @@ class TipOutDrawer extends Component {
 function mapStateToProps(state) {
   return {
     drawerOpen: state.showDrawer,
-    newTipOut: state.showTipOutDialog,
   };
 }
 

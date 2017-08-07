@@ -9,6 +9,16 @@ import { hideDrawer } from '../actions/drawerActions';
 import { showNewTipOutDialog } from '../actions/newTipOutDialogActions';
 
 class TipOutList extends Component {
+  componentWillMount() {
+    console.log("in TipOutList:",this.props.tipOuts);
+    
+    if (!this.props.tipOuts[0]) {
+      this.props.showNewTipOutDialog();
+    }
+
+    return null;
+  }
+
   renderList() {
     return this.props.tipOuts.map(tipOut => (
       <TipOutListItem
@@ -24,9 +34,14 @@ class TipOutList extends Component {
     ),
     );
   }
-
+  
   render() {
-    console.log("in TipOutList:",this.props.tipOuts);
+    console.log(this.props.tipOuts);
+
+    if (!this.props.tipOuts[0]) {
+      return <NewTipOut isOpen={this.props.newTipOut} />;
+    }
+
     return (
       <div>
       <List>

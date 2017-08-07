@@ -5,7 +5,7 @@ export default function addNewTipOut(tipOuts) {
     payload: {
       weekEnding: tipOuts.weekEnding,
       totalCash: tipOuts.totalCash,
-      employees: [{ id: 0, name: '', hours: 0 }],
+      employees: [{ id: 0, name: 'New Person', hours: '0' }],
     },
   };
 }

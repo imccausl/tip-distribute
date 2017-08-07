@@ -7,6 +7,7 @@ import selectEmployee from '../actions/index';
 import Employee from './Employee.jsx';
 import AddPeople from './AddPeople.jsx';
 import { showModal } from '../actions/modalActions';
+import { showAddPeopleDialog } from '../actions/toggleAddPeopleDialog';
 
 
 class EmployeeList extends Component {
@@ -50,7 +51,7 @@ function mapStateToProps(state) {
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({ selectEmployee, showModal }, dispatch);
+  return bindActionCreators({ selectEmployee, showModal, showAddPeopleDialog }, dispatch);
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(EmployeeList);

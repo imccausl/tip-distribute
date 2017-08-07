@@ -38,7 +38,7 @@ class TipAppBar extends Component {
     if (!this.props.tipOut) 
       headerText = "No Tipout Selected";
     else
-      headerText = this.props.tipOut.weekEnding;
+      headerText = 'Week: ' + this.props.tipOut.weekEnding;
 
     return (
       <AppBar

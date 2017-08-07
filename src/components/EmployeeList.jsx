@@ -1,27 +1,42 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { List } from 'material-ui/List';
 import { bindActionCreators } from 'redux';
-import EmployeeListItem from './EmployeeListItem.jsx';
 import selectEmployee from '../actions/index';
-import Employee from './Employee.jsx';
-import AddPeople from './AddPeople.jsx';
+import SinglePerson from './SinglePerson.jsx';
 import { showModal } from '../actions/modalActions';
 import { showAddPeopleDialog } from '../actions/toggleAddPeopleDialog';
 
 
 class EmployeeList extends Component {
+  constructor(props) {
+    super(props);
+
+    let tempId = 0;
+    const newPeople = [{ id: tempId += 1, name: '', hours: 0 }];
+    this.state = { newPeople };
+    this.addPeopleHandler = this.addPeopleHandler.bind(this);
+  }
+
+  addPeopleHandler(tempId) {
+    const parsedDate = Date.parse(tempId);
+    // prevent unique key errors if button is clicked more than once a second
+    const randomizer = Math.floor(Math.random() * parsedDate);
+    const id = parsedDate + randomizer;
+
+    const newElement = this.state.newPeople.concat({ id, name: '', hours: 0 });
+
+    this.setState({ newPeople: newElement });
+  }
+
   renderList() {
+    const tempId = new Date();
+
     return this.props.tipOut.employees.map(employee => (
-      <EmployeeListItem 
-        key={employee.id} 
-        name={employee.name} 
-        hours={employee.hours} 
-        clicked={() => {
-          
-          this.props.selectEmployee(employee);
-          this.props.showModal();
-        }}
+      <SinglePerson
+        addPerson={() => this.addPeopleHandler(tempId)}
+        key={employee.id}
+        name={employee.name}
+        hours={employee.hours}
       />
     ),
     );
@@ -32,11 +47,7 @@ class EmployeeList extends Component {
 
     return (
       <div>
-      <List>
         {this.renderList()}
-      </List>
-      <Employee open={this.props.open} />
-      <AddPeople open={this.props.showDialog} />
       </div>
     );
   }

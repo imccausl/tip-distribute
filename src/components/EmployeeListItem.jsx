@@ -3,10 +3,6 @@ import Paper from 'material-ui/Paper';
 import TextField from 'material-ui/TextField';
 
 class EmployeeListItem extends Component {
-  constructor(props) {
-    super(props);
-  }
-
   render() {
     return (
       <Paper>

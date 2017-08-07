@@ -6,23 +6,33 @@ import IconButton from 'material-ui/IconButton';
 import IconMenu from 'material-ui/IconMenu';
 import MenuItem from 'material-ui/MenuItem';
 import Divider from 'material-ui/Divider';
+import SvgIcon from 'material-ui/SvgIcon';
 import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
+import ContentAdd from 'material-ui/svg-icons/content/add';
 import { showDrawer } from '../actions/drawerActions';
+import { showAddPeopleDialog } from '../actions/toggleAddPeopleDialog';
 
-const MainMenu = () => (
+class TipAppBar extends Component {
+
+  MainMenu() {
+      return (
       <IconMenu
         iconButtonElement={<IconButton><MoreVertIcon /></IconButton>}
         targetOrigin={{horizontal: 'right', vertical: 'top'}}
         anchorOrigin={{horizontal: 'right', vertical: 'top'}}
       >
-        <MenuItem primaryText="Add People to Tip Out..." />
+        <MenuItem 
+          primaryText="Add People to Tip Out..."
+          leftIcon={<SvgIcon><ContentAdd /></SvgIcon>}
+          onTouchTap={() => this.props.showAddPeopleDialog()}
+        />
         <MenuItem primaryText="Edit Date and Cash..." />
          <Divider /> 
         <MenuItem primaryText="Distribute Tips" />
       </IconMenu>
-    );
+      );
+    }
 
-class TipAppBar extends Component {
   render() {
     let headerText = "";
     if (!this.props.tipOut) 
@@ -33,7 +43,7 @@ class TipAppBar extends Component {
     return (
       <AppBar
         title={headerText}
-        iconElementRight={<MainMenu />}
+        iconElementRight={this.MainMenu()}
         onLeftIconButtonTouchTap={() => this.props.showDrawer()}
       />
     );
@@ -43,12 +53,13 @@ class TipAppBar extends Component {
 function mapStateToProps(state) {
   return {
     drawerOpen: state.showDrawer,
+    showAddPeople: state.toggleAddPeopleDialog,
     tipOut: state.activeTipOut,
   };
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({ showDrawer }, dispatch);
+  return bindActionCreators({ showDrawer, showAddPeopleDialog }, dispatch);
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(TipAppBar);

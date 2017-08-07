@@ -4,7 +4,7 @@ import Paper from 'material-ui/Paper';
 import IconButton from 'material-ui/IconButton';
 import SvgIcon from 'material-ui/SvgIcon';
 import ContentAdd from 'material-ui/svg-icons/content/add';
-import ContentRemove from 'material-ui/svg-icons/content/remove';
+import ContentRemove from 'material-ui/svg-icons/content/remove-circle-outline';
 
 class SinglePerson extends Component {
   render() {
@@ -27,9 +27,6 @@ class SinglePerson extends Component {
         />
         <IconButton tooltip="Remove this person">
           <SvgIcon><ContentRemove /></SvgIcon>
-        </IconButton>
-        <IconButton tooltip="Add another person" onTouchTap={this.props.addPerson}>
-          <SvgIcon><ContentAdd /></SvgIcon>
         </IconButton>
       </Paper>
     );

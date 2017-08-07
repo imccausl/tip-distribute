@@ -1,6 +1,5 @@
-const initialState = [
-  {
-    weekEnding: 'July 20',
+/* 
+weekEnding: 'July 20',
     totalCash: 228,
     employees: [
       { id: 1, name: 'Ian McCausland', hours: 40 },
@@ -51,8 +50,9 @@ const initialState = [
       { id: 7,name: 'Drishti Thakar', hours: 10 },
       { id: 8,name: 'Paul Sheffield', hours: 28 },
     ],
-  },
-];
+*/
+
+const initialState = {};
 
 export default function tipOutsReducer(state = initialState, action){
   switch (action.type) {

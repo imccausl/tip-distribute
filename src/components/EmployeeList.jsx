@@ -5,6 +5,7 @@ import { bindActionCreators } from 'redux';
 import EmployeeListItem from './EmployeeListItem.jsx';
 import selectEmployee from '../actions/index';
 import Employee from './Employee.jsx';
+import AddPeople from './AddPeople.jsx';
 import { showModal } from '../actions/modalActions';
 
 
@@ -35,6 +36,7 @@ class EmployeeList extends Component {
         {this.renderList()}
       </List>
       <Employee open={this.props.open} />
+      <AddPeople open={this.props.showDialog} />
       </div>
     );
   }
@@ -43,6 +45,7 @@ class EmployeeList extends Component {
 function mapStateToProps(state) {
   return {
     tipOut: state.activeTipOut,
+    showDialog: state.toggleAddPeopleDialog,
     open: state.showModal,
   };
 }

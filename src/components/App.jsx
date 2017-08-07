@@ -13,10 +13,10 @@ const App = () => (
   <Provider store={store}>
     <div>
     <MuiThemeProvider>
-    <AppBar />
+      <AppBar />
     </MuiThemeProvider>
     <MuiThemeProvider>
-    <TipOutDrawer />
+      <TipOutDrawer />
     </MuiThemeProvider>
     <MuiThemeProvider>
       <EmployeeList />

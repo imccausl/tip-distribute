@@ -11,7 +11,7 @@ import addNewTipOut from '../actions/addNewTipOut';
 class NewTipOut extends Component {
   constructor(props) {
     super(props);
-    this.state = { newDate: null, newTotalCash: 0 }
+    this.state = { newDate: this.parseDate(this.getNearestWeekEnding()), newTotalCash: '0' }
   }
 
   getNearestWeekEnding() {
@@ -24,6 +24,26 @@ class NewTipOut extends Component {
 
   disableWeekdays(date) {
     return date.getDay() !== 0 || date.getDay() >= 5;
+  }
+
+  parseDate(date) {
+    const months = [
+      'January',
+      'February',
+      'March',
+      'April',
+      'May',
+      'June',
+      'July',
+      'August',
+      'September',
+      'October',
+      'November',
+      'December',
+    ];
+
+    const tipOutMonth = months[date.getMonth()];
+    return tipOutMonth.concat(' ', date.getDate());
   }
 
   render() {
@@ -57,35 +77,19 @@ class NewTipOut extends Component {
         onRequestClose={() => this.props.hideNewTipOutDialog()}
       >
         <DatePicker
+          autoOk={true}
           hintText="Week Ending"
           floatingLabelText="Tip Out Week Ending"
           shouldDisableDate={this.disableWeekdays}
           defaultDate={this.getNearestWeekEnding()}
           onChange={(event, newValue) => {
-            const months = [
-              'January',
-              'February',
-              'March',
-              'April',
-              'May',
-              'June',
-              'July',
-              'August',
-              'September',
-              'October',
-              'November',
-              'December',
-            ];
-
-            const tipOutMonth = months[newValue.getMonth()];
-            const tipOutDate = tipOutMonth.concat(' ', newValue.getDate());
-
-            this.setState({ newDate: tipOutDate });
+            this.setState({ newDate: this.parseDate(newValue) });
           }}
         />
         <TextField
           floatingLabelText="Cash Amount to Distribute"
-          onChange={(event, newValue) => this.setState({ newTotalCash: newValue })}
+          defaultValue={this.state.newTotalCash}
+          onChange={(event, newValue) => this.setState({ newTotalCash: newValue || '0' })}
         />
       </Dialog>
     );

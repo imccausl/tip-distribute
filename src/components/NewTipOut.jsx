@@ -77,7 +77,8 @@ class NewTipOut extends Component {
               'December',
             ];
 
-            const tipOutDate = months[newValue.getMonth()] + " " + newValue.getDate();
+            const tipOutMonth = months[newValue.getMonth()];
+            const tipOutDate = tipOutMonth.concat(' ', newValue.getDate());
 
             this.setState({ newDate: tipOutDate });
           }}

@@ -61,7 +61,26 @@ class NewTipOut extends Component {
           floatingLabelText="Tip Out Week Ending"
           shouldDisableDate={this.disableWeekdays}
           defaultDate={this.getNearestWeekEnding()}
-          onChange={(event, newValue) => this.setState({ newDate: newValue } )}
+          onChange={(event, newValue) => {
+            const months = [
+              'January',
+              'February',
+              'March',
+              'April',
+              'May',
+              'June',
+              'July',
+              'August',
+              'September',
+              'October',
+              'November',
+              'December',
+            ];
+
+            const tipOutDate = months[newValue.getMonth()] + " " + newValue.getDate();
+
+            this.setState({ newDate: tipOutDate });
+          }}
         />
         <TextField
           floatingLabelText="Cash Amount to Distribute"

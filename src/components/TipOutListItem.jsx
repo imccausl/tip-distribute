@@ -7,7 +7,6 @@ import IconButton from 'material-ui/IconButton';
 import Divider from 'material-ui/Divider';
 import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
 import { grey400, darkBlack, lightBlack } from 'material-ui/styles/colors';
-import Employee from './Employee.jsx';
 
 const iconButtonElement = (
   <IconButton

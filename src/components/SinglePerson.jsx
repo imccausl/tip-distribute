@@ -7,10 +7,6 @@ import ContentAdd from 'material-ui/svg-icons/content/add';
 import ContentRemove from 'material-ui/svg-icons/content/remove';
 
 class SinglePerson extends Component {
-  constructor(props) {
-    super(props);
-  }
-  
   render() {
     const style = {
       padding: '0 10px',
@@ -22,12 +18,12 @@ class SinglePerson extends Component {
         <TextField
           hintText="Name"
           floatingLabelText="Name"
-          defaultValue="Enter a Name"
+          defaultValue="New Person"
         />
         <TextField
           hintText="Tippable Hours Worked"
           floatingLabelText="Tipable Hours Worked"
-          defaultValue="Hours Worked"
+          defaultValue="0"
         />
         <IconButton tooltip="Remove this person">
           <SvgIcon><ContentRemove /></SvgIcon>

@@ -6,10 +6,12 @@ import FlatButton from 'material-ui/FlatButton';
 import TextField from 'material-ui/TextField';
 import DatePicker from 'material-ui/DatePicker';
 import { hideNewTipOutDialog } from '../actions/newTipOutDialogActions';
+import addNewTipOut from '../actions/addNewTipOut';
 
 class NewTipOut extends Component {
-  disableWeekdays(date) {
-    return date.getDay() !== 0 || date.getDay() >= 5;
+  constructor(props) {
+    super(props);
+    this.state = { newDate: null, newTotalCash: 0 }
   }
 
   getNearestWeekEnding() {
@@ -20,17 +22,30 @@ class NewTipOut extends Component {
     return new Date(today.getFullYear(), today.getMonth(), todaysDate - todaysDay);
   }
 
+  disableWeekdays(date) {
+    return date.getDay() !== 0 || date.getDay() >= 5;
+  }
+
   render() {
     const actions = [
       <FlatButton
         label="Cancel"
         primary={false}
-        onTouchTap={()=>this.props.hideNewTipOutDialog()}
+        onTouchTap={() => this.props.hideNewTipOutDialog()}
       />,
       <FlatButton
         label="Create"
         primary={true}
         keyboardFocused={true}
+        onTouchTap={() => {
+          this.props.addNewTipOut(
+            {
+              weekEnding: this.state.newDate,
+              totalCash: this.state.newTotalCash,
+            });
+
+          this.props.hideNewTipOutDialog();
+        }}
       />,
     ];
     return (
@@ -39,16 +54,18 @@ class NewTipOut extends Component {
         actions={actions}
         autoScrollBodyContent={true}
         open={this.props.isOpen}
-        onRequestClose={()=>this.props.hideNewTipOutDialog()}
+        onRequestClose={() => this.props.hideNewTipOutDialog()}
       >
         <DatePicker
           hintText="Week Ending"
           floatingLabelText="Tip Out Week Ending"
           shouldDisableDate={this.disableWeekdays}
           defaultDate={this.getNearestWeekEnding()}
+          onChange={(event, newValue) => this.setState({ newDate: newValue } )}
         />
         <TextField
           floatingLabelText="Cash Amount to Distribute"
+          onChange={(event, newValue) => this.setState({ newTotalCash: newValue })}
         />
       </Dialog>
     );
@@ -58,11 +75,12 @@ class NewTipOut extends Component {
 function mapPropsToState(state) {
   return {
     isOpen: state.showTipOutDialog,
+    tipOuts: state.tipOuts,
   };
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({ hideNewTipOutDialog }, dispatch);
+  return bindActionCreators({ hideNewTipOutDialog, addNewTipOut }, dispatch);
 }
 
 export default connect(mapPropsToState, mapDispatchToProps)(NewTipOut);

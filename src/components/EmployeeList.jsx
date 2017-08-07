@@ -27,9 +27,8 @@ class EmployeeList extends Component {
   }
 
   render() {
-   
     if (!this.props.tipOut) return null;
-        
+
     return (
       <div>
       <List>

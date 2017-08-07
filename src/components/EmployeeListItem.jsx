@@ -1,29 +1,6 @@
 import React, { Component } from 'react';
-import { ListItem } from 'material-ui/List';
-import IconMenu from 'material-ui/IconMenu';
-import MenuItem from 'material-ui/MenuItem';
-import IconButton from 'material-ui/IconButton';
-import Divider from 'material-ui/Divider';
-import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
-import { grey400, darkBlack, lightBlack } from 'material-ui/styles/colors';
-import Employee from './Employee.jsx';
-
-const iconButtonElement = (
-  <IconButton
-    touch={true}
-    tooltip="Actions"
-    tooltipPosition="bottom-left"
-  >
-    <MoreVertIcon color={grey400} />
-  </IconButton>
-);
-
-const rightIconMenu = (
-  <IconMenu iconButtonElement={iconButtonElement}>
-    <MenuItem>Edit</MenuItem>
-    <MenuItem>Delete</MenuItem>
-  </IconMenu>
-);
+import Paper from 'material-ui/Paper';
+import TextField from 'material-ui/TextField';
 
 class EmployeeListItem extends Component {
   constructor(props) {
@@ -32,15 +9,16 @@ class EmployeeListItem extends Component {
 
   render() {
     return (
-      <div>
-        <ListItem
-          rightIconButton={rightIconMenu}
-          primaryText={this.props.name}
-          secondaryText={this.props.hours}
-          onTouchTap={this.props.clicked}
+      <Paper>
+        <TextField
+          floatingLabelText="Person Name"
+          defaultValue={this.props.name}
         />
-        <Divider inset={true} />
-      </div>
+        <TextField
+          floatingLabelText="Tippable Hours Worked"
+          defaultValue={this.props.hours}
+        />
+      </Paper>
     );
   }
 }

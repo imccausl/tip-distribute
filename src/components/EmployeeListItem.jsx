@@ -4,8 +4,13 @@ import TextField from 'material-ui/TextField';
 
 class EmployeeListItem extends Component {
   render() {
+    const style = {
+      padding: '0 10px',
+      margin: '5px 0',
+    };
+
     return (
-      <Paper>
+      <Paper style={style} zDepth={2}>
         <TextField
           floatingLabelText="Person Name"
           defaultValue={this.props.name}

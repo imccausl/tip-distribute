@@ -8,8 +8,12 @@ import ContentRemove from 'material-ui/svg-icons/content/remove';
 
 class SinglePerson extends Component {
   render() {
+    const style = {
+      padding: '0 10px',
+    };
+
     return (
-      <Paper zDepth={1}>
+      <Paper style={style} zDepth={2}>
         <TextField
           hintText="Name"
           floatingLabelText="Name"

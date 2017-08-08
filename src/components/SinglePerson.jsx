@@ -18,12 +18,12 @@ class SinglePerson extends Component {
         <TextField
           hintText="Name"
           floatingLabelText="Name"
-          defaultValue="New Person"
+          defaultValue={this.props.name}
         />
         <TextField
           hintText="Tippable Hours Worked"
           floatingLabelText="Tipable Hours Worked"
-          defaultValue="0"
+          defaultValue={this.props.hours}
         />
         <IconButton tooltip="Remove this person">
           <SvgIcon><ContentRemove /></SvgIcon>

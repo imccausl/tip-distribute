@@ -10,7 +10,8 @@ import SvgIcon from 'material-ui/SvgIcon';
 import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
 import ContentAdd from 'material-ui/svg-icons/content/add';
 import { showDrawer } from '../actions/drawerActions';
-import addNewPerson from '../actions/addNewPersonToCurrentTipOut';
+import { showModal } from '../actions/modalActions';
+import DistributionReport from './DistributionReport.jsx';
 
 class TipAppBar extends Component {
 
@@ -28,30 +29,11 @@ class TipAppBar extends Component {
         />
         <MenuItem primaryText="Edit Date and Cash..." />
          <Divider /> 
-        <MenuItem primaryText="Distribute Tips" />
+        <MenuItem primaryText="Distribute Tips" 
+          onTouchTap={this.props.showModal}
+        />
       </IconMenu>
       );
-    }
-
-    makeNewId() {
-      const tempId = new Date();
-      const parsedDate = Date.parse(tempId);
-
-      // prevent unique key errors if button is clicked more than once a second
-      const randomizer = Math.floor(Math.random() * parsedDate);
-      return parsedDate + randomizer;
-    }
-
-    addButton() {
-      return (
-        <IconButton
-          toolTip="Add new person to tip out"
-          onTouchTap={() => this.props.addNewPerson({ 
-            id: this.makeNewId(), name: 'New Person', hours: '0' })}
-        >
-          <SvgIcon><ContentAdd /></SvgIcon>
-        </IconButton>
-      )
     }
 
   render() {
@@ -62,11 +44,14 @@ class TipAppBar extends Component {
       headerText = 'Week: ' + this.props.tipOut.weekEnding;
     console.log("AppBAR:", this.props.tipOut);
     return (
-      <AppBar
-        title={headerText}
-        iconElementRight={this.MainMenu()}
-        onLeftIconButtonTouchTap={() => this.props.showDrawer()}
-      />
+      <div>
+        <AppBar
+          title={headerText}
+          iconElementRight={this.MainMenu()}
+          onLeftIconButtonTouchTap={() => this.props.showDrawer()}
+        />
+      <DistributionReport />
+      </div>
     );
   }
 }
@@ -74,12 +59,13 @@ class TipAppBar extends Component {
 function mapStateToProps(state) {
   return {
     drawerOpen: state.showDrawer,
+    open: state.showModal,
     tipOut: state.activeTipOut,
   };
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({ showDrawer, addNewPerson }, dispatch);
+  return bindActionCreators({ showDrawer, showModal }, dispatch);
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(TipAppBar);

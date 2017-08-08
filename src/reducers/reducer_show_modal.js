@@ -1,5 +1,5 @@
 
-function showModal(state = true, action) {
+function showModal(state = false, action) {
   switch (action.type) {
     case 'SHOW_MODAL':
       return action.payload;

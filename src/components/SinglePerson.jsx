@@ -21,8 +21,8 @@ class SinglePerson extends Component {
           defaultValue={this.props.name}
         />
         <TextField
-          hintText="Tippable Hours Worked"
-          floatingLabelText="Tipable Hours Worked"
+          hintText="Hours Worked"
+          floatingLabelText="Hours Worked"
           defaultValue={this.props.hours}
         />
         <IconButton tooltip="Remove this person">

@@ -29,7 +29,7 @@ class SinglePerson extends Component {
           <SvgIcon><ContentRemove /></SvgIcon>
         </IconButton>
         <IconButton
-          toolTip="Add new person to tip out"
+          tooltip="Add new person to tip out"
           onTouchTap={this.props.addPersonClicked}
         >
           <SvgIcon><ContentAdd /></SvgIcon>

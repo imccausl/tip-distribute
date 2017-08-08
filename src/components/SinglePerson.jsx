@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import TextField from 'material-ui/TextField';
 import Paper from 'material-ui/Paper';
 import IconButton from 'material-ui/IconButton';
@@ -39,4 +41,12 @@ class SinglePerson extends Component {
   }
 }
 
-export default SinglePerson;
+function mapStateToProps(state) {
+
+}
+
+function mapDispatchToProps(dispatch) {
+
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(SinglePerson);

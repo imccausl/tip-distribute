@@ -7,9 +7,20 @@ import { showModal } from '../actions/modalActions';
 import addNewPerson from '../actions/addNewPersonToCurrentTipOut';
 
 class EmployeeList extends Component {
+  makeNewId() {
+      const tempId = new Date();
+      const parsedDate = Date.parse(tempId);
+
+      // prevent unique key errors if button is clicked more than once a second
+      const randomizer = Math.floor(Math.random() * parsedDate);
+      return parsedDate + randomizer;
+    }
+    
   renderList() {
     return this.props.tipOut.employees.map(employee => (
       <SinglePerson
+        addPersonClicked={() => this.props.addNewPerson({ 
+            id: this.makeNewId(), name: 'New Person', hours: '0' })}
         key={employee.id}
         name={employee.name}
         hours={employee.hours}

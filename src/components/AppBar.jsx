@@ -64,7 +64,7 @@ class TipAppBar extends Component {
     return (
       <AppBar
         title={headerText}
-        iconElementRight={this.addButton()}
+        iconElementRight={this.MainMenu()}
         onLeftIconButtonTouchTap={() => this.props.showDrawer()}
       />
     );

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import selectEmployee from '../actions/index';
+import selectEmployee from '../actions/selectPerson';
 import SinglePerson from './SinglePerson.jsx';
 import { showModal } from '../actions/modalActions';
 import addNewPerson from '../actions/addNewPersonToCurrentTipOut';

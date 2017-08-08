@@ -1,10 +1,8 @@
-function activeEmployee(state = null, action) {
+export default function activePerson(state = null, action) {
   switch (action.type) {
-    case 'EMPLOYEE_SELECTED':
+    case 'PERSON_SELECTED':
       return action.payload;
     default:
       return state;
   }
 }
-
-export default activeEmployee;

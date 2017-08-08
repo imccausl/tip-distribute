@@ -42,11 +42,13 @@ class SinglePerson extends Component {
 }
 
 function mapStateToProps(state) {
+  return {
 
+  };
 }
 
 function mapDispatchToProps(dispatch) {
-
+  return bindActionCreators( {}, dispatch );
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(SinglePerson);

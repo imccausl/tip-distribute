@@ -7,9 +7,10 @@ import TipOutListItem from './TipOutListItem.jsx';
 import selectTipOut from '../actions/tipOutActions';
 import { hideDrawer } from '../actions/drawerActions';
 import { showNewTipOutDialog } from '../actions/newTipOutDialogActions';
+import selectPeople from '../actions/selectEmployees';
 
 class TipOutList extends Component {
-  componentWillMount() {    
+  componentWillMount() {
     if (!this.props.tipOuts[0]) {
       this.props.showNewTipOutDialog();
     }
@@ -18,32 +19,30 @@ class TipOutList extends Component {
   }
 
   renderList() {
-    return this.props.tipOuts.map(tipOut => (
+    return this.props.tipOuts.map((tipOut, index) => (
       <TipOutListItem
         key={tipOut.weekEnding}
         week={tipOut.weekEnding}
         cash={tipOut.totalCash}
-        employees={tipOut.employees}
-        clicked={() => {
-          this.props.selectTipOut(tipOut);
-          this.props.hideDrawer();
-        }}
+        tipOutObj={tipOut}
+        employees={this.props.people}
+        tipOutIndex={index}
       />
     ),
     );
   }
-  
+
   render() {
-    if (!this.props.tipOuts[0]) {
+    if (!this.props.tipOuts[0] || !this.props.tipOuts) {
       return <NewTipOut isOpen={this.props.newTipOut} />;
     }
 
     return (
       <div>
-      <List>
-        {this.renderList()}
-      </List>
-      <NewTipOut isOpen={this.props.newTipOut} />
+        <List>
+          {this.renderList()}
+        </List>
+        <NewTipOut isOpen={this.props.newTipOut} />
       </div>
     );
   }
@@ -52,13 +51,18 @@ class TipOutList extends Component {
 function mapStateToProps(state) {
   return {
     tipOuts: state.tipOuts,
+    people: state.activePeople,
     drawerOpen: state.showDrawer,
     newTipOut: state.showTipOutDialog,
   };
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({ selectTipOut, hideDrawer, showNewTipOutDialog }, dispatch);
+  return bindActionCreators({ 
+    selectTipOut, 
+    hideDrawer,
+    showNewTipOutDialog,
+    selectPeople }, dispatch);
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(TipOutList);

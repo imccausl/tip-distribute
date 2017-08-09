@@ -37,7 +37,7 @@ class TipOutDrawer extends Component {
           open={this.props.drawerOpen}
         >
           <Toolbar>
-            <ToolbarTitle text="Tip Out History" />
+            <ToolbarTitle text="Previous Tip Outs" />
             <ToolbarGroup>
               {this.tipOutsMenu()}
             </ToolbarGroup>
@@ -52,6 +52,7 @@ class TipOutDrawer extends Component {
 function mapStateToProps(state) {
   return {
     drawerOpen: state.showDrawer,
+    tipOuts: state.tipOuts,
   };
 }
 

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import { ListItem } from 'material-ui/List';
 import IconMenu from 'material-ui/IconMenu';
 import MenuItem from 'material-ui/MenuItem';
@@ -7,6 +8,9 @@ import IconButton from 'material-ui/IconButton';
 import Divider from 'material-ui/Divider';
 import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
 import { grey400, darkBlack, lightBlack } from 'material-ui/styles/colors';
+import selectPeople from '../actions/selectEmployees';
+import selectTipOut from '../actions/tipOutActions';
+import { hideDrawer } from '../actions/drawerActions';
 
 const iconButtonElement = (
   <IconButton
@@ -26,12 +30,8 @@ const rightIconMenu = (
 );
 
 class TipOutListItem extends Component {
-  constructor(props) {
-    super(props);
-  }
-
   render() {
-    const people = this.props.employees.length;
+    const people = (!this.props.employees) ? 0 : this.props.employees.length;
 
     console.log(people);
     const NumOfPeople = () => {
@@ -73,7 +73,14 @@ class TipOutListItem extends Component {
           primaryText={'Week Ending ' + this.props.week}
           secondaryText={'Tipout: $' + this.props.cash}
           rightIcon={<NumOfPeople />}
-          onTouchTap={this.props.clicked}
+          onTouchTap={() => {
+            console.log('tipOutObj?', this.props.tipOutObj);
+            this.props.selectTipOut({
+              index: this.props.tipOutIndex,
+              tipOut: this.props.tipOutObj,
+            });
+            this.props.hideDrawer()
+          }}
         />
         <Divider inset={true} />
       </div>
@@ -81,4 +88,15 @@ class TipOutListItem extends Component {
   }
 }
 
-export default TipOutListItem;
+function mapStateToProps(state) {
+  return {
+    people: state.activePeople,
+    tipOuts: state.tipOuts,
+    tipOut: state.activeTipOut,
+  };
+}
+
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators({ selectPeople, selectTipOut, hideDrawer }, dispatch);
+}
+export default connect(mapStateToProps, mapDispatchToProps)(TipOutListItem);

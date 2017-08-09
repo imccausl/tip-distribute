@@ -19,25 +19,42 @@ const dialogStyle = {
 class Distribution extends Component {
   makeRows() {
     const getTipOut = (hours) => {
-      const allHours = this.props.tipOut.employees.map( employee => parseInt(employee.hours, 10));
+      if (!hours || !this.props.tipOut.tipOut.employees) {
+        return 0;
+      }
+
+      const allHours = this.props.tipOut.tipOut.employees.map( employee => {
+        if (!employee) {
+          return 0;
+        }
+
+        return parseInt(employee.hours, 10)
+      });
+
       const totalHours = allHours.reduce((prev, curr) => prev + curr);
-      const hourlyAmount =  parseInt(this.props.tipOut.totalCash, 10) / totalHours;
+      const hourlyAmount = parseInt(this.props.tipOut.totalCash, 10) / totalHours;
 
       return Math.floor(parseInt(hours, 10) * hourlyAmount);
     }
 
-    return this.props.tipOut.employees.map( employee => (
+    return this.props.tipOut.tipOut.employees.map( employee => 
+      {
+        if (!employee) {
+          return null;
+        }
+
+        return (
       <TableRow key={employee.id}>
         <TableRowColumn>{employee.name}</TableRowColumn>
         <TableRowColumn>{employee.hours}</TableRowColumn>
         <TableRowColumn>{'$' + getTipOut(employee.hours)}</TableRowColumn>
       </TableRow>
-    ));
+    )});
   }
 
   render() {
   if (!this.props.tipOut) return null;
-
+  console.log(this.props.tipOut.tipOut);
   const actions = [
       <FlatButton
         label="Close"

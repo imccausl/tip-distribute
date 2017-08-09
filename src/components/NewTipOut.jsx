@@ -7,6 +7,8 @@ import TextField from 'material-ui/TextField';
 import DatePicker from 'material-ui/DatePicker';
 import { hideNewTipOutDialog } from '../actions/newTipOutDialogActions';
 import addNewTipOut from '../actions/addNewTipOut';
+import addNewPerson from '../actions/addNewPersonToCurrentTipOut';
+import selectPeople from '../actions/selectEmployees';
 
 class NewTipOut extends Component {
   constructor(props) {
@@ -64,6 +66,10 @@ class NewTipOut extends Component {
               totalCash: this.state.newTotalCash,
             });
 
+          this.props.selectPeople(
+             this.props.tipOuts.map( tipOut => tipOut.weekEnding === this.state.newDate)
+          );
+
           this.props.hideNewTipOutDialog();
         }}
       />,
@@ -99,12 +105,13 @@ class NewTipOut extends Component {
 function mapPropsToState(state) {
   return {
     isOpen: state.showTipOutDialog,
+    people: state.activePeople,
     tipOuts: state.tipOuts,
   };
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({ hideNewTipOutDialog, addNewTipOut }, dispatch);
+  return bindActionCreators({ hideNewTipOutDialog, addNewTipOut, addNewPerson, selectPeople }, dispatch);
 }
 
 export default connect(mapPropsToState, mapDispatchToProps)(NewTipOut);

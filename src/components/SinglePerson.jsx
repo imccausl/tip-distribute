@@ -7,8 +7,17 @@ import IconButton from 'material-ui/IconButton';
 import SvgIcon from 'material-ui/SvgIcon';
 import ContentAdd from 'material-ui/svg-icons/content/add-circle-outline';
 import ContentRemove from 'material-ui/svg-icons/content/remove-circle-outline';
+import updatePerson from '../actions/updatePerson';
+import addNewPerson from '../actions/addNewPersonToCurrentTipOut';
+import selectTipOut from '../actions/tipOutActions';
 
 class SinglePerson extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = { canUpdate: false };
+  }
+
   render() {
     const style = {
       padding: '0 10px',
@@ -16,11 +25,26 @@ class SinglePerson extends Component {
     };
 
     return (
-      <Paper style={style} zDepth={2}>
+      <Paper style={style} zDepth={1}>
         <TextField
           hintText="Name"
           floatingLabelText="Name"
-          defaultValue={this.props.name}
+          defaultValue={this.props.personName}
+          onFocus={() => {
+            this.setState({ canUpdate: true })
+          }}
+          onBlur={
+            (e) => {
+              if (this.state.canUpdate) {
+                this.setState({ canUpdate: false });
+                this.props.updatePerson({
+                  fromIndex: this.props.tipOut.index,
+                  name: e.target.value,
+                  id: this.props.id,
+                  hours: this.props.hours,
+                });
+              }
+            }}
         />
         <TextField
           hintText="Hours Worked"
@@ -30,12 +54,6 @@ class SinglePerson extends Component {
         <IconButton tooltip="Remove this person">
           <SvgIcon><ContentRemove /></SvgIcon>
         </IconButton>
-        <IconButton
-          tooltip="Add new person to tip out"
-          onTouchTap={this.props.addPersonClicked}
-        >
-          <SvgIcon><ContentAdd /></SvgIcon>
-        </IconButton>
       </Paper>
     );
   }
@@ -43,12 +61,14 @@ class SinglePerson extends Component {
 
 function mapStateToProps(state) {
   return {
-
+    drawerOpen: state.showDrawer,
+    tipOuts: state.tipOuts,
+    tipOut: state.activeTipOut,
   };
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators( {}, dispatch );
+  return bindActionCreators({ updatePerson, addNewPerson, selectTipOut }, dispatch);
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(SinglePerson);

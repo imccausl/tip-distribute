@@ -4,25 +4,18 @@ import { bindActionCreators } from 'redux';
 import selectEmployee from '../actions/selectPerson';
 import SinglePerson from './SinglePerson.jsx';
 import { showModal } from '../actions/modalActions';
-import addNewPerson from '../actions/addNewPersonToCurrentTipOut';
+import selectPeople from '../actions/selectEmployees';
 
 class EmployeeList extends Component {
-  makeNewId() {
-      const tempId = new Date();
-      const parsedDate = Date.parse(tempId);
-
-      // prevent unique key errors if button is clicked more than once a second
-      const randomizer = Math.floor(Math.random() * parsedDate);
-      return parsedDate + randomizer;
-    }
-    
   renderList() {
-    return this.props.tipOut.employees.map(employee => (
+    console.log("people", this.props.people);
+
+    return this.props.people.map(employee => (
       <SinglePerson
-        addPersonClicked={() => this.props.addNewPerson({ 
-            id: this.makeNewId(), name: 'New Person', hours: '0' })}
         key={employee.id}
-        name={employee.name}
+        id={employee.id}
+        //person={employee}
+        personName={employee.name}
         hours={employee.hours}
       />
     ),
@@ -30,9 +23,7 @@ class EmployeeList extends Component {
   }
 
   render() {
-    if (!this.props.tipOut) return null;
-    
-    console.log(this.props.tipOut);
+    if (!this.props.people) return null;
 
     return (
       <div>
@@ -45,12 +36,13 @@ class EmployeeList extends Component {
 function mapStateToProps(state) {
   return {
     tipOut: state.activeTipOut,
+    people: state.activePeople,
     open: state.showModal,
   };
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({ selectEmployee, showModal, addNewPerson }, dispatch);
+  return bindActionCreators({ selectEmployee, showModal, selectPeople }, dispatch);
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(EmployeeList);

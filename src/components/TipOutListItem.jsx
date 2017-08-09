@@ -31,12 +31,48 @@ class TipOutListItem extends Component {
   }
 
   render() {
+    const people = this.props.employees.length;
+
+    console.log(people);
+    const NumOfPeople = () => {
+      const style = {
+        position: 'relative',
+        borderRadius: '50%',
+        color: 'black',
+        backgroundColor: 'lightGrey',
+        width: '30px',
+        height: '30px',
+        textAlign: 'center',
+        margin: '5px',
+        fontWeight: 'bold',
+      };
+
+      const spanStyle = {
+        position: 'absolute',
+        top: '6px',
+        left: (people < 10) ? '10px' : '6px',
+      };
+
+      const styleAbsolute = {
+        position: 'absolute',
+        right: '20px',
+      };
+
+      return (
+        <div style={styleAbsolute}>
+          <div style={style}>
+            <span style={spanStyle}>{people}</span>
+          </div>
+        </div>
+      );
+    };
+
     return (
       <div>
         <ListItem
-          rightIconButton={rightIconMenu}
-          primaryText={"Week Ending " + this.props.week}
-          secondaryText={"Total Tipout: $" + this.props.cash}
+          primaryText={'Week Ending ' + this.props.week}
+          secondaryText={'Tipout: $' + this.props.cash}
+          rightIcon={<NumOfPeople />}
           onTouchTap={this.props.clicked}
         />
         <Divider inset={true} />

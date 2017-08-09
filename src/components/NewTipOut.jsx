@@ -66,9 +66,9 @@ class NewTipOut extends Component {
               totalCash: this.state.newTotalCash,
             });
 
-          this.props.selectPeople(
-             this.props.tipOuts.map( tipOut => tipOut.weekEnding === this.state.newDate)
-          );
+          // this.props.selectPeople(
+          //   this.props.tipOuts.map( tipOut => tipOut.weekEnding === this.state.newDate)
+          // );
 
           this.props.hideNewTipOutDialog();
         }}

@@ -1,3 +1,5 @@
+import makeNewId from '../helpers/makeNewId';
+
 export default function addNewTipOut(tipOuts) {
   console.log("in action:", tipOuts);
   return {
@@ -5,7 +7,7 @@ export default function addNewTipOut(tipOuts) {
     payload: {
       weekEnding: tipOuts.weekEnding,
       totalCash: tipOuts.totalCash,
-      employees: [{ id: 0, name: 'New Person', hours: '0' }],
+      employees: {id:makeNewId(), name: 'New Person', hours: '0'},
     },
   };
 }

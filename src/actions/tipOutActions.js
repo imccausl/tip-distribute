@@ -1,8 +1,11 @@
-function populateTipOutList(tipOut) {
+function populateTipOutList(newState) {
   return {
     type: 'TIPOUT_SELECTED',
-    payload: tipOut,
-  }
+    payload: {
+      index: newState.index,
+      tipOut: newState.tipOut,
+    },
+  };
 }
 
 export default populateTipOutList;

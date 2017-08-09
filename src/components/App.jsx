@@ -7,16 +7,19 @@ import rootReducer from '../reducers/index';
 import AppBar from './AppBar.jsx';
 import TipOutDrawer from './TipOutDrawer.jsx';
 
-const store = createStore(rootReducer);
+const store = createStore(
+  rootReducer,
+  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__(), // debugger
+);
 
 const App = () => (
   <Provider store={store}>
     <div>
     <MuiThemeProvider>
-      <AppBar />
+      <TipOutDrawer />
     </MuiThemeProvider>
     <MuiThemeProvider>
-      <TipOutDrawer />
+      <AppBar />
     </MuiThemeProvider>
     <MuiThemeProvider>
       <EmployeeList />

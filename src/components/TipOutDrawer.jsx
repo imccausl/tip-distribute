@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import Drawer from 'material-ui/Drawer';
@@ -9,19 +10,29 @@ import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
 import IconButton from 'material-ui/IconButton';
 import Divider from 'material-ui/Divider';
 import TipOutList from './TipOutList.jsx';
-import { showNewTipOutDialog } from '../actions/newTipOutDialogActions';
+import NewTipOut from './NewTipOut.jsx';
+import showModal from '../actions/modalActions';
 
 class TipOutDrawer extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = { isOpen: true };
+  }
+
   tipOutsMenu() {
     return (
       <IconMenu
         iconButtonElement={<IconButton><MoreVertIcon /></IconButton>}
-        anchorOrigin={{horizontal: 'left', vertical: 'top'}}
-        targetOrigin={{horizontal: 'left', vertical: 'top'}}
+        anchorOrigin={{ horizontal: 'left', vertical: 'top' }}
+        targetOrigin={{ horizontal: 'left', vertical: 'top' }}
       >
-        <MenuItem 
+        <MenuItem
           primaryText="New Tip Out..."
-          onTouchTap={() => this.props.showNewTipOutDialog()}
+          onTouchTap={
+            () => {
+              this.props.showModal('ADD_NEW_TIP_OUT', true);
+            }}
         />
         <Divider />
         <MenuItem primaryText="Combine Tip Outs..." />
@@ -31,23 +42,33 @@ class TipOutDrawer extends Component {
   }
 
   render() {
+    console.log("TipOutDrawer State:", this.state);
+    if (!this.props.tipOuts[0] || !this.props.tipOuts) {
+      this.props.showModal('ADD_NEW_TIP_OUT', true);
+    }
+
     return (
       <div>
         <Drawer
           open={this.props.drawerOpen}
         >
           <Toolbar>
-            <ToolbarTitle text="Previous Tip Outs" />
+            <ToolbarTitle text="Tip Outs" />
             <ToolbarGroup>
               {this.tipOutsMenu()}
             </ToolbarGroup>
           </Toolbar>
           <TipOutList />
         </Drawer>
+        <NewTipOut open={this.state.newTipOutOpen} />
       </div>
     );
   }
 }
+
+TipOutDrawer.propTypes = {
+  showModal: PropTypes.func.isRequired,
+};
 
 function mapStateToProps(state) {
   return {
@@ -57,7 +78,7 @@ function mapStateToProps(state) {
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({ showNewTipOutDialog }, dispatch);
+  return bindActionCreators({ showModal }, dispatch);
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(TipOutDrawer);

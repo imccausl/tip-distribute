@@ -1,15 +1,9 @@
-function showModal() {
+export default function showModal(modal, isOpen) {
   return {
     type: 'SHOW_MODAL',
-    payload: true,
-  }
+    payload: {
+      modal,
+      isOpen,
+    },
+  };
 }
-
-function hideModal() {
-  return {
-    type: 'HIDE_MODAL',
-    payload: false,
-  }
-}
-
-export { showModal, hideModal };

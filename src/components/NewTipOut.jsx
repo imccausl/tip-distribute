@@ -91,6 +91,7 @@ class NewTipOut extends Component {
               });
 
             this.props.addNewPerson(newPerson);
+            this.props.updateTipOuts(tipOutId, [newPerson]);
             this.props.showModal('ADD_NEW_TIP_OUT', false);
           }}
         />,
@@ -127,6 +128,7 @@ class NewTipOut extends Component {
 }
 
 NewTipOut.propTypes = {
+  updateTipOuts: PropTypes.func.isRequired,
   showModal: PropTypes.func.isRequired,
   addNewTipOut: PropTypes.func.isRequired,
   addNewPerson: PropTypes.func.isRequired,
@@ -135,6 +137,7 @@ NewTipOut.propTypes = {
 function mapPropsToState(state) {
   return {
     tipOuts: state.tipOuts,
+    activePeople: state.activePeople,
     modalAction: state.modalAction,
   };
 }
@@ -142,6 +145,7 @@ function mapPropsToState(state) {
 function mapDispatchToProps(dispatch) {
   return bindActionCreators({
     showModal,
+    updateTipOuts,
     addNewTipOut,
     addNewPerson,
   }, dispatch);

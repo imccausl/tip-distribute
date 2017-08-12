@@ -11,10 +11,11 @@ const initialState = [
   //   ],
   // },
   // {
+  //   id:
   //   weekEnding: 'July 27',
   //   totalCash: 200,
   //   employees: [
-  //     { id: '6',name: 'Ian McCausland', hours: '40' },
+  //     { id: '6',name: 'Ian McCausland', hours: '40', belongsTo: },
   //     { id: '7',name: 'Kathleen James', hours: '40' },
   //     { id: '8',name: 'Khavy Tran', hours: '35' },
   //     { id: '9',name: 'John Reyes', hours: '30' },
@@ -54,25 +55,45 @@ const initialState = [
  // },
 ];
 
-export default function tipOutsReducer(state = initialState, action){
+export default function tipOutsReducer(state = initialState, action) {
   switch (action.type) {
     case 'ADD_NEW_TIP_OUT':
       return [
         ...state,
         {
+          id: action.payload.id,
           weekEnding: action.payload.weekEnding,
           totalCash: action.payload.totalCash,
-          employees: [action.payload.employees],
         },
       ];
+    case 'ADD_PEOPLE_TO_CURRENT_TIP_OUT':
+    console.log(state, action.payload);
+      return state.map((tipOut) => {
+        console.log("checking", tipOut.id, "for", action.payload.belongsTo);
+        if (tipOut.id === action.payload.belongsTo) {
+          const appendedTipOut = Object.assign({}, tipOut);
+          const allEmployees = (!tipOut.employees) ? action.payload.employees : tipOut.employees.concat(action.payload.employees);
+
+          console.log("FOUND IT!");
+
+          appendedTipOut.employees = [
+            ...allEmployees,
+          ];
+
+          return appendedTipOut;
+        }
+        console.log(tipOut);
+        return tipOut;
+      });
     case 'UPDATE_PERSON':
-      return state.map((tipOut, i) => {
-        if (i === action.payload.fromIndex) {
+      return state.map((tipOut) => {
+        if (tipOut.id === action.payload.belongsTo) {
           return {
+            id: tipOut.id,
             weekEnding: tipOut.weekEnding,
             totalCash: tipOut.totalCash,
             employees: tipOut.employees.map(
-             employee => (employee.id === action.payload.id) ? {id: action.payload.id, name: action.payload.name, hours: action.payload.hours} : employee,
+             employee => (employee.id === action.payload.id) ? { id: action.payload.id, name: action.payload.name, hours: action.payload.hours } : employee,
             ),
           };
         }

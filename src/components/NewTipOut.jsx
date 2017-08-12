@@ -90,7 +90,8 @@ class NewTipOut extends Component {
                 totalCash: this.state.newTotalCash,
               });
 
-            this.props.addNewPerson(newPerson).then(this.props.showModal('ADD_NEW_TIP_OUT', false));
+            this.props.addNewPerson(newPerson);
+            this.props.showModal('ADD_NEW_TIP_OUT', false);
           }}
         />,
       ];

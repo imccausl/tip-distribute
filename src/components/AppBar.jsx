@@ -22,10 +22,6 @@ class TipAppBar extends Component {
   MainMenu() {
     return (
       <div>
-        <MenuItem 
-          primaryText="Add People to Tip Out..."
-          leftIcon={<SvgIcon><ContentAdd /></SvgIcon>}
-        />
         <MenuItem primaryText="Edit Date and Cash..." />
         <Divider />
         <MenuItem primaryText="Distribute Tips"

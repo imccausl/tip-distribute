@@ -1,20 +1,17 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import selectEmployee from '../actions/selectPerson';
 import SinglePerson from './SinglePerson.jsx';
-import { showModal } from '../actions/modalActions';
 import selectPeople from '../actions/selectEmployees';
 
 class EmployeeList extends Component {
   renderList() {
-    console.log("people", this.props.people);
-
-    return this.props.people.map(employee => (
+    return this.props.tipOut.employees.map(employee => (
       <SinglePerson
         key={employee.id}
         id={employee.id}
-        //person={employee}
         personName={employee.name}
         hours={employee.hours}
       />
@@ -23,7 +20,7 @@ class EmployeeList extends Component {
   }
 
   render() {
-    if (!this.props.people) return null;
+    if (!this.props.tipOut) return null;
 
     return (
       <div>
@@ -35,14 +32,13 @@ class EmployeeList extends Component {
 
 function mapStateToProps(state) {
   return {
-    tipOut: state.activeTipOut,
+    tipOut: state.currentTipOut,
     people: state.activePeople,
-    open: state.showModal,
   };
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({ selectEmployee, showModal, selectPeople }, dispatch);
+  return bindActionCreators({ selectEmployee, selectPeople }, dispatch);
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(EmployeeList);

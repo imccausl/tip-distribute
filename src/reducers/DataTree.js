@@ -68,21 +68,10 @@ export default function tipOutsReducer(state = initialState, action) {
         },
       ];
     case 'ADD_PEOPLE_TO_CURRENT_TIP_OUT':
-    console.log(state, action.payload);
       return state.map((tipOut) => {
-        console.log("checking", tipOut.id, "for", action.payload.belongsTo);
         if (tipOut.id === action.payload.belongsTo) {
           let appendedTipOut = Object.assign({}, tipOut);
-
-         
-            appendedTipOut.employees = action.payload.employees;
-          
-            //appendedTipOut.employees = appendedTipOut.employees.filter(employee => employee !== null);
-
-          console.log("FOUND IT!");
-
-          
-
+          appendedTipOut.employees = action.payload.employees;
           return appendedTipOut;
         }
         console.log(tipOut);
@@ -96,7 +85,7 @@ export default function tipOutsReducer(state = initialState, action) {
             weekEnding: tipOut.weekEnding,
             totalCash: tipOut.totalCash,
             employees: tipOut.employees.map(
-             employee => (employee.id === action.payload.id) ? { id: action.payload.id, name: action.payload.name, hours: action.payload.hours } : employee,
+              employee => (employee.id === action.payload.id) ? { id: action.payload.id, name: action.payload.name, hours: action.payload.hours } : employee,
             ),
           };
         }

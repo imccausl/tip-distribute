@@ -61,9 +61,9 @@ class SinglePerson extends Component {
 function mapStateToProps(state) {
   return {
     drawerOpen: state.showDrawer,
-    tipOuts: state.tipOuts,
+    tipOuts: state.dataTree,
     people: state.activePeople,
-    tipOut: state.activeTipOut,
+    tipOut: state.currentTipOut,
   };
 }
 

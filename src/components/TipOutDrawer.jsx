@@ -43,7 +43,7 @@ class TipOutDrawer extends Component {
 
   render() {
     console.log("TipOutDrawer State:", this.state);
-    if (!this.props.tipOuts[0] || !this.props.tipOuts) {
+    if (!this.props.data[0] || !this.props.data) {
       this.props.showModal('ADD_NEW_TIP_OUT', true);
     }
 
@@ -73,7 +73,7 @@ TipOutDrawer.propTypes = {
 function mapStateToProps(state) {
   return {
     drawerOpen: state.showDrawer,
-    tipOuts: state.tipOuts,
+    data: state.dataTree,
   };
 }
 

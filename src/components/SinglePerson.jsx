@@ -5,10 +5,9 @@ import TextField from 'material-ui/TextField';
 import Paper from 'material-ui/Paper';
 import IconButton from 'material-ui/IconButton';
 import SvgIcon from 'material-ui/SvgIcon';
-import ContentAdd from 'material-ui/svg-icons/content/add-circle-outline';
-import ContentRemove from 'material-ui/svg-icons/content/remove-circle-outline';
+import ContentRemove from 'material-ui/svg-icons/content/remove-circle';
 import updatePerson from '../actions/updatePerson';
-import addNewPerson from '../actions/addNewPersonToCurrentTipOut';
+import updateTipOuts from '../actions/updateTipOuts';
 import selectTipOut from '../actions/tipOutActions';
 
 class SinglePerson extends Component {
@@ -38,7 +37,7 @@ class SinglePerson extends Component {
               if (this.state.canUpdate) {
                 this.setState({ canUpdate: false });
                 this.props.updatePerson({
-                  fromIndex: this.props.tipOut.index,
+                  belongsTo: this.props.tipOut.id,
                   name: e.target.value,
                   id: this.props.id,
                   hours: this.props.hours,
@@ -63,12 +62,13 @@ function mapStateToProps(state) {
   return {
     drawerOpen: state.showDrawer,
     tipOuts: state.tipOuts,
+    people: state.activePeople,
     tipOut: state.activeTipOut,
   };
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({ updatePerson, addNewPerson, selectTipOut }, dispatch);
+  return bindActionCreators({ updatePerson, selectTipOut }, dispatch);
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(SinglePerson);

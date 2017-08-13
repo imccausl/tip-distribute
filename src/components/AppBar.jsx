@@ -12,11 +12,11 @@ import MenuIcon from 'material-ui/svg-icons/navigation/menu';
 import ContentAdd from 'material-ui/svg-icons/content/add';
 import { showDrawer } from '../actions/drawerActions';
 import { showModal } from '../actions/modalActions';
-import addNewPerson from '../actions/addNewPersonToCurrentTipOut';
 import DistributionReport from './DistributionReport.jsx';
-import EmployeeList from './EmployeeList.jsx';
 import selectTipOut from '../actions/tipOutActions';
 import selectPeople from '../actions/selectEmployees';
+import updateTipOuts from '../actions/updateTipOuts';
+import makeNewId from '../helpers/makeNewId';
 
 class TipAppBar extends Component {
   MainMenu() {
@@ -25,7 +25,6 @@ class TipAppBar extends Component {
         <MenuItem 
           primaryText="Add People to Tip Out..."
           leftIcon={<SvgIcon><ContentAdd /></SvgIcon>}
-          onTouchTap={() => this.props.showAddPeopleDialog()}
         />
         <MenuItem primaryText="Edit Date and Cash..." />
         <Divider />
@@ -50,7 +49,7 @@ class TipAppBar extends Component {
     if (!this.props.tipOut) {
       headerText = 'No Tipout Selected';
     } else {
-      headerText = this.props.tipOut.tipOut.weekEnding.concat(' | $', this.props.tipOut.tipOut.totalCash);
+      headerText = this.props.tipOut.weekEnding.concat(' | $', this.props.tipOut.totalCash);
     }
 
     return (
@@ -70,11 +69,21 @@ class TipAppBar extends Component {
             <IconButton
               tooltip="Add person to tipout"
               onTouchTap={() => {
-                this.props.selectPeople(this.props.tipOut.tipOut.employees);
-                this.props.addNewPerson({
+
+                const newPerson = {
+                  belongsTo: this.props.tipOut.id,
+                  id: makeNewId(),
                   name: 'New Person',
                   hours: '0',
-                });
+                };
+
+                const newEmployees = [
+                  ...this.props.tipOut.employees,
+                  newPerson,
+                ];
+
+                console.log("Making new tipOut with", newPerson);
+                this.props.updateTipOuts(this.props.tipOut.id, newEmployees);
               }}
             >
               <SvgIcon><ContentAdd /></SvgIcon>
@@ -88,7 +97,6 @@ class TipAppBar extends Component {
             </IconMenu>
           </ToolbarGroup>
         </Toolbar>
-        <DistributionReport />
       </div>
     );
   }
@@ -99,13 +107,19 @@ function mapStateToProps(state) {
     drawerOpen: state.showDrawer,
     open: state.showModal,
     people: state.activePeople,
-    tipOut: state.activeTipOut,
-    tipOuts: state.tipOuts,
+    tipOut: state.currentTipOut,
+    tipOuts: state.dataTree,
   };
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({ showDrawer, showModal, addNewPerson, selectPeople, selectTipOut }, dispatch);
+  return bindActionCreators({ 
+    showDrawer,
+    showModal,
+    updateTipOuts,
+    selectPeople,
+    selectTipOut,
+  }, dispatch);
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(TipAppBar);

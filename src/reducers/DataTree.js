@@ -64,6 +64,7 @@ export default function tipOutsReducer(state = initialState, action) {
           id: action.payload.id,
           weekEnding: action.payload.weekEnding,
           totalCash: action.payload.totalCash,
+          employees: [action.payload.employees],
         },
       ];
     case 'ADD_PEOPLE_TO_CURRENT_TIP_OUT':
@@ -71,14 +72,16 @@ export default function tipOutsReducer(state = initialState, action) {
       return state.map((tipOut) => {
         console.log("checking", tipOut.id, "for", action.payload.belongsTo);
         if (tipOut.id === action.payload.belongsTo) {
-          const appendedTipOut = Object.assign({}, tipOut);
-          const allEmployees = (!tipOut.employees) ? action.payload.employees : tipOut.employees.concat(action.payload.employees);
+          let appendedTipOut = Object.assign({}, tipOut);
+
+         
+            appendedTipOut.employees = action.payload.employees;
+          
+            //appendedTipOut.employees = appendedTipOut.employees.filter(employee => employee !== null);
 
           console.log("FOUND IT!");
 
-          appendedTipOut.employees = [
-            ...allEmployees,
-          ];
+          
 
           return appendedTipOut;
         }

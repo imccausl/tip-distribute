@@ -7,10 +7,7 @@ import FlatButton from 'material-ui/FlatButton';
 import TextField from 'material-ui/TextField';
 import DatePicker from 'material-ui/DatePicker';
 import addNewTipOut from '../actions/addNewTipOut';
-import addNewPerson from '../actions/addNewPersonToCurrentTipOut';
-import selectPeople from '../actions/selectEmployees';
 import makeNewId from '../helpers/makeNewId';
-import updateTipOuts from '../actions/updateTipOuts';
 import showModal from '../actions/modalActions';
 
 const defaults = true;
@@ -88,10 +85,9 @@ class NewTipOut extends Component {
                 id: tipOutId,
                 weekEnding: this.state.newDate,
                 totalCash: this.state.newTotalCash,
+                employees: newPerson,
               });
 
-            this.props.addNewPerson(newPerson);
-            this.props.updateTipOuts(tipOutId, [newPerson]);
             this.props.showModal('ADD_NEW_TIP_OUT', false);
           }}
         />,
@@ -136,7 +132,8 @@ NewTipOut.propTypes = {
 
 function mapPropsToState(state) {
   return {
-    tipOuts: state.tipOuts,
+    data: state.dataTree,
+    tipOutsById: state.tipOutsById,
     activePeople: state.activePeople,
     modalAction: state.modalAction,
   };
@@ -145,9 +142,7 @@ function mapPropsToState(state) {
 function mapDispatchToProps(dispatch) {
   return bindActionCreators({
     showModal,
-    updateTipOuts,
     addNewTipOut,
-    addNewPerson,
   }, dispatch);
 }
 

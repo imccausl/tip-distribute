@@ -1,10 +1,10 @@
-## Starbucks Tip Distributor
+## Tip Distributor
 (C) 2017 Ian McCausland. This App can be freely distributed and is open source according to the MIT license. If you like it, share it, fork it, submit a pull request, etc.
 
 # Technology Stack
 This app was built using React and Redux with the MaterialUI component library. This is my first app in React, and my first time using Redux. I learned it by reading the documentation, asking Google questions, and good old fashioned research -- I am a former academic, after all. Anyway, the point is: the code is a little messy while I tried to get a handle on interaction between components and managing state with Redux. Chalk that up to inexperience.
 
-I built this in React for two reasons: 1) I wanted to learn React; 2) If this app becomes useful to Starbucks partners, I feel like it would be well served by being turned into a React Native app. Learning React Native may be my next leap into the unknown. I love this stuff.
+I built this in React for two reasons: 1) I wanted to learn React and Redux and it seemed like a perfectly reasonable project to get myself started; 2) If this app becomes useful to Starbucks partners, I feel like it would be well served by being turned into a React Native app. Learning React Native may be my next leap into the unknown. I love this stuff.
 
 # Back Story
 

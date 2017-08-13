@@ -19,11 +19,11 @@ const dialogStyle = {
 class Distribution extends Component {
   makeRows() {
     const getTipOut = (hours) => {
-      if (!hours || !this.props.tipOut.tipOut.employees) {
+      if (!hours || !this.props.people) {
         return 0;
       }
 
-      const allHours = this.props.tipOut.tipOut.employees.map( employee => {
+      const allHours = this.props.people.map( employee => {
         if (!employee) {
           return 0;
         }
@@ -37,7 +37,7 @@ class Distribution extends Component {
       return Math.floor(parseInt(hours, 10) * hourlyAmount);
     }
 
-    return this.props.tipOut.tipOut.employees.map( employee => 
+    return this.props.people.map( employee => 
       {
         if (!employee) {
           return null;
@@ -54,7 +54,7 @@ class Distribution extends Component {
 
   render() {
   if (!this.props.tipOut) return null;
-  console.log(this.props.tipOut.tipOut);
+  console.log(this.props.tipOut);
   const actions = [
       <FlatButton
         label="Close"
@@ -91,6 +91,7 @@ class Distribution extends Component {
 function mapStateToProps(state) {
   return {
     tipOut: state.activeTipOut,
+    people: state.activePeople,
     open: state.showModal,
   };
 }

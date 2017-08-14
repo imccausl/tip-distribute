@@ -85,8 +85,8 @@ class NewTipOut extends Component {
             const newPerson = {
               belongsTo: tipOutId,
               id: makeNewId(),
-              name: 'New Person',
-              hours: '0',
+              name: '',
+              hours: '',
             };
 
             this.props.addNewTipOut(

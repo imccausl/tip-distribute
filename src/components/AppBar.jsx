@@ -75,8 +75,8 @@ class TipAppBar extends Component {
                 const newPerson = {
                   belongsTo: this.props.tipOut.id,
                   id: makeNewId(),
-                  name: 'New Person',
-                  hours: '0',
+                  name: '',
+                  hours: '',
                 };
 
                 const newEmployees = [

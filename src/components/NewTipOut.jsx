@@ -14,21 +14,11 @@ import editTipOut from '../actions/editTipOut';
 const defaults = true;
 
 class NewTipOut extends Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      newDate: this.parseDate(this.getNearestWeekEnding()),
-      newExactDate: (!this.props.currentTipOut) ? this.getNearestWeekEnding() : this.props.currentTipOut.exactDate,
-      newTotalCash: (!this.props.currentTipOut) ? '200' : this.props.currentTipOut.totalCash,
-    };
-
-    this.getNearestWeekEnding = this.getNearestWeekEnding.bind(this);
-    this.disableWeekdays = this.disableWeekdays.bind(this);
-    this.parseDate = this.parseDate.bind(this);
+  static disableWeekdays(date) {
+    return date.getDay() !== 0 || date.getDay() >= 5;
   }
 
-  getNearestWeekEnding() {
+  static getNearestWeekEnding() {
     const today = new Date();
     const todaysDay = today.getDay();
     const todaysDate = today.getDate();
@@ -36,11 +26,7 @@ class NewTipOut extends Component {
     return new Date(today.getFullYear(), today.getMonth(), todaysDate - todaysDay);
   }
 
-  disableWeekdays(date) {
-    return date.getDay() !== 0 || date.getDay() >= 5;
-  }
-
-  parseDate(date) {
+  static parseDate(date) {
     const months = [
       'January',
       'February',
@@ -60,24 +46,34 @@ class NewTipOut extends Component {
     return tipOutMonth.concat(' ', date.getDate());
   }
 
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      newDate: NewTipOut.parseDate(NewTipOut.getNearestWeekEnding()),
+      newExactDate: (!this.props.currentTipOut) ?
+        NewTipOut.getNearestWeekEnding() : this.props.currentTipOut.exactDate,
+      newTotalCash: (!this.props.currentTipOut) ? '200' : this.props.currentTipOut.totalCash,
+    };
+  }
+
   render() {
     let modalButton = null;
     let modalTitle = '';
     let defaultDate = '';
-    let defaultCash = '';
 
     const cancelButton = [(<FlatButton
       label="Cancel"
       onTouchTap={() => this.props.showModal('', false)}
-    />),];
+    />)];
 
     if ((!this.props.modalAction)) {
       return null;
-    } else { 
-      if (this.props.modalAction.modal === 'ADD_NEW_TIP_OUT') {
-        modalTitle = 'New Tip Out';
-        defaultDate = this.getNearestWeekEnding();
-        defaultCash = '200';
+    }
+
+    if (this.props.modalAction.modal === 'ADD_NEW_TIP_OUT') {
+      modalTitle = 'New Tip Out';
+      defaultDate = NewTipOut.getNearestWeekEnding();
 
       modalButton = (
         <FlatButton
@@ -105,64 +101,72 @@ class NewTipOut extends Component {
             this.props.showModal('', false);
           }}
         />);
-      } else if (this.props.modalAction.modal === 'EDIT_TIP_OUT_MODAL') {  
-        modalTitle = 'Edit Tip Out';
-        defaultDate = this.props.currentTipOut.exactDate;
-        defaultCash = this.props.currentTipOut.totalCash;
+    } else if (this.props.modalAction.modal === 'EDIT_TIP_OUT_MODAL') {  
+      modalTitle = 'Edit Tip Out';
+      defaultDate = this.props.currentTipOut.exactDate;
 
-        modalButton = (
-          <FlatButton
-            label="Change"
-            primary={defaults}
-            keyboardFocused={defaults.keyboardFocused}
-            onTouchTap={() => {
-              this.props.editTipOut( this.props.currentTipOut.id, 
-                {
-                  exactDate: this.state.newExactDate,
-                  weekEnding: this.state.newDate,
-                  totalCash: this.state.newTotalCash,
-                });
+      modalButton = (
+        <FlatButton
+          label="Change"
+          primary={defaults}
+          keyboardFocused={defaults.keyboardFocused}
+          onTouchTap={() => {
+            this.props.editTipOut(this.props.currentTipOut.id,
+              {
+                exactDate: this.state.newExactDate,
+                weekEnding: this.state.newDate,
+                totalCash: this.state.newTotalCash,
+              });
 
-              this.props.showModal('', false);
-            }}
-          />);
-      }
-
-      const actions = cancelButton.concat(modalButton);
-
-      return (
-        <Dialog
-          title={modalTitle}
-          actions={actions}
-          autoScrollBodyContent={defaults}
-          open={this.props.modalAction.isOpen}
-          onRequestClose={() => this.props.showModal('', false)}
-        >
-          <DatePicker
-            autoOk={defaults}
-            hintText="Week Ending"
-            floatingLabelText="Tip Out Week Ending"
-            shouldDisableDate={this.disableWeekdays}
-            defaultDate={defaultDate}
-            onChange={(event, newValue) => {
-              this.setState({ newDate: this.parseDate(newValue), newExactDate: newValue });
-            }}
-          />
-          <TextField
-            floatingLabelText="Cash Amount to Distribute"
-            defaultValue={this.state.newTotalCash}
-            onChange={(event, newValue) => this.setState({ newTotalCash: newValue })}
-          />
-        </Dialog>
-      );
+            this.props.showModal('', false);
+          }}
+        />);
     }
+
+    const actions = cancelButton.concat(modalButton);
+
+    return (
+      <Dialog
+        title={modalTitle}
+        actions={actions}
+        autoScrollBodyContent={defaults}
+        open={this.props.modalAction.isOpen}
+        onRequestClose={() => this.props.showModal('', false)}
+      >
+        <DatePicker
+          autoOk={defaults}
+          hintText="Week Ending"
+          floatingLabelText="Tip Out Week Ending"
+          shouldDisableDate={NewTipOut.disableWeekdays}
+          defaultDate={defaultDate}
+          onChange={(event, newValue) => {
+            this.setState({ newDate: NewTipOut.parseDate(newValue), newExactDate: newValue });
+          }}
+        />
+        <TextField
+          floatingLabelText="Cash Amount to Distribute"
+          defaultValue={this.state.newTotalCash}
+          onChange={(event, newValue) => this.setState({ newTotalCash: newValue })}
+        />
+      </Dialog>
+    );
   }
 }
 
 NewTipOut.propTypes = {
   showModal: PropTypes.func.isRequired,
   addNewTipOut: PropTypes.func.isRequired,
+  editTipOut: PropTypes.func.isRequired,
+  modalAction: PropTypes.object,
+  currentTipOut: PropTypes.object,
 };
+
+NewTipOut.defaultProps = {
+  modalAction: false,
+  currentTipOut: null,
+};
+
+PropTypes.checkPropTypes(NewTipOut.propTypes, NewTipOut.props, 'prop', NewTipOut);
 
 function mapPropsToState(state) {
   return {

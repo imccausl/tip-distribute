@@ -60,10 +60,11 @@ class NewTipOut extends Component {
   render() {
     let modalButton = null;
     let defaultDate = '';
-
+    const disabledButton = !(this.props.data[0]);
+    console.log(disabledButton);
     const cancelButton = [(<FlatButton
       label="Cancel"
-      disabled={!(this.props.dataTree)}
+      disabled={disabledButton}
       onTouchTap={() => this.props.showModal('', false)}
     />)];
 

@@ -8,7 +8,10 @@ import MenuItem from 'material-ui/MenuItem';
 import Divider from 'material-ui/Divider';
 import SvgIcon from 'material-ui/SvgIcon';
 import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
+import DeleteIcon from 'material-ui/svg-icons/action/delete-forever';
+import EditIcon from 'material-ui/svg-icons/editor/mode-edit';
 import MenuIcon from 'material-ui/svg-icons/navigation/menu';
+import MoneyIcon from 'material-ui/svg-icons/editor/attach-money';
 import ContentAdd from 'material-ui/svg-icons/content/add';
 import { showDrawer } from '../actions/drawerActions';
 import showModal from '../actions/modalActions';
@@ -23,15 +26,22 @@ class TipAppBar extends Component {
     return (
       <div>
         <MenuItem
-          primaryText="Edit Date and Cash..."
+          primaryText="Distribute Tips"
+          leftIcon={<MoneyIcon />}
+        />
+        <Divider />
+        <MenuItem
+          primaryText="Edit..."
+          leftIcon={<EditIcon />}
           onTouchTap={
             () => {
               this.props.showModal('EDIT_TIP_OUT_MODAL', true);
             }
           }
         />
-        <Divider />
-        <MenuItem primaryText="Distribute Tips"
+        <MenuItem
+          primaryText="Delete..."
+          leftIcon={<DeleteIcon />}
         />
       </div>
     );

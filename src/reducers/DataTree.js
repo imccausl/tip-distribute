@@ -62,6 +62,7 @@ export default function tipOutsReducer(state = initialState, action) {
         ...state,
         {
           id: action.payload.id,
+          exactDate: action.payload.exactDate,
           weekEnding: action.payload.weekEnding,
           totalCash: action.payload.totalCash,
           employees: [action.payload.employees],
@@ -74,7 +75,6 @@ export default function tipOutsReducer(state = initialState, action) {
           appendedTipOut.employees = action.payload.employees;
           return appendedTipOut;
         }
-        console.log(tipOut);
         return tipOut;
       });
     case 'UPDATE_PERSON':
@@ -82,11 +82,26 @@ export default function tipOutsReducer(state = initialState, action) {
         if (tipOut.id === action.payload.belongsTo) {
           return {
             id: tipOut.id,
+            exactDate: tipOut.exactDate,
             weekEnding: tipOut.weekEnding,
             totalCash: tipOut.totalCash,
             employees: tipOut.employees.map(
               employee => (employee.id === action.payload.id) ? { id: action.payload.id, name: action.payload.name, hours: action.payload.hours } : employee,
             ),
+          };
+        }
+
+        return tipOut;
+      });
+    case 'EDIT_TIP_OUT':
+      return state.map((tipOut) => {
+        if (tipOut.id === action.payload.tipOutId) {
+          return {
+            id: tipOut.id,
+            exactDate: action.payload.newData.exactDate,
+            weekEnding: action.payload.newData.weekEnding,
+            totalCash: action.payload.newData.totalCash,
+            employees: tipOut.employees,
           };
         }
 

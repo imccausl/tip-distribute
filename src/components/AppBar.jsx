@@ -11,7 +11,7 @@ import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
 import MenuIcon from 'material-ui/svg-icons/navigation/menu';
 import ContentAdd from 'material-ui/svg-icons/content/add';
 import { showDrawer } from '../actions/drawerActions';
-import { showModal } from '../actions/modalActions';
+import showModal from '../actions/modalActions';
 import DistributionReport from './DistributionReport.jsx';
 import selectTipOut from '../actions/tipOutActions';
 import selectPeople from '../actions/selectEmployees';
@@ -22,10 +22,16 @@ class TipAppBar extends Component {
   MainMenu() {
     return (
       <div>
-        <MenuItem primaryText="Edit Date and Cash..." />
+        <MenuItem
+          primaryText="Edit Date and Cash..."
+          onTouchTap={
+            () => {
+              this.props.showModal('EDIT_TIP_OUT_MODAL', true);
+            }
+          }
+        />
         <Divider />
         <MenuItem primaryText="Distribute Tips"
-          onTouchTap={this.props.showModal}
         />
       </div>
     );
@@ -78,7 +84,6 @@ class TipAppBar extends Component {
                   newPerson,
                 ];
 
-                console.log("Making new tipOut with", newPerson);
                 this.props.updateTipOuts(this.props.tipOut.id, newEmployees);
               }}
             >

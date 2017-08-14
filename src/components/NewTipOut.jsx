@@ -9,6 +9,7 @@ import DatePicker from 'material-ui/DatePicker';
 import addNewTipOut from '../actions/addNewTipOut';
 import makeNewId from '../helpers/makeNewId';
 import showModal from '../actions/modalActions';
+import editTipOut from '../actions/editTipOut';
 
 const defaults = true;
 
@@ -18,7 +19,8 @@ class NewTipOut extends Component {
 
     this.state = {
       newDate: this.parseDate(this.getNearestWeekEnding()),
-      newTotalCash: '0',
+      newExactDate: (!this.props.currentTipOut) ? this.getNearestWeekEnding() : this.props.currentTipOut.exactDate,
+      newTotalCash: (!this.props.currentTipOut) ? '200' : this.props.currentTipOut.totalCash,
     };
 
     this.getNearestWeekEnding = this.getNearestWeekEnding.bind(this);
@@ -40,7 +42,7 @@ class NewTipOut extends Component {
 
   parseDate(date) {
     const months = [
-      'January',  
+      'January',
       'February',
       'March',
       'April',
@@ -59,14 +61,25 @@ class NewTipOut extends Component {
   }
 
   render() {
+    let modalButton = null;
+    let modalTitle = '';
+    let defaultDate = '';
+    let defaultCash = '';
+
+    const cancelButton = [(<FlatButton
+      label="Cancel"
+      onTouchTap={() => this.props.showModal('', false)}
+    />),];
+
     if ((!this.props.modalAction)) {
       return null;
-    } else if (this.props.modalAction.modal === 'ADD_NEW_TIP_OUT') {
-      const actions = [
-        <FlatButton
-          label="Cancel"
-          onTouchTap={() => this.props.showModal('ADD_NEW_TIP_OUT', false)}
-        />,
+    } else { 
+      if (this.props.modalAction.modal === 'ADD_NEW_TIP_OUT') {
+        modalTitle = 'New Tip Out';
+        defaultDate = this.getNearestWeekEnding();
+        defaultCash = '200';
+
+      modalButton = (
         <FlatButton
           label="Create"
           primary={defaults}
@@ -83,32 +96,56 @@ class NewTipOut extends Component {
             this.props.addNewTipOut(
               {
                 id: tipOutId,
+                exactDate: this.state.newExactDate,
                 weekEnding: this.state.newDate,
                 totalCash: this.state.newTotalCash,
                 employees: newPerson,
               });
 
-            this.props.showModal('ADD_NEW_TIP_OUT', false);
+            this.props.showModal('', false);
           }}
-        />,
-      ];
+        />);
+      } else if (this.props.modalAction.modal === 'EDIT_TIP_OUT_MODAL') {  
+        modalTitle = 'Edit Tip Out';
+        defaultDate = this.props.currentTipOut.exactDate;
+        defaultCash = this.props.currentTipOut.totalCash;
+
+        modalButton = (
+          <FlatButton
+            label="Change"
+            primary={defaults}
+            keyboardFocused={defaults.keyboardFocused}
+            onTouchTap={() => {
+              this.props.editTipOut( this.props.currentTipOut.id, 
+                {
+                  exactDate: this.state.newExactDate,
+                  weekEnding: this.state.newDate,
+                  totalCash: this.state.newTotalCash,
+                });
+
+              this.props.showModal('', false);
+            }}
+          />);
+      }
+
+      const actions = cancelButton.concat(modalButton);
 
       return (
         <Dialog
-          title="New Tip Out"
+          title={modalTitle}
           actions={actions}
           autoScrollBodyContent={defaults}
           open={this.props.modalAction.isOpen}
-          onRequestClose={() => this.props.showModal('ADD_NEW_TIP_OUT', false)}
+          onRequestClose={() => this.props.showModal('', false)}
         >
           <DatePicker
             autoOk={defaults}
             hintText="Week Ending"
             floatingLabelText="Tip Out Week Ending"
             shouldDisableDate={this.disableWeekdays}
-            defaultDate={this.getNearestWeekEnding()}
+            defaultDate={defaultDate}
             onChange={(event, newValue) => {
-              this.setState({ newDate: this.parseDate(newValue) });
+              this.setState({ newDate: this.parseDate(newValue), newExactDate: newValue });
             }}
           />
           <TextField
@@ -119,22 +156,19 @@ class NewTipOut extends Component {
         </Dialog>
       );
     }
-    return null;
   }
 }
 
 NewTipOut.propTypes = {
-  updateTipOuts: PropTypes.func.isRequired,
   showModal: PropTypes.func.isRequired,
   addNewTipOut: PropTypes.func.isRequired,
-  addNewPerson: PropTypes.func.isRequired,
 };
 
 function mapPropsToState(state) {
   return {
     data: state.dataTree,
     tipOutsById: state.tipOutsById,
-    activePeople: state.activePeople,
+    currentTipOut: state.currentTipOut,
     modalAction: state.modalAction,
   };
 }
@@ -143,6 +177,7 @@ function mapDispatchToProps(dispatch) {
   return bindActionCreators({
     showModal,
     addNewTipOut,
+    editTipOut,
   }, dispatch);
 }
 

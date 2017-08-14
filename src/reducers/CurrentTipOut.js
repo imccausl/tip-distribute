@@ -6,6 +6,14 @@ function activeTipOut(state = null, action) {
       const newState = Object.assign({}, state);
       newState.employees = action.payload.employees;
       return newState;
+    case 'EDIT_TIP_OUT':
+      return {
+        id: state.id,
+        exactDate: action.payload.newData.exactDate,
+        weekEnding: action.payload.newData.weekEnding,
+        totalCash: action.payload.newData.totalCash,
+        employees: state.employees,
+      };
     default:
       return state;
   }

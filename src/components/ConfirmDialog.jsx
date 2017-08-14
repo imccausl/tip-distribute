@@ -38,7 +38,7 @@ class ConfirmDialog extends Component {
         />
       );
 
-      message = `Are you sure you want to permanently delete tip out of $${this.props.currentTipOut.totalCash} for the week ending ${this.props.currentTipOut.weekEnding}?`;
+      message = `Are you sure you want to permanently delete this tip out of $${this.props.currentTipOut.totalCash} for the week ending ${this.props.currentTipOut.weekEnding}?`;
       actions = cancel.concat(deleteConfirm);
     }
 
@@ -49,7 +49,7 @@ class ConfirmDialog extends Component {
           actions={actions}
           open={this.props.modalAction.isOpen}
         >
-          <strong>{message}</strong>
+          {message}
         </Dialog>
       );
     }

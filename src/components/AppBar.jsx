@@ -48,7 +48,7 @@ class TipAppBar extends Component {
           leftIcon={<DeleteIcon />}
           onTouchTap={
             () => {
-              this.props.showModal(true, 'MODAL_CONFIRM_DELETE', 'Confirm Deletion')
+              this.props.showModal(true, 'MODAL_CONFIRM_DELETE', 'Delete Tip Out')
             }
           }
         />

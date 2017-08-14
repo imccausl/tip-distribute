@@ -7,6 +7,9 @@ import { Toolbar, ToolbarGroup, ToolbarTitle } from 'material-ui/Toolbar';
 import IconMenu from 'material-ui/IconMenu';
 import MenuItem from 'material-ui/MenuItem';
 import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
+import CreateIcon from 'material-ui/svg-icons/content/add-circle';
+import DeleteIcon from 'material-ui/svg-icons/action/delete-forever';
+import CombineIcon from 'material-ui/svg-icons/editor/merge-type';
 import IconButton from 'material-ui/IconButton';
 import Divider from 'material-ui/Divider';
 import TipOutList from './TipOutList.jsx';
@@ -31,14 +34,21 @@ class TipOutDrawer extends Component {
       >
         <MenuItem
           primaryText="New Tip Out..."
+          leftIcon={<CreateIcon />}
           onTouchTap={
             () => {
               this.props.showModal(true, 'ADD_NEW_TIP_OUT', 'Add New Tip Out');
             }}
         />
         <Divider />
-        <MenuItem primaryText="Combine Tip Outs..." />
-        <MenuItem primaryText="Delete Tip Outs..." />
+        <MenuItem
+          leftIcon={<CombineIcon />}
+          primaryText="Combine Tip Outs..."
+        />
+        <MenuItem
+          leftIcon={<DeleteIcon />}
+          primaryText="Delete Tip Outs..."
+        />
       </IconMenu>
     );
   }

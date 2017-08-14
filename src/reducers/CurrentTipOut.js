@@ -14,6 +14,16 @@ function activeTipOut(state = null, action) {
         totalCash: action.payload.newData.totalCash,
         employees: state.employees,
       };
+    case 'UPDATE_PERSON':
+      return {
+        id: state.id,
+        exactDate: state.exactDate,
+        weekEnding: state.weekEnding,
+        totalCash: state.totalCash,
+        employees: state.employees.map(
+          employee => (employee.id === action.payload.id) ? { id: action.payload.id, name: action.payload.name, hours: action.payload.hours } : employee,
+        ),
+      };
     default:
       return state;
   }

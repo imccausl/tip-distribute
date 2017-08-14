@@ -28,7 +28,7 @@ class SinglePerson extends Component {
         <TextField
           hintText="Name"
           floatingLabelText="Name"
-          defaultValue={this.props.personName}
+          defaultValue={this.props.name}
           onFocus={() => {
             this.setState({ canUpdate: true })
           }}
@@ -46,9 +46,23 @@ class SinglePerson extends Component {
             }}
         />
         <TextField
-          hintText="Hours Worked"
-          floatingLabelText="Hours Worked"
+          hintText="Hours"
+          floatingLabelText="Hours"
           defaultValue={this.props.hours}
+          onFocus={() => this.setState({ canUpdate: true })}
+          onBlur={
+            (e) => {
+              if (this.state.canUpdate) {
+                this.setState({ canUpdate: false });
+                this.props.updatePerson({
+                  belongsTo: this.props.tipOut.id,
+                  name: this.props.name,
+                  id: this.props.id,
+                  hours: e.target.value,
+                });
+              }
+            }
+          }
         />
         <IconButton tooltip="Remove this person">
           <SvgIcon><ContentRemove /></SvgIcon>

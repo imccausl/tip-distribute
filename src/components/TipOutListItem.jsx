@@ -27,7 +27,10 @@ const rightIconMenu = (
 class TipOutListItem extends Component {
   render() {
     const people = (!this.props.employees) ? 0 : this.props.employees.length;
-
+    const totalHours = (!this.props.employees) ? 0 : Math.floor(
+      this.props.employees.map(emp => Number.parseFloat(emp.hours))
+        .reduce((sum, curr) => sum + curr, 0),
+    );
     const NumOfPeople = () => {
       const style = {
         position: 'relative',
@@ -65,7 +68,7 @@ class TipOutListItem extends Component {
       <div>
         <ListItem
           primaryText={`Week Ending ${this.props.week}`}
-          secondaryText={`Tipout: $${this.props.cash} | Total Hours: XXX`}
+          secondaryText={`$${this.props.cash} | Hours: ${totalHours}`}
           rightIcon={<NumOfPeople />}
           onTouchTap={this.props.click}
         />

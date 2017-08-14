@@ -12,7 +12,7 @@ class EmployeeList extends Component {
       <SinglePerson
         key={employee.id}
         id={employee.id}
-        personName={employee.name}
+        name={employee.name}
         hours={employee.hours}
       />
     ),

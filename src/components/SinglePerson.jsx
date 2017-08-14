@@ -23,6 +23,11 @@ class SinglePerson extends Component {
       margin: '5px 0',
     };
 
+    const hoursStyle = {
+      width: '60px',
+      margin: '0 10px',
+    }
+
     return (
       <Paper style={style} zDepth={1}>
         <TextField
@@ -49,6 +54,7 @@ class SinglePerson extends Component {
           hintText="Hours"
           floatingLabelText="Hours"
           defaultValue={this.props.hours}
+          style={hoursStyle}
           onFocus={() => this.setState({ canUpdate: true })}
           onBlur={
             (e) => {

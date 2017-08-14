@@ -26,11 +26,13 @@ class TipAppBar extends Component {
     return (
       <div>
         <MenuItem
+          disabled={!(this.props.tipOut)}
           primaryText="Distribute Tips"
           leftIcon={<MoneyIcon />}
         />
         <Divider />
         <MenuItem
+          disabled={!(this.props.tipOut)}
           primaryText="Edit..."
           leftIcon={<EditIcon />}
           onTouchTap={
@@ -40,6 +42,7 @@ class TipAppBar extends Component {
           }
         />
         <MenuItem
+          disabled={!(this.props.tipOut)}        
           primaryText="Delete..."
           leftIcon={<DeleteIcon />}
         />
@@ -79,9 +82,9 @@ class TipAppBar extends Component {
           </ToolbarGroup>
           <ToolbarGroup>
             <IconButton
+              disabled={!(this.props.tipOut)}
               tooltip="Add person to tipout"
               onTouchTap={() => {
-
                 const newPerson = {
                   belongsTo: this.props.tipOut.id,
                   id: makeNewId(),

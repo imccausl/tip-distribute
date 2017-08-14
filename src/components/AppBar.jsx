@@ -16,6 +16,7 @@ import ContentAdd from 'material-ui/svg-icons/content/add';
 import { showDrawer } from '../actions/drawerActions';
 import showModal from '../actions/modalActions';
 import DistributionReport from './DistributionReport.jsx';
+import ConfirmDialog from './ConfirmDialog.jsx';
 import selectTipOut from '../actions/tipOutActions';
 import selectPeople from '../actions/selectEmployees';
 import updateTipOuts from '../actions/updateTipOuts';
@@ -37,7 +38,7 @@ class TipAppBar extends Component {
           leftIcon={<EditIcon />}
           onTouchTap={
             () => {
-              this.props.showModal('EDIT_TIP_OUT_MODAL', true);
+              this.props.showModal(true, 'EDIT_TIP_OUT_MODAL', 'Edit Tip Out');
             }
           }
         />
@@ -45,6 +46,11 @@ class TipAppBar extends Component {
           disabled={!(this.props.tipOut)}        
           primaryText="Delete..."
           leftIcon={<DeleteIcon />}
+          onTouchTap={
+            () => {
+              this.props.showModal(true, 'MODAL_CONFIRM_DELETE', 'Confirm Deletion')
+            }
+          }
         />
       </div>
     );
@@ -111,6 +117,7 @@ class TipAppBar extends Component {
             </IconMenu>
           </ToolbarGroup>
         </Toolbar>
+        <ConfirmDialog />
       </div>
     );
   }

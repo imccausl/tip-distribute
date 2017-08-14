@@ -59,7 +59,6 @@ class NewTipOut extends Component {
 
   render() {
     let modalButton = null;
-    let modalTitle = '';
     let defaultDate = '';
 
     const cancelButton = [(<FlatButton
@@ -72,7 +71,6 @@ class NewTipOut extends Component {
     }
 
     if (this.props.modalAction.modal === 'ADD_NEW_TIP_OUT') {
-      modalTitle = 'New Tip Out';
       defaultDate = NewTipOut.getNearestWeekEnding();
 
       modalButton = (
@@ -98,11 +96,10 @@ class NewTipOut extends Component {
                 employees: newPerson,
               });
 
-            this.props.showModal('', false);
+            this.props.showModal(false);
           }}
         />);
     } else if (this.props.modalAction.modal === 'EDIT_TIP_OUT_MODAL') {  
-      modalTitle = 'Edit Tip Out';
       defaultDate = this.props.currentTipOut.exactDate;
 
       modalButton = (
@@ -118,38 +115,42 @@ class NewTipOut extends Component {
                 totalCash: this.state.newTotalCash,
               });
 
-            this.props.showModal('', false);
+            this.props.showModal(false);
           }}
         />);
     }
 
-    const actions = cancelButton.concat(modalButton);
+    if (this.props.modalAction.modal === 'EDIT_TIP_OUT_MODAL' || this.props.modalAction.modal === 'ADD_NEW_TIP_OUT') {
+      const actions = cancelButton.concat(modalButton);
 
-    return (
-      <Dialog
-        title={modalTitle}
-        actions={actions}
-        autoScrollBodyContent={defaults}
-        open={this.props.modalAction.isOpen}
-        onRequestClose={() => this.props.showModal('', false)}
-      >
-        <DatePicker
-          autoOk={defaults}
-          hintText="Week Ending"
-          floatingLabelText="Tip Out Week Ending"
-          shouldDisableDate={NewTipOut.disableWeekdays}
-          defaultDate={new Date(defaultDate)}
-          onChange={(event, newValue) => {
-            this.setState({ newDate: NewTipOut.parseDate(newValue), newExactDate: newValue });
-          }}
-        />
-        <TextField
-          floatingLabelText="Cash Amount to Distribute"
-          defaultValue={this.state.newTotalCash}
-          onChange={(event, newValue) => this.setState({ newTotalCash: newValue })}
-        />
-      </Dialog>
-    );
+      return (
+        <Dialog
+          title={this.props.modalAction.title}
+          actions={actions}
+          autoScrollBodyContent={defaults}
+          open={this.props.modalAction.isOpen}
+          onRequestClose={() => this.props.showModal(false)}
+        >
+          <DatePicker
+            autoOk={defaults}
+            hintText="Week Ending"
+            floatingLabelText="Tip Out Week Ending"
+            shouldDisableDate={NewTipOut.disableWeekdays}
+            defaultDate={new Date(defaultDate)}
+            onChange={(event, newValue) => {
+              this.setState({ newDate: NewTipOut.parseDate(newValue), newExactDate: newValue });
+            }}
+          />
+          <TextField
+            floatingLabelText="Cash Amount to Distribute"
+            defaultValue={this.state.newTotalCash}
+            onChange={(event, newValue) => this.setState({ newTotalCash: newValue })}
+          />
+        </Dialog>
+      );
+    }
+
+    return null;
   }
 }
 

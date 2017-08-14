@@ -63,6 +63,7 @@ class NewTipOut extends Component {
 
     const cancelButton = [(<FlatButton
       label="Cancel"
+      disabled={!(this.props.dataTree)}
       onTouchTap={() => this.props.showModal('', false)}
     />)];
 
@@ -129,7 +130,6 @@ class NewTipOut extends Component {
           actions={actions}
           autoScrollBodyContent={defaults}
           open={this.props.modalAction.isOpen}
-          onRequestClose={() => this.props.showModal(false)}
         >
           <DatePicker
             autoOk={defaults}

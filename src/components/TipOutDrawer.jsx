@@ -12,12 +12,14 @@ import Divider from 'material-ui/Divider';
 import TipOutList from './TipOutList.jsx';
 import NewTipOut from './NewTipOut.jsx';
 import showModal from '../actions/modalActions';
+import { hideDrawer } from '../actions/drawerActions';
+
 
 class TipOutDrawer extends Component {
   constructor(props) {
     super(props);
 
-    this.state = { isOpen: true };
+    this.state = { isOpen: this.props.drawerOpen };
   }
 
   tipOutsMenu() {
@@ -51,6 +53,8 @@ class TipOutDrawer extends Component {
       <div>
         <Drawer
           open={this.props.drawerOpen}
+          docked={false}
+          onRequestChange={() => this.props.hideDrawer()}
         >
           <Toolbar>
             <ToolbarTitle text="Tip Outs" />
@@ -78,7 +82,7 @@ function mapStateToProps(state) {
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({ showModal }, dispatch);
+  return bindActionCreators({ showModal, hideDrawer }, dispatch);
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(TipOutDrawer);

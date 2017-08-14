@@ -138,7 +138,7 @@ class NewTipOut extends Component {
           hintText="Week Ending"
           floatingLabelText="Tip Out Week Ending"
           shouldDisableDate={NewTipOut.disableWeekdays}
-          defaultDate={defaultDate}
+          defaultDate={new Date(defaultDate)}
           onChange={(event, newValue) => {
             this.setState({ newDate: NewTipOut.parseDate(newValue), newExactDate: newValue });
           }}

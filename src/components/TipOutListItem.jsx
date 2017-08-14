@@ -28,7 +28,6 @@ class TipOutListItem extends Component {
   render() {
     const people = (!this.props.employees) ? 0 : this.props.employees.length;
 
-    console.log(people);
     const NumOfPeople = () => {
       const style = {
         position: 'relative',
@@ -65,8 +64,8 @@ class TipOutListItem extends Component {
     return (
       <div>
         <ListItem
-          primaryText={'Week Ending ' + this.props.week}
-          secondaryText={'Tipout: $' + this.props.cash}
+          primaryText={`Week Ending ${this.props.week}`}
+          secondaryText={`Tipout: $${this.props.cash} | Total Hours: XXX`}
           rightIcon={<NumOfPeople />}
           onTouchTap={this.props.click}
         />

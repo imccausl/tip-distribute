@@ -33,7 +33,7 @@ class TipOutDrawer extends Component {
           primaryText="New Tip Out..."
           onTouchTap={
             () => {
-              this.props.showModal('ADD_NEW_TIP_OUT', true);
+              this.props.showModal(true, 'ADD_NEW_TIP_OUT', 'Add New Tip Out');
             }}
         />
         <Divider />

@@ -42,15 +42,18 @@ class ConfirmDialog extends Component {
       actions = cancel.concat(deleteConfirm);
     }
 
-    return (
-      <Dialog
-        title={this.props.modalAction.title}
-        actions={actions}
-        open={this.props.modalAction.isOpen}
-      >
-        <strong>{message}</strong>
-      </Dialog>
-    );
+    if (this.props.modalAction.modal === 'MODAL_CONFIRM_DELETE') {
+      return (
+        <Dialog
+          title={this.props.modalAction.title}
+          actions={actions}
+          open={this.props.modalAction.isOpen}
+        >
+          <strong>{message}</strong>
+        </Dialog>
+      );
+    }
+    return null;
   }
 }
 

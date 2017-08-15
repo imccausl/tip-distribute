@@ -57,6 +57,10 @@ class NewTipOut extends Component {
     };
   }
 
+  componentWillReceiveProps(nextProps) {
+    this.setState({ newTotalCash: (!nextProps.currentTipOut) ? '200' : nextProps.currentTipOut.totalCash });
+  }
+
   render() {
     let modalButton = null;
     let defaultDate = '';

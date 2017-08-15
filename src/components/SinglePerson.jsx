@@ -6,31 +6,68 @@ import Paper from 'material-ui/Paper';
 import IconButton from 'material-ui/IconButton';
 import SvgIcon from 'material-ui/SvgIcon';
 import ContentRemove from 'material-ui/svg-icons/content/remove-circle';
+import { red500 } from 'material-ui/styles/colors';
 import updatePerson from '../actions/updatePerson';
 import updateTipOuts from '../actions/updateTipOuts';
 import selectTipOut from '../actions/tipOutActions';
 
 class SinglePerson extends Component {
+  static getWindowDimensions() {
+    return (window.innerWidth >= 500) ? 500 : window.innerWidth;
+  }
+
   constructor(props) {
     super(props);
 
-    this.state = { canUpdate: false };
+    this.state = { canUpdate: false, width: SinglePerson.getWindowDimensions() };
+    this.updateDimensions = this.updateDimensions.bind(this);
+  }
+
+  componentDidMount() {
+    window.addEventListener('resize', this.updateDimensions);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.updateDimensions);
+  }
+
+  updateDimensions() {
+    this.setState({ width: SinglePerson.getWindowDimensions() });
   }
 
   render() {
+    const xSmall = window.matchMedia('(min-width: 320px)');
+    const small = window.matchMedia('(max-width: 375px)');
+    const medium = window.matchMedia('(min-width: 375px)');
+    const large = window.matchMedia('(max-width: 445px)');
     const style = {
       padding: '0 10px',
       margin: '5px 0',
+      position: 'relative',
     };
 
     const hoursStyle = {
       width: '60px',
       margin: '0 10px',
+    };
+
+    let nameStyle = {
+      width: `${this.state.width / 1.4 - 60}px`,
+      margin: '0 10px',
+    };
+
+    if (xSmall.matches && small.matches) {
+      nameStyle.width = '135px';
+    }
+
+    if (medium.matches && large.matches) {
+      nameStyle.width = '200px';
     }
 
     return (
       <Paper style={style} zDepth={1}>
         <TextField
+          style={nameStyle}
           hintText="Name"
           floatingLabelText="Name"
           defaultValue={this.props.name}
@@ -70,8 +107,17 @@ class SinglePerson extends Component {
             }
           }
         />
-        <IconButton tooltip="Remove this person">
-          <SvgIcon><ContentRemove /></SvgIcon>
+        <IconButton
+          tooltip="Remove this person"
+          style={{
+            position: 'absolute',
+            right: '0',
+            top: '10px',
+            margin: '5px',
+            borderLeft: '1px solid lightgrey',
+          }}
+        >
+          <SvgIcon><ContentRemove color={red500} /></SvgIcon>
         </IconButton>
       </Paper>
     );

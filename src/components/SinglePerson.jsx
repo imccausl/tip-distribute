@@ -10,6 +10,8 @@ import { red500 } from 'material-ui/styles/colors';
 import updatePerson from '../actions/updatePerson';
 import updateTipOuts from '../actions/updateTipOuts';
 import selectTipOut from '../actions/tipOutActions';
+import selectPerson from '../actions/selectPerson';
+import showModal from '../actions/modalActions';
 
 class SinglePerson extends Component {
   static getWindowDimensions() {
@@ -117,6 +119,10 @@ class SinglePerson extends Component {
             margin: '5px',
             borderLeft: '1px solid lightgrey',
           }}
+          onTouchTap={() => {
+            this.props.selectPerson({ belongsTo: this.props.tipOut.id, name: this.props.name, id: this.props.id, hours: this.props.hours });
+            this.props.showModal(true, 'MODAL_CONFIRM_DELETE_PERSON', 'Delete Person');
+          }}
         >
           <SvgIcon><ContentRemove color={red500} /></SvgIcon>
         </IconButton>
@@ -135,7 +141,7 @@ function mapStateToProps(state) {
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({ updatePerson, selectTipOut }, dispatch);
+  return bindActionCreators({ updatePerson, selectTipOut, selectPerson, showModal }, dispatch);
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(SinglePerson);

@@ -42,7 +42,25 @@ class ConfirmDialog extends Component {
       actions = cancel.concat(deleteConfirm);
     }
 
-    if (this.props.modalAction.modal === 'MODAL_CONFIRM_DELETE') {
+    if(this.props.modalAction.modal === 'MODAL_CONFIRM_DELETE_PERSON') {
+      const deleteConfirm = (
+        <RaisedButton
+          label="Delete"
+          backgroundColor="#ff0000"
+          labelColor="#ffffff"
+          onTouchTap={
+            () => {
+              this.props.showModal(false);
+            }
+          }
+        />
+      );
+
+      message = `Are you sure you want to permanently delete this entry for ${this.props.currentPerson.name}?`;
+      actions = cancel.concat(deleteConfirm);
+    }
+
+    if (this.props.modalAction.modal === 'MODAL_CONFIRM_DELETE' || this.props.modalAction.modal === 'MODAL_CONFIRM_DELETE_PERSON') {
       return (
         <Dialog
           title={this.props.modalAction.title}
@@ -61,6 +79,7 @@ function mapStateToProps(state) {
   return {
     modalAction: state.modalAction,
     currentTipOut: state.currentTipOut,
+    currentPerson: state.currentPerson,
   };
 }
 

@@ -24,6 +24,16 @@ function activeTipOut(state = null, action) {
           employee => (employee.id === action.payload.id) ? { id: action.payload.id, name: action.payload.name, hours: action.payload.hours } : employee,
         ),
       };
+    case 'DELETE_TIP_OUT':
+      return null;
+    case 'DELETE_PERSON':
+      return {
+        id: state.id,
+        exactDate: state.exactDate,
+        weekEnding: state.weekEnding,
+        totalCash: state.totalCash,
+        employees: state.employees.filter(employee => employee.id !== action.payload.id),
+      };
     default:
       return state;
   }

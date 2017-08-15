@@ -6,6 +6,7 @@ import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import RaisedButton from 'material-ui/RaisedButton';
 import showModal from '../actions/modalActions';
+import { deleteTipOut, deletePerson } from '../actions/delete';
 
 class ConfirmDialog extends Component {
   render() {
@@ -32,6 +33,7 @@ class ConfirmDialog extends Component {
           labelColor="#ffffff"
           onTouchTap={
             () => {
+              this.props.deleteTipOut(this.props.currentTipOut.id);              
               this.props.showModal(false);
             }
           }
@@ -50,6 +52,7 @@ class ConfirmDialog extends Component {
           labelColor="#ffffff"
           onTouchTap={
             () => {
+              this.props.deletePerson(this.props.currentPerson.id, this.props.currentTipOut.id);
               this.props.showModal(false);
             }
           }
@@ -84,7 +87,7 @@ function mapStateToProps(state) {
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({ showModal }, dispatch);
+  return bindActionCreators({ showModal, deleteTipOut, deletePerson }, dispatch);
 }
 
 ConfirmDialog.propTypes = {

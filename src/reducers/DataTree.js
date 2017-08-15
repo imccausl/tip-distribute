@@ -54,6 +54,22 @@ export default function tipOutsReducer(state = initialState, action) {
 
         return tipOut;
       });
+    case 'DELETE_TIP_OUT':
+      return state.filter(tipOut => tipOut.id !== action.payload);
+    case 'DELETE_PERSON':
+      return state.map((tipOut) => {
+        if (tipOut.id === action.payload.belongsTo) {
+          return {
+            id: tipOut.id,
+            exactDate: tipOut.exactDate,
+            weekEnding: tipOut.weekEnding,
+            totalCash: tipOut.totalCash,
+            employees: tipOut.employees.filter(employee => employee.id !== action.payload.id),
+          };
+        }
+
+        return tipOut;
+      });
     default:
       return state;
   }

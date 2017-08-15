@@ -40,6 +40,7 @@ class SinglePerson extends Component {
     const small = window.matchMedia('(max-width: 375px)');
     const medium = window.matchMedia('(min-width: 375px)');
     const large = window.matchMedia('(max-width: 445px)');
+
     const style = {
       padding: '0 10px',
       margin: '5px 0',

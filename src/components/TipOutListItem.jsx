@@ -72,7 +72,7 @@ class TipOutListItem extends Component {
           rightIcon={<NumOfPeople />}
           onTouchTap={this.props.click}
         />
-        <Divider inset={true} />
+        <Divider inset={false} />
       </div>
     );
   }

@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import TextField from 'material-ui/TextField';
+import Divider from 'material-ui/Divider';
 import Paper from 'material-ui/Paper';
 import IconButton from 'material-ui/IconButton';
 import SvgIcon from 'material-ui/SvgIcon';
@@ -68,7 +69,7 @@ class SinglePerson extends Component {
     }
 
     return (
-      <Paper style={style} zDepth={1}>
+      <Paper style={style} zDepth={0}>
         <TextField
           style={nameStyle}
           hintText="Name"
@@ -79,7 +80,7 @@ class SinglePerson extends Component {
           }}
           onBlur={
             (e) => {
-              if (this.state.canUpdate) {
+              if (this.state.canUpdate && this.props.name !== e.target.value) {
                 this.setState({ canUpdate: false });
                 this.props.updatePerson({
                   belongsTo: this.props.tipOut.id,
@@ -98,7 +99,7 @@ class SinglePerson extends Component {
           onFocus={() => this.setState({ canUpdate: true })}
           onBlur={
             (e) => {
-              if (this.state.canUpdate) {
+              if (this.state.canUpdate && this.props.hours !== e.target.value) {
                 this.setState({ canUpdate: false });
                 this.props.updatePerson({
                   belongsTo: this.props.tipOut.id,

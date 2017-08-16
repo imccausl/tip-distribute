@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { ListItem } from 'material-ui/List';
+import Checkbox from 'material-ui/Checkbox';
 import IconMenu from 'material-ui/IconMenu';
 import MenuItem from 'material-ui/MenuItem';
 import IconButton from 'material-ui/IconButton';

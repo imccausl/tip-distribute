@@ -81,7 +81,7 @@ class TipAppBar extends Component {
     }
 
     return (
-      <div style={{ position: 'relative' }}>
+      <div style={{ position: 'fixed', zIndex: '5', width: '100%', top: '0', left: '0' }}>
         <Toolbar>
           <ToolbarGroup
             firstChild={true}

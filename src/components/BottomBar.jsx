@@ -19,24 +19,19 @@ class BottomBar extends Component {
   render() {
     return (
       <div style={{ position: 'fixed', bottom: 0, left: 0, width: '100%', zIndex: '5' }}>
-      <Paper zDepth={1}>
-        <BottomNavigation selectedIndex={this.state.selectedIndex}>
-          <BottomNavigationItem
-            label="Edit"
-            icon={<EditIcon />}
-            onTouchTap={() => this.select(0)}
-          />
-          <BottomNavigationItem
-            label="Distribute"
-            icon={<MoneyIcon />}
-            onTouchTap={() => this.select(1)}
-          />
-          <BottomNavigationItem
-            label="Statistics"
-            icon={<StatsIcon />}
-            onTouchTap={() => this.select(2)}
-          />
-        </BottomNavigation>
+        <Paper zDepth={1}>
+          <BottomNavigation selectedIndex={this.state.selectedIndex}>
+            <BottomNavigationItem
+              label="Edit"
+              icon={<EditIcon />}
+              onTouchTap={() => this.select(0)}
+            />
+            <BottomNavigationItem
+              label="Distribute"
+              icon={<MoneyIcon />}
+              onTouchTap={() => this.select(1)}
+            />
+          </BottomNavigation>
         </Paper>
       </div>
     );

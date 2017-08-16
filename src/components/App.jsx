@@ -4,10 +4,11 @@ import darkBaseTheme from 'material-ui/styles/baseThemes/darkBaseTheme';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import EmployeeList from './EmployeeList.jsx';
 import AppBar from './AppBar.jsx';
+import BottomBar from './BottomBar.jsx';
 import TipOutDrawer from './TipOutDrawer.jsx';
 
 const App = () => (
-  <div style={{ maxWidth: '97%', margin: '0 auto' }}>
+  <div style={{ position: 'relative' }}>
     <MuiThemeProvider>
       <TipOutDrawer />
     </MuiThemeProvider>
@@ -16,6 +17,9 @@ const App = () => (
     </MuiThemeProvider>
     <MuiThemeProvider>
       <EmployeeList />
+    </MuiThemeProvider>
+    <MuiThemeProvider>
+      <BottomBar />
     </MuiThemeProvider>
   </div>
 );

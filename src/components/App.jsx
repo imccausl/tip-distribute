@@ -7,7 +7,7 @@ import AppBar from './AppBar.jsx';
 import TipOutDrawer from './TipOutDrawer.jsx';
 
 const App = () => (
-  <div style={{ maxWidth: '500px', margin: '0 auto' }}>
+  <div>
     <MuiThemeProvider>
       <TipOutDrawer />
     </MuiThemeProvider>

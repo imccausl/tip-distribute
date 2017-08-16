@@ -23,7 +23,7 @@ class EmployeeList extends Component {
     if (!this.props.tipOut) return null;
 
     return (
-      <div>
+      <div style={{marginTop: '60px', zIndex: '0'}}>
         {this.renderList()}
       </div>
     );

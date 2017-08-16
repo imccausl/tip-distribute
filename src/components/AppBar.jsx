@@ -23,6 +23,12 @@ import updateTipOuts from '../actions/updateTipOuts';
 import makeNewId from '../helpers/makeNewId';
 
 class TipAppBar extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = { distributionOpen: false };
+  }
+
   MainMenu() {
     return (
       <div>
@@ -30,6 +36,7 @@ class TipAppBar extends Component {
           disabled={!(this.props.tipOut)}
           primaryText="Distribute Tips"
           leftIcon={<MoneyIcon />}
+          onTouchTap={() => this.setState({ distributionOpen: true })}
         />
         <Divider />
         <MenuItem
@@ -118,6 +125,7 @@ class TipAppBar extends Component {
           </ToolbarGroup>
         </Toolbar>
         <ConfirmDialog />
+        <DistributionReport isOpen={this.state.distributionOpen} resetState={() => this.setState({ distributionOpen: false })} />
       </div>
     );
   }

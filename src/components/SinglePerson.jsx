@@ -5,7 +5,7 @@ import TextField from 'material-ui/TextField';
 import Paper from 'material-ui/Paper';
 import IconButton from 'material-ui/IconButton';
 import SvgIcon from 'material-ui/SvgIcon';
-import ContentRemove from 'material-ui/svg-icons/content/remove-circle';
+import ContentRemove from 'material-ui/svg-icons/action/delete-forever';
 import { red500 } from 'material-ui/styles/colors';
 import updatePerson from '../actions/updatePerson';
 import updateTipOuts from '../actions/updateTipOuts';

@@ -6,7 +6,8 @@ import Drawer from 'material-ui/Drawer';
 import { Toolbar, ToolbarGroup, ToolbarTitle } from 'material-ui/Toolbar';
 import IconMenu from 'material-ui/IconMenu';
 import MenuItem from 'material-ui/MenuItem';
-import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
+import MoreVertIcon from 'material-ui/svg-icons/navigation/arrow-drop-down';
+import SelectIcon from 'material-ui/svg-icons/content/select-all';
 import CreateIcon from 'material-ui/svg-icons/content/add-box';
 import DeleteIcon from 'material-ui/svg-icons/action/delete-forever';
 import CombineIcon from 'material-ui/svg-icons/editor/merge-type';
@@ -69,6 +70,7 @@ class TipOutDrawer extends Component {
           <Toolbar>
             <ToolbarTitle text="Tip Outs" />
             <ToolbarGroup>
+              <IconButton><SelectIcon /></IconButton>
               {this.tipOutsMenu()}
             </ToolbarGroup>
           </Toolbar>

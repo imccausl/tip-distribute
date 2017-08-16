@@ -27,23 +27,29 @@ const rightIconMenu = (
 );
 
 class TipOutListItem extends Component {
+  static getNumOfPeople(employees) {
+    return (!employees) ? 0 : employees.length;
+  }
+
+  static getTotalHours(employees)  {
+    return (!employees) ? 0 : Math.floor(
+      employees.map(emp => Number.parseFloat(emp.hours))
+        .reduce((sum, curr) => sum + curr, 0));
+  }
+
   constructor(props) {
     super(props);
 
     this.state = {
-      people: (!this.props.employees) ? 0 : this.props.employees.length,
-      totalHours: (!this.props.employees) ? 0 : Math.floor(
-        this.props.employees.map(emp => Number.parseFloat(emp.hours))
-          .reduce((sum, curr) => sum + curr, 0)),
+      people: TipOutListItem.getNumOfPeople(this.props.employees),
+      totalHours: TipOutListItem.getTotalHours(this.props.employees),
     };
   }
 
   componentWillReceiveProps(nextProps) {
     this.setState({
-      people: (!nextProps.employees) ? 0 : nextProps.employees.length,
-      totalHours: (!nextProps.employees) ? 0 : Math.floor(
-        nextProps.employees.map(emp => Number.parseFloat(emp.hours))
-          .reduce((sum, curr) => sum + curr, 0)),
+      people: TipOutListItem.getNumOfPeople(nextProps.employees),
+      totalHours: TipOutListItem.getTotalHours(nextProps.employees),
     });
   }
 

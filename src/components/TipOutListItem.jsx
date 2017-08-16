@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { ListItem } from 'material-ui/List';
 import Checkbox from 'material-ui/Checkbox';
+import NumPeopleBadge from 'material-ui/Badge';
 import IconMenu from 'material-ui/IconMenu';
 import MenuItem from 'material-ui/MenuItem';
 import IconButton from 'material-ui/IconButton';
@@ -32,45 +33,13 @@ class TipOutListItem extends Component {
       this.props.employees.map(emp => Number.parseFloat(emp.hours))
         .reduce((sum, curr) => sum + curr, 0),
     );
-    const NumOfPeople = () => {
-      const style = {
-        position: 'relative',
-        borderRadius: '50%',
-        color: 'black',
-        backgroundColor: 'lightGrey',
-        width: '30px',
-        height: '30px',
-        textAlign: 'center',
-        margin: '5px',
-        fontWeight: 'bold',
-      };
-
-      const spanStyle = {
-        position: 'absolute',
-        top: '6px',
-        left: (people < 10) ? '10px' : '6px',
-      };
-
-      const styleAbsolute = {
-        position: 'absolute',
-        right: '20px',
-      };
-
-      return (
-        <div style={styleAbsolute}>
-          <div style={style}>
-            <span style={spanStyle}>{people}</span>
-          </div>
-        </div>
-      );
-    };
 
     return (
       <div>
         <ListItem
           primaryText={`Week Ending ${this.props.week}`}
           secondaryText={`$${this.props.cash} | Hours: ${totalHours}`}
-          rightIcon={<NumOfPeople />}
+          rightIcon={<NumPeopleBadge badgeContent={people} primary={true} />}
           onTouchTap={this.props.click}
         />
         <Divider inset={false} />

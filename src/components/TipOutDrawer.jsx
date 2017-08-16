@@ -61,6 +61,7 @@ class TipOutDrawer extends Component {
     return (
       <div>
         <Drawer
+          width="30%"
           open={this.props.drawerOpen}
           docked={false}
           onRequestChange={() => this.props.hideDrawer()}

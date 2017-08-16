@@ -45,7 +45,8 @@ class SinglePerson extends Component {
     const large = window.matchMedia('(max-width: 445px)');
 
     const style = {
-      padding: '0 10px',
+      padding: '0',
+      border: '1px solid lightgrey',
       margin: '5px 0',
       position: 'relative',
     };
@@ -117,8 +118,7 @@ class SinglePerson extends Component {
             position: 'absolute',
             right: '0',
             top: '10px',
-            margin: '5px',
-            borderLeft: '1px solid lightgrey',
+            margin: '5px 0',
           }}
           onTouchTap={() => {
             this.props.selectPerson({ belongsTo: this.props.tipOut.id, name: this.props.name, id: this.props.id, hours: this.props.hours });

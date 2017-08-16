@@ -49,7 +49,8 @@ class Distribution extends Component {
       const hourlyAmount = parseFloat(this.props.tipOut.totalCash) / totalHours;
       console.log("Hourly amount:", hourlyAmount);
 
-      return Math.round(parseFloat(hours) * hourlyAmount);
+      return Math.round(parseFloat(hours) * hourlyAmount)
+       ;
     }
 
     return this.state.people.map((employee) =>

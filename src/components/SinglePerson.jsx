@@ -6,8 +6,7 @@ import Divider from 'material-ui/Divider';
 import Paper from 'material-ui/Paper';
 import IconButton from 'material-ui/IconButton';
 import SvgIcon from 'material-ui/SvgIcon';
-import ContentRemove from 'material-ui/svg-icons/action/delete-forever';
-import { red500 } from 'material-ui/styles/colors';
+import ContentRemove from 'material-ui/svg-icons/navigation/cancel';
 import updatePerson from '../actions/updatePerson';
 import updateTipOuts from '../actions/updateTipOuts';
 import selectTipOut from '../actions/tipOutActions';
@@ -46,9 +45,8 @@ class SinglePerson extends Component {
 
     const style = {
       padding: '0',
-      margin: '5px 0',
+      margin: '0',
       position: 'relative',
-      maxWidth: '95%',
     };
 
     const hoursStyle = {
@@ -70,7 +68,21 @@ class SinglePerson extends Component {
     }
 
     return (
-      <Paper style={style} zDepth={1}>
+      <div style={style}>
+        <IconButton
+          style={{
+            position: 'absolute',
+            right: '-10px',
+            top: '15px',
+            margin: '5px 0',
+          }}
+          onTouchTap={() => {
+            this.props.selectPerson({ belongsTo: this.props.tipOut.id, name: this.props.name, id: this.props.id, hours: this.props.hours });
+            this.props.showModal(true, 'MODAL_CONFIRM_DELETE_PERSON', 'Delete Person');
+          }}
+        >
+          <SvgIcon><ContentRemove /></SvgIcon>
+        </IconButton>
         <TextField
           style={nameStyle}
           hintText="Name"
@@ -112,22 +124,7 @@ class SinglePerson extends Component {
             }
           }
         />
-        <IconButton
-          tooltip="Remove this person"
-          style={{
-            position: 'absolute',
-            right: '0',
-            top: '10px',
-            margin: '5px 0',
-          }}
-          onTouchTap={() => {
-            this.props.selectPerson({ belongsTo: this.props.tipOut.id, name: this.props.name, id: this.props.id, hours: this.props.hours });
-            this.props.showModal(true, 'MODAL_CONFIRM_DELETE_PERSON', 'Delete Person');
-          }}
-        >
-          <SvgIcon><ContentRemove color={red500} /></SvgIcon>
-        </IconButton>
-      </Paper>
+      </div>
     );
   }
 }

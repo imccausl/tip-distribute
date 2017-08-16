@@ -34,7 +34,7 @@ class TipOutListItem extends Component {
   static getTotalHours(employees)  {
     return (!employees) ? 0 : Math.floor(
       employees.map(emp => Number.parseFloat(emp.hours))
-        .reduce((sum, curr) => sum + curr, 0));
+        .reduce((sum, curr) => sum + curr, 0)) || 0;
   }
 
   constructor(props) {

@@ -10,7 +10,7 @@ import FlatButton from 'material-ui/FlatButton';
 import { hideModal } from '../actions/modalActions';
 
 const dialogStyle = {
-  width: '100%',
+  width: '80%',
   maxWidth: 'none',
   height: '100vh',
   maxHeight: 'none',
@@ -93,7 +93,8 @@ class Distribution extends Component {
     ];
 
   return (
-  <Dialog 
+  <Dialog
+    title="Tip Distribution Report"
     open={this.state.open}
     contentStyle={dialogStyle}
     autoScrollBodyContent={true}

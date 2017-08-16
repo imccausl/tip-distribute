@@ -46,9 +46,9 @@ class SinglePerson extends Component {
 
     const style = {
       padding: '0',
-      border: '1px solid lightgrey',
       margin: '5px 0',
       position: 'relative',
+      maxWidth: '95%',
     };
 
     const hoursStyle = {
@@ -70,7 +70,7 @@ class SinglePerson extends Component {
     }
 
     return (
-      <Paper style={style} zDepth={0}>
+      <Paper style={style} zDepth={1}>
         <TextField
           style={nameStyle}
           hintText="Name"

@@ -17,27 +17,42 @@ const dialogStyle = {
 };
 
 class Distribution extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = { people: (!this.props.tipOut) ? null : this.props.tipOut.employees, open: false };
+  }
+
+  componentWillReceiveProps(newProps) {
+    this.setState({ people: (!this.props.tipOut) ? null : this.props.tipOut.employees, open: newProps.isOpen });
+  }
+
   makeRows() {
+    if (!this.state.people) {
+      return null;
+    }
+
     const getTipOut = (hours) => {
-      if (!hours || !this.props.people) {
+      if (!hours || !this.state.people) {
         return 0;
       }
 
-      const allHours = this.props.people.map( employee => {
+      const allHours = this.state.people.map( employee => {
         if (!employee) {
           return 0;
         }
 
-        return parseInt(employee.hours, 10)
+        return parseFloat(employee.hours);
       });
 
       const totalHours = allHours.reduce((prev, curr) => prev + curr);
-      const hourlyAmount = parseInt(this.props.tipOut.totalCash, 10) / totalHours;
+      const hourlyAmount = parseFloat(this.props.tipOut.totalCash) / totalHours;
+      console.log("Hourly amount:", hourlyAmount);
 
-      return Math.floor(parseInt(hours, 10) * hourlyAmount);
+      return Math.round(parseFloat(hours) * hourlyAmount);
     }
 
-    return this.props.people.map( employee => 
+    return this.state.people.map((employee) =>
       {
         if (!employee) {
           return null;
@@ -52,6 +67,17 @@ class Distribution extends Component {
     )});
   }
 
+  getTotalHours() {
+    if (!this.state.people) {
+      return 0;
+    }
+
+    return Math.round(this.state.people.map(person => parseFloat(person.hours)).reduce((sum, curr) => sum + curr));
+  }
+
+  getTotalTipOut() {
+  }
+
   render() {
   if (!this.props.tipOut) return null;
   console.log(this.props.tipOut);
@@ -59,13 +85,16 @@ class Distribution extends Component {
       <FlatButton
         label="Close"
         primary={true}
-        onTouchTap={this.props.hideModal}
+        onTouchTap={() => {
+          this.props.resetState();
+          this.setState({ open: false });
+        }}
       />,
     ];
 
   return (
   <Dialog 
-    open={this.props.open}
+    open={this.state.open}
     contentStyle={dialogStyle}
     autoScrollBodyContent={true}
     modal={true}
@@ -75,12 +104,13 @@ class Distribution extends Component {
         <TableHeader adjustForCheckbox={false} displaySelectAll={false}>
           <TableRow>
             <TableHeaderColumn>Name</TableHeaderColumn>
-            <TableHeaderColumn>Hours</TableHeaderColumn>
+            <TableHeaderColumn>Hours ({this.getTotalHours()})</TableHeaderColumn>
             <TableHeaderColumn>Tip Out</TableHeaderColumn>
           </TableRow>
         </TableHeader>
         <TableBody displayRowCheckbox={false}>
           {this.makeRows()}
+         
         </TableBody>
       </Table>
     </Dialog>
@@ -90,9 +120,7 @@ class Distribution extends Component {
 
 function mapStateToProps(state) {
   return {
-    tipOut: state.activeTipOut,
-    people: state.activePeople,
-    open: state.showModal,
+    tipOut: state.currentTipOut,
   };
 }
 

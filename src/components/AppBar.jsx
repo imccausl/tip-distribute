@@ -12,7 +12,7 @@ import DeleteIcon from 'material-ui/svg-icons/action/delete-forever';
 import EditIcon from 'material-ui/svg-icons/editor/mode-edit';
 import MenuIcon from 'material-ui/svg-icons/navigation/menu';
 import MoneyIcon from 'material-ui/svg-icons/editor/monetization-on';
-import ContentAdd from 'material-ui/svg-icons/content/add-circle';
+import ContentAdd from 'material-ui/svg-icons/content/add-box';
 import { showDrawer } from '../actions/drawerActions';
 import showModal from '../actions/modalActions';
 import DistributionReport from './DistributionReport.jsx';

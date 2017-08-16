@@ -7,7 +7,7 @@ import { Toolbar, ToolbarGroup, ToolbarTitle } from 'material-ui/Toolbar';
 import IconMenu from 'material-ui/IconMenu';
 import MenuItem from 'material-ui/MenuItem';
 import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
-import CreateIcon from 'material-ui/svg-icons/content/add-circle';
+import CreateIcon from 'material-ui/svg-icons/content/add-box';
 import DeleteIcon from 'material-ui/svg-icons/action/delete-forever';
 import CombineIcon from 'material-ui/svg-icons/editor/merge-type';
 import IconButton from 'material-ui/IconButton';

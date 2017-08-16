@@ -27,19 +27,35 @@ const rightIconMenu = (
 );
 
 class TipOutListItem extends Component {
-  render() {
-    const people = (!this.props.employees) ? 0 : this.props.employees.length;
-    const totalHours = (!this.props.employees) ? 0 : Math.floor(
-      this.props.employees.map(emp => Number.parseFloat(emp.hours))
-        .reduce((sum, curr) => sum + curr, 0),
-    );
+  constructor(props) {
+    super(props);
 
+    this.state = {
+      people: (!this.props.employees) ? 0 : this.props.employees.length,
+      totalHours: (!this.props.employees) ? 0 : Math.floor(
+        this.props.employees.map(emp => Number.parseFloat(emp.hours))
+          .reduce((sum, curr) => sum + curr, 0)),
+    };
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.setState({
+      people: (!nextProps.employees) ? 0 : nextProps.employees.length,
+      totalHours: (!nextProps.employees) ? 0 : Math.floor(
+        nextProps.employees.map(emp => Number.parseFloat(emp.hours))
+          .reduce((sum, curr) => sum + curr, 0)),
+    });
+  }
+
+  render() {
     return (
       <div>
         <ListItem
+          leftCheckbox={null}
           primaryText={`Week Ending ${this.props.week}`}
-          secondaryText={`$${this.props.cash} | Hours: ${totalHours}`}
-          rightIcon={<NumPeopleBadge badgeContent={people} primary={true} />}
+          secondaryText={`$${this.props.cash} | Hours: ${this.state.totalHours}`}
+          secondaryTextLines={2}
+          rightIcon={<NumPeopleBadge badgeContent={this.state.people} primary={true} />}
           onTouchTap={this.props.click}
         />
         <Divider inset={false} />

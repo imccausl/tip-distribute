@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { List } from 'material-ui/List';
+import Subheader from 'material-ui/Subheader';
 import { bindActionCreators } from 'redux';
 import TipOutListItem from './TipOutListItem.jsx';
 import selectTipOut from '../actions/tipOutActions';
@@ -31,9 +32,15 @@ class TipOutList extends Component {
     }
 
     return (
+      <div>
         <List>
+          <Subheader>Individual Tip Outs</Subheader>
           {this.renderList()}
         </List>
+        <List>
+          <Subheader>Combined Tip Outs</Subheader>
+        </List>
+      </div>
     );
   }
 }

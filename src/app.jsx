@@ -4,6 +4,7 @@ import injectTapEventPlugin from 'react-tap-event-plugin';
 import { Provider } from 'react-redux';
 import { createStore, compose } from 'redux';
 import { reactReduxFirebase } from 'react-redux-firebase';
+import * as firebase from 'firebase';
 import App from './components/App.jsx';
 import rootReducer from './reducers/index';
 import firebaseConfig from './config/firebaseConfig';
@@ -15,13 +16,14 @@ const config = {
   enableLogging: false,
 };
 
-const createStoreWithFirebase = compose(
-  reactReduxFirebase(firebaseConfig, config),
-)(createStore);
+firebase.initializeApp(firebaseConfig);
 
-const store = createStoreWithFirebase(
+const store = createStore(
   rootReducer,
   window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__(), // debugger
+  compose(
+    reactReduxFirebase(firebase, config),
+  ),
 );
 
 ReactDOM.render(

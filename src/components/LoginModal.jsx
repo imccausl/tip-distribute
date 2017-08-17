@@ -18,7 +18,6 @@ class LoginBox extends Component {
   }
 
   render() {
-    console.log(this.props.auth);
     if (!isEmpty(this.props.auth)) {
       return null;
     }

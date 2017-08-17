@@ -1688,10 +1688,6 @@ es6-map@^0.1.3:
     es6-symbol "~3.1.1"
     event-emitter "~0.3.5"
 
-es6-promise@^4.1.0:
-  version "4.1.1"
-  resolved "https://registry.yarnpkg.com/es6-promise/-/es6-promise-4.1.1.tgz#8811e90915d9a0dba36274f0b242dbda78f9c92a"
-
 es6-set@~0.1.5:
   version "0.1.5"
   resolved "https://registry.yarnpkg.com/es6-set/-/es6-set-0.1.5.tgz#d2b3ec5d4d800ced818db538d28974db0a73ccb1"
@@ -2098,9 +2094,9 @@ find-up@^2.0.0, find-up@^2.1.0:
   dependencies:
     locate-path "^2.0.0"
 
-firebase@^3.9.0:
-  version "3.9.0"
-  resolved "https://registry.yarnpkg.com/firebase/-/firebase-3.9.0.tgz#c4237f50f58eeb25081b1839d6cbf175f8f7ed9b"
+firebase@^4.2.0:
+  version "4.2.0"
+  resolved "https://registry.yarnpkg.com/firebase/-/firebase-4.2.0.tgz#9181a0a22c6afc2b27bd810789beac48a438207d"
   dependencies:
     dom-storage "^2.0.2"
     faye-websocket "0.9.3"
@@ -2382,7 +2378,7 @@ hoist-non-react-statics@^1.0.0, hoist-non-react-statics@^1.0.3:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/hoist-non-react-statics/-/hoist-non-react-statics-1.2.0.tgz#aa448cf0986d55cc40773b17174b7dd066cb7cfb"
 
-hoist-non-react-statics@^2.2.0:
+hoist-non-react-statics@^2.2.2:
   version "2.2.2"
   resolved "https://registry.yarnpkg.com/hoist-non-react-statics/-/hoist-non-react-statics-2.2.2.tgz#c0eca5a7d5a28c5ada3107eb763b01da6bfa81fb"
 
@@ -2503,10 +2499,6 @@ ieee754@^1.1.4:
 ignore@^3.3.3:
   version "3.3.3"
   resolved "https://registry.yarnpkg.com/ignore/-/ignore-3.3.3.tgz#432352e57accd87ab3110e82d3fea0e47812156d"
-
-immutable@^3.8.1:
-  version "3.8.1"
-  resolved "https://registry.yarnpkg.com/immutable/-/immutable-3.8.1.tgz#200807f11ab0f72710ea485542de088075f68cd2"
 
 imurmurhash@^0.1.4:
   version "0.1.4"
@@ -2845,8 +2837,8 @@ jsonify@~0.0.0:
   resolved "https://registry.yarnpkg.com/jsonify/-/jsonify-0.0.0.tgz#2c74b6ee41d93ca51b7b5aaee8f503631d252a73"
 
 jsonwebtoken@^7.3.0:
-  version "7.4.2"
-  resolved "https://registry.yarnpkg.com/jsonwebtoken/-/jsonwebtoken-7.4.2.tgz#571b903c07e875c0fc59203d1ac78667d80e09cd"
+  version "7.4.3"
+  resolved "https://registry.yarnpkg.com/jsonwebtoken/-/jsonwebtoken-7.4.3.tgz#77f5021de058b605a1783fa1283e99812e645638"
   dependencies:
     joi "^6.10.1"
     jws "^3.1.4"
@@ -3796,16 +3788,14 @@ react-event-listener@^0.4.5:
     prop-types "^15.5.4"
     warning "^3.0.0"
 
-react-redux-firebase@^1.4.6:
-  version "1.4.6"
-  resolved "https://registry.yarnpkg.com/react-redux-firebase/-/react-redux-firebase-1.4.6.tgz#87dba5cb08fb7ae09aa703c2c66782589c5db156"
+react-redux-firebase@canary:
+  version "2.0.0-beta.5"
+  resolved "https://registry.yarnpkg.com/react-redux-firebase/-/react-redux-firebase-2.0.0-beta.5.tgz#a56694b2f971aae9357ac8dd5e192e83b86289f9"
   dependencies:
-    es6-promise "^4.1.0"
-    firebase "^3.9.0"
-    hoist-non-react-statics "^2.2.0"
-    immutable "^3.8.1"
+    hoist-non-react-statics "^2.2.2"
     jwt-decode "^2.2.0"
     lodash "^4.17.4"
+    prop-types "^15.5.10"
 
 react-redux@^5.0.5:
   version "5.0.5"

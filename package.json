@@ -33,12 +33,13 @@
     "webpack-dev-server": "^2.6.1"
   },
   "dependencies": {
+    "firebase": "^4.2.0",
     "material-ui": "^0.18.7",
     "prop-types": "^15.5.10",
     "react": "^15.6.1",
     "react-dom": "^15.6.1",
     "react-redux": "^5.0.5",
-    "react-redux-firebase": "^1.4.6",
+    "react-redux-firebase": "canary",
     "react-tap-event-plugin": "^2.0.1",
     "redux": "^3.7.2"
   },

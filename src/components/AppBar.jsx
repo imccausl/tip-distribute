@@ -4,6 +4,8 @@ import { pathToJS, firebaseConnect, isEmpty } from 'react-redux-firebase';
 import { bindActionCreators } from 'redux';
 import AppBar from 'material-ui/AppBar';
 import IconButton from 'material-ui/IconButton';
+import Avatar from 'material-ui/Avatar';
+import Divider from 'material-ui/Divider';
 import IconMenu from 'material-ui/IconMenu';
 import MenuItem from 'material-ui/MenuItem';
 import FlatButton from 'material-ui/FlatButton';
@@ -23,11 +25,22 @@ class MainBar extends Component {
   render() {
     const Logged = () => (
       <IconMenu
-        iconButtonElement={<IconButton><MoreIcon /></IconButton>}
+        iconButtonElement={<IconButton style={{ padding: '0' }}><Avatar>P</Avatar></IconButton>}
         targetOrigin={{horizontal: 'right', vertical: 'top'}}
         anchorOrigin={{horizontal: 'right', vertical: 'top'}}
       >
-        <MenuItem primaryText="Sign out"
+        <MenuItem
+          primaryText="Profile..."
+        />
+        <Divider />
+        <MenuItem
+          primaryText="Users & Permissions..."
+        />
+        <MenuItem
+          primaryText="Stores..."
+        />
+        <Divider />
+        <MenuItem primaryText="Sign Out"
           onTouchTap={() => this.props.firebase.logout()}
         />
       </IconMenu>
@@ -36,7 +49,7 @@ class MainBar extends Component {
     return (
       <div style={{ position: 'fixed', zIndex: 3, width: '100%', top: 0, left: 0 }}>
         <AppBar
-          title="Tip Management"
+          title={`${(isEmpty(this.props.auth)) ? 'Tip Management' : `Hello, ${this.props.auth.displayName}`}`}
           onLeftIconButtonTouchTap={this.props.showDrawer}
           iconElementRight={(!isEmpty(this.props.auth)) ? <Logged /> : <Login />}
         />

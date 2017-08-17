@@ -1,16 +1,15 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
 import EmployeeList from './EmployeeList.jsx';
 
 class ViewArea extends Component {
   render() {
     const viewArea = () => {
       switch (this.props.view.type) {
-        case 'EMPLOYEE_LIST':
+        case 'SHOW_EDIT_VIEW':
           return <EmployeeList />;
-        case 'USER_PROFILE':
-        case 'DISTRIBUTE_TIPS':
+        case 'SHOW_USER_PROFILE':
+        case 'SHOW_DISTRIBUTE_TIPS':
         default:
           return null;
       }
@@ -23,4 +22,10 @@ class ViewArea extends Component {
   }
 }
 
-export default ViewArea;
+function mapStateToProps(state) {
+  return {
+    view: state.activeView,
+  }
+}
+
+export default connect(mapStateToProps)(ViewArea);

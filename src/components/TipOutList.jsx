@@ -7,6 +7,7 @@ import TipOutListItem from './TipOutListItem.jsx';
 import selectTipOut from '../actions/tipOutActions';
 import { hideDrawer } from '../actions/drawerActions';
 import selectPeople from '../actions/selectEmployees';
+import selectView from '../actions/viewAction';
 
 class TipOutList extends Component {
 
@@ -19,6 +20,7 @@ class TipOutList extends Component {
         employees={tipOut.employees}
         click={() => {
           this.props.selectTipOut(tipOut);
+          this.props.selectView('SHOW_EDIT_VIEW', 0);
           this.props.hideDrawer();
         }}
       />
@@ -48,6 +50,7 @@ class TipOutList extends Component {
 function mapStateToProps(state) {
   return {
     data: state.dataTree,
+    view: state.activeView,
     currentTipOut: state.currentTipOut,
     drawerOpen: state.showDrawer,
   };
@@ -56,6 +59,7 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return bindActionCreators({ 
     selectTipOut,
+    selectView,
     hideDrawer,
     selectPeople }, dispatch);
 }

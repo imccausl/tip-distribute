@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { pathToJS, firebaseConnect, isEmpty } from 'react-redux-firebase';
+import { firebaseConnect } from 'react-redux-firebase';
 import { bindActionCreators } from 'redux';
 import AppBar from 'material-ui/AppBar';
 import IconButton from 'material-ui/IconButton';
@@ -11,6 +11,7 @@ import MenuItem from 'material-ui/MenuItem';
 import FlatButton from 'material-ui/FlatButton';
 import MoreIcon from 'material-ui/svg-icons/navigation/more-vert';
 import { showDrawer } from '../actions/drawerActions';
+import showView from '../actions/viewAction';
 
 class Login extends Component {  
   render() {
@@ -49,9 +50,9 @@ class MainBar extends Component {
     return (
       <div style={{ position: 'fixed', zIndex: 3, width: '100%', top: 0, left: 0 }}>
         <AppBar
-          title={`${(isEmpty(this.props.auth)) ? 'Tip Management' : `Hello, ${this.props.auth.displayName}`}`}
+          title={`${(!this.props.auth.isEmpty) ? 'Tip Management' : `Hello, ${this.props.auth.displayName}`}`}
           onLeftIconButtonTouchTap={this.props.showDrawer}
-          iconElementRight={(!isEmpty(this.props.auth)) ? <Logged /> : <Login />}
+          iconElementRight={(this.props.auth) ? <Logged /> : <Login />}
         />
       </div>
     );
@@ -61,12 +62,13 @@ class MainBar extends Component {
 function mapStateToProps(state) {
   return {
     showDrawer: state.showDrawer,
-    auth: pathToJS(state.firebase, 'auth'),
+    view: state.activeView,
+    auth: state.firebase.auth,
   };
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({ showDrawer }, dispatch);
+  return bindActionCreators({ showDrawer, showView }, dispatch);
 }
 
 export default firebaseConnect()(connect(mapStateToProps, mapDispatchToProps)(MainBar));

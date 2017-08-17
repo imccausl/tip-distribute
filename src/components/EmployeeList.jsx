@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import selectEmployee from '../actions/selectPerson';
 import SinglePerson from './SinglePerson.jsx';
+import TipOutToolbar from './TipOutToolbar.jsx';
 import selectPeople from '../actions/selectEmployees';
 
 class EmployeeList extends Component {
@@ -30,7 +31,8 @@ class EmployeeList extends Component {
     if (!this.props.tipOut) return null;
 
     return (
-      <div style={{margin: '60px 0', zIndex: '0'}}>
+      <div>
+        <TipOutToolbar />
         <List>
           {this.renderList()}
         </List>

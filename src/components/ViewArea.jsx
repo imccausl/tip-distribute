@@ -4,7 +4,9 @@ import EmployeeList from './EmployeeList.jsx';
 class ViewArea extends Component {
   render() {
     return (
-      <EmployeeList />
+      <div style={{margin: '110px 0', zIndex: '0'}}>
+        <EmployeeList />
+      </div>
     );
   }
 }

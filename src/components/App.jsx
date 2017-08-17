@@ -6,9 +6,13 @@ import ViewArea from './ViewArea.jsx';
 import AppBar from './AppBar.jsx';
 import BottomBar from './BottomBar.jsx';
 import TipOutDrawer from './TipOutDrawer.jsx';
+import Login from './LoginModal.jsx';
 
-const App = () => (
+const App = (props) => (
   <div style={{ position: 'relative', overflow: 'hidden' }}>
+    <MuiThemeProvider>
+      <Login />
+    </MuiThemeProvider>
     <MuiThemeProvider>
       <TipOutDrawer />
     </MuiThemeProvider>

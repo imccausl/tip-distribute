@@ -1,10 +1,5 @@
 import React, { Component } from 'react';
-import { 
-  firebaseConnect,
-  pathToJS,
-  isEmpty,
-  isLoaded,
-} from 'react-redux-firebase';
+import { firebaseConnect } from 'react-redux-firebase';
 import { connect, bindActionCreators } from 'react-redux';
 import Dialog from 'material-ui/Dialog';
 import TextField from 'material-ui/TextField';
@@ -18,7 +13,8 @@ class LoginBox extends Component {
   }
 
   render() {
-    if (!isEmpty(this.props.auth)) {
+    console.log(this.props.auth);
+    if (this.props.auth.isLoaded && !this.props.auth.isEmpty) {
       return null;
     }
 
@@ -29,7 +25,7 @@ class LoginBox extends Component {
       <FlatButton
         disabled={!this.state.email && !this.state.password}
         onTouchTap={() => {
-          console.log("Attempting to sign in with:", this.state.email, this.state.password)
+          console.log("Attempting to sign in with:", this.state.email, this.state.password);
           return this.props.firebase.login({email: this.state.email, password: this.state.password })
             .then(() => this.setState({ isOpen: false }))
             .catch((error) => {
@@ -67,9 +63,9 @@ class LoginBox extends Component {
 
 function mapStateToProps(state) {
   return {
-    auth: pathToJS(state.firebase, 'auth'),
-    authError: pathToJS(state.firebase, 'authError'),
-    profile: pathToJS(state.firebase, 'profile'),
+    auth: state.firebase.auth,
+    authError: state.firebase.authError,
+    profile: state.firebase.profile,
   };
 }
 

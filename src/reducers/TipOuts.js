@@ -1,6 +1,4 @@
-import dummyData from '../helpers/dummyData';
-
-const initialState = dummyData || [];
+const initialState = null;
 
 export default function tipOutsReducer(state = initialState, action) {
   switch (action.type) {

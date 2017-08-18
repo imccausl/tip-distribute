@@ -5,6 +5,18 @@ import Dialog from 'material-ui/Dialog';
 import TextField from 'material-ui/TextField';
 import FlatButton from 'material-ui/FlatButton';
 
+/* 
+ WHAT NEEDS TO BE DONE IMMEDIATELY AFTER A USER LOGS IN:
+  - Once a user logs in, we have to check for tip outs the user created, and/or belongs to.
+  - We have to check the user's type
+  - If the user is type 1, supervisor, the user has access to all tip outs from his/her store,
+    so they should be added to the list.
+  - because the sole purpose of this app is no longer to just make tip outs,
+    we no longer have to show the create tip out dialog on start up if the drawer is empty...
+  All these things should be added to the redux store, changes will be made to the redux store
+  which will then be pushed to firebase.
+
+ */
 class LoginBox extends Component {
   constructor(props) {
     super(props);
@@ -13,6 +25,18 @@ class LoginBox extends Component {
   }
 
   render() {
+    const {
+      users,
+      tipOuts,
+      people,
+      stores,
+      roles,
+    } = this.props.data;
+
+    const {
+      profile,
+    } = this.props.profile;
+
     console.log(this.props.auth);
     if (this.props.auth.isLoaded && !this.props.auth.isEmpty) {
       return null;
@@ -25,8 +49,11 @@ class LoginBox extends Component {
       <FlatButton
         disabled={!this.state.email && !this.state.password}
         onTouchTap={() => {
-          console.log("Attempting to sign in with:", this.state.email, this.state.password);
-          return this.props.firebase.login({email: this.state.email, password: this.state.password })
+          return this.props.firebase.login(
+            {
+              email: this.state.email,
+              password: this.state.password,
+            })
             .then(() => this.setState({ isOpen: false }))
             .catch((error) => {
               this.setState({ email: '', password: '' });
@@ -66,7 +93,14 @@ function mapStateToProps(state) {
     auth: state.firebase.auth,
     authError: state.firebase.authError,
     profile: state.firebase.profile,
+    data: state.firebase.data,
   };
 }
 
-export default firebaseConnect()(connect(mapStateToProps)(LoginBox));
+export default firebaseConnect([
+  '/tipOuts',
+  '/people',
+  '/users',
+  '/stores',
+  '/roles',
+])(connect(mapStateToProps)(LoginBox));

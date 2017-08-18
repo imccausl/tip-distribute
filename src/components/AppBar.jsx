@@ -32,6 +32,7 @@ class MainBar extends Component {
       >
         <MenuItem
           primaryText="Profile..."
+          onTouchTap={() => this.props.showView('SHOW_USER_PROFILE', null)}
         />
         <Divider />
         <MenuItem

@@ -2,6 +2,8 @@ const initialState = null;
 
 export default function tipOutsReducer(state = initialState, action) {
   switch (action.type) {
+    case 'INITIALIZE_STATE': 
+      
     case 'ADD_NEW_TIP_OUT':
       return [
         ...state,

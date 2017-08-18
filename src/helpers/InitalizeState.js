@@ -11,9 +11,14 @@ function matchPeopleToTipOuts(tipOut, allPeople) {
   return tipOutState;
 }
 
-function getTipOutsCreatedByUser(tipOut, userId) {
-  return Object.keys(tipOut).map(key => 
-  )
+function getTipOutsCreatedByUser(tipOuts, userId) {
+  return Object.keys(tipOuts).map((key) => {
+    if (tipOuts[key].created === userId) {
+      return tipOuts[key];
+    }
+
+    return null;
+  });
 }
 
 export {

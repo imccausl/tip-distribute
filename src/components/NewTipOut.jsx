@@ -64,7 +64,7 @@ class NewTipOut extends Component {
   render() {
     let modalButton = null;
     let defaultDate = '';
-    const disabledButton = !(this.props.data[0]);
+    const disabledButton = !(this.props.data);
     const cancelButton = [(<FlatButton
       label="Cancel"
       disabled={disabledButton}
@@ -175,7 +175,7 @@ PropTypes.checkPropTypes(NewTipOut.propTypes, NewTipOut.props, 'prop', NewTipOut
 
 function mapPropsToState(state) {
   return {
-    data: state.dataTree,
+    tipOuts: state.tipOuts,
     tipOutsById: state.tipOutsById,
     currentTipOut: state.currentTipOut,
     modalAction: state.modalAction,

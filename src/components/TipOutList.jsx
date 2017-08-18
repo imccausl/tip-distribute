@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { firebaseConnect } from 'react-redux-firebase';
 import { List } from 'material-ui/List';
 import Subheader from 'material-ui/Subheader';
 import { bindActionCreators } from 'redux';
@@ -9,8 +10,31 @@ import { hideDrawer } from '../actions/drawerActions';
 import selectPeople from '../actions/selectEmployees';
 import selectView from '../actions/viewAction';
 
-class TipOutList extends Component {
+function mapStateToProps(state) {
+  return {
+    data: state.dataTree,
+    view: state.activeView,
+    currentTipOut: state.currentTipOut,
+    drawerOpen: state.showDrawer,
+  };
+}
 
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators({
+    selectTipOut,
+    selectView,
+    hideDrawer,
+    selectPeople }, dispatch);
+}
+
+@firebaseConnect([
+  '/tipOuts',
+  '/users',
+  '/people',
+  '/stores',
+])
+@connect(mapStateToProps, mapDispatchToProps)
+export default class TipOutList extends Component {
   renderList() {
     return this.props.data.map((tipOut, index) => (
       <TipOutListItem
@@ -29,7 +53,7 @@ class TipOutList extends Component {
   }
 
   render() {
-    if (!this.props.data[0] || !this.props.data) {
+    if (!this.props.data) {
       return null;
     }
 
@@ -46,22 +70,3 @@ class TipOutList extends Component {
     );
   }
 }
-
-function mapStateToProps(state) {
-  return {
-    data: state.dataTree,
-    view: state.activeView,
-    currentTipOut: state.currentTipOut,
-    drawerOpen: state.showDrawer,
-  };
-}
-
-function mapDispatchToProps(dispatch) {
-  return bindActionCreators({ 
-    selectTipOut,
-    selectView,
-    hideDrawer,
-    selectPeople }, dispatch);
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(TipOutList);

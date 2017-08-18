@@ -55,7 +55,7 @@ class TipOutDrawer extends Component {
   }
 
   render() {
-    if (!this.props.data[0] || !this.props.data) {
+    if (!this.props.data) {
       this.props.showModal(true, 'ADD_NEW_TIP_OUT', 'Add New Tip Out');
     }
 
@@ -68,7 +68,7 @@ class TipOutDrawer extends Component {
           onRequestChange={() => this.props.hideDrawer()}
         >
           <Toolbar>
-            <ToolbarTitle text="Tip Outs" />
+            <ToolbarTitle text="Your Tip Outs" />
             <ToolbarGroup>
               <IconButton><SelectIcon /></IconButton>
               {this.tipOutsMenu()}

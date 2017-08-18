@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import EmployeeList from './EmployeeList.jsx';
+import UserProfile from './UserProfile.jsx';
 
 class ViewArea extends Component {
   render() {
@@ -9,6 +10,7 @@ class ViewArea extends Component {
         case 'SHOW_EDIT_VIEW':
           return <EmployeeList />;
         case 'SHOW_USER_PROFILE':
+          return <UserProfile />;
         case 'SHOW_DISTRIBUTE_TIPS':
         default:
           return null;

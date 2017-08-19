@@ -17,6 +17,7 @@ function matchPeopleToTipOuts(tipOut, allPeople) {
 }
 
 function getTipOutsCreatedByUser(profile, tipOuts) {
+  console.log("getTipOuts",profile);
   return profile.tipOuts.created.map(key => tipOuts[key]);
 }
 

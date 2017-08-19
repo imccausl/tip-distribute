@@ -52,14 +52,14 @@ export default class TipOutList extends Component {
   }
 
   render() {
-    if (!this.props.data) {
+    if (!this.props.tipOuts) {
       return null;
     }
 
     return (
       <div>
         <List>
-          <Subheader>Individual Tip Outs</Subheader>
+          <Subheader>Group Tip Outs</Subheader>
           {this.renderList()}
         </List>
         <List>

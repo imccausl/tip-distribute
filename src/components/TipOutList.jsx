@@ -12,7 +12,7 @@ import selectView from '../actions/viewAction';
 
 function mapStateToProps(state) {
   return {
-    data: state.dataTree,
+    tipOuts: state.tipOuts,
     view: state.activeView,
     currentTipOut: state.currentTipOut,
     drawerOpen: state.showDrawer,
@@ -28,7 +28,6 @@ function mapDispatchToProps(dispatch) {
 }
 
 @firebaseConnect([
-  '/tipOuts',
   '/users',
   '/people',
   '/stores',
@@ -36,14 +35,14 @@ function mapDispatchToProps(dispatch) {
 @connect(mapStateToProps, mapDispatchToProps)
 export default class TipOutList extends Component {
   renderList() {
-    return this.props.data.map((tipOut, index) => (
+    return Object.keys(this.props.tipOuts).map((key, index) => (
       <TipOutListItem
-        key={tipOut.id}
-        week={tipOut.weekEnding}
-        cash={tipOut.totalCash}
-        employees={tipOut.employees}
+        key={key}
+        week={tipOut[key].weekEnding}
+        cash={tipOut[key].totalCash}
+        employees={tipOut[key].people}
         click={() => {
-          this.props.selectTipOut(tipOut);
+          this.props.selectTipOut(tipOut[key]);
           this.props.selectView('SHOW_EDIT_VIEW', 0);
           this.props.hideDrawer();
         }}

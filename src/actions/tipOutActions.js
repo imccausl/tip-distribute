@@ -5,4 +5,18 @@ function populateTipOutList(newState) {
   };
 }
 
-export default populateTipOutList;
+function populateState(obj) {
+  console.log(obj);
+  return {
+    type: 'POPULATE_STATE',
+    payload: {
+      profile: obj.profile,
+      tipOuts: obj.tipOuts,
+    },
+  };
+}
+
+export {
+  populateTipOutList,
+  populateState,
+};

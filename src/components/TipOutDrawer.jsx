@@ -56,7 +56,7 @@ class TipOutDrawer extends Component {
 
   render() {
     if (!this.props.data) {
-      this.props.showModal(true, 'ADD_NEW_TIP_OUT', 'Add New Tip Out');
+      //this.props.showModal(true, 'ADD_NEW_TIP_OUT', 'Add New Tip Out');
     }
 
     return (

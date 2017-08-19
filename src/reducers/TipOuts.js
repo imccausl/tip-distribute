@@ -1,6 +1,6 @@
 import { getTipOutsCreatedByUser } from '../helpers/populateStateHelpers';
 
-const initialState = null;
+const initialState = {};
 
 export default function tipOutsReducer(state = initialState, action) {
   switch (action.type) {

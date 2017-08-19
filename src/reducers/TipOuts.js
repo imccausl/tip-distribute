@@ -1,9 +1,11 @@
+import { getTipOutsCreatedByUser } from '../helpers/populateStateHelpers';
+
 const initialState = null;
 
 export default function tipOutsReducer(state = initialState, action) {
   switch (action.type) {
-    case 'INITIALIZE_STATE':
-      
+    case 'POPULATE_STATE':
+      return getTipOutsCreatedByUser(action.payload.profile, action.payload.tipOuts);
     case 'ADD_NEW_TIP_OUT':
       return [
         ...state,

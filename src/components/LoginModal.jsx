@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
 import { firebaseConnect } from 'react-redux-firebase';
-import { connect, bindActionCreators } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
 import Dialog from 'material-ui/Dialog';
 import TextField from 'material-ui/TextField';
 import FlatButton from 'material-ui/FlatButton';
+import { populateState } from '../actions/tipOutActions';
 
 /* 
  WHAT NEEDS TO BE DONE IMMEDIATELY AFTER A USER LOGS IN:
@@ -17,28 +19,66 @@ import FlatButton from 'material-ui/FlatButton';
   which will then be pushed to firebase.
 
  */
-class LoginBox extends Component {
+
+function mapStateToProps(state) {
+  return {
+    auth: state.firebase.auth,
+    authError: state.firebase.authError,
+    profile: state.firebase.profile,
+    data: state.firebase.data,
+  };
+}
+
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators({
+    populateState,
+  }, dispatch);
+}
+
+@firebaseConnect([
+  '/tipOuts',
+  '/people',
+  '/users',
+  '/stores',
+  '/roles',
+])
+@connect(mapStateToProps, mapDispatchToProps)
+export default class LoginBox extends Component {
   constructor(props) {
     super(props);
 
     this.state = { isOpen: true, email: '', password: '' };
+
+  }
+
+  handlePostLogin(arg) {
+    const {
+      tipOuts,
+    } = this.props.data;
+
+    const {
+      populateState,
+      profile,
+      auth,
+    } = this.props;
+
+    if (arg !== 'NO_SET_STATE') {
+      this.setState({ isOpen: false });
+    }
+
+    populateState({ profile, tipOuts });
   }
 
   render() {
     const {
-      users,
-      tipOuts,
-      people,
-      stores,
-      roles,
-    } = this.props.data;
-
-    const {
       profile,
-    } = this.props.profile;
+      authError,
+      auth,
+    } = this.props;
 
-    console.log(this.props.auth);
-    if (this.props.auth.isLoaded && !this.props.auth.isEmpty) {
+    console.log(auth);
+    if (auth.isLoaded && !auth.isEmpty) {
+      this.handlePostLogin('NO_SET_STATE');
       return null;
     }
 
@@ -54,10 +94,10 @@ class LoginBox extends Component {
               email: this.state.email,
               password: this.state.password,
             })
-            .then(() => this.setState({ isOpen: false }))
+            .then(() => this.handlePostLogin())
             .catch((error) => {
               this.setState({ email: '', password: '' });
-              console.log("Error!!!!", error, this.props.authError)
+              console.log("Error!!!!", error, authError)
             });
         }}
         label="Login"
@@ -87,20 +127,3 @@ class LoginBox extends Component {
     );
   }
 }
-
-function mapStateToProps(state) {
-  return {
-    auth: state.firebase.auth,
-    authError: state.firebase.authError,
-    profile: state.firebase.profile,
-    data: state.firebase.data,
-  };
-}
-
-export default firebaseConnect([
-  '/tipOuts',
-  '/people',
-  '/users',
-  '/stores',
-  '/roles',
-])(connect(mapStateToProps)(LoginBox));

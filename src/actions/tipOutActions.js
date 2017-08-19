@@ -6,7 +6,6 @@ function populateTipOutList(newState) {
 }
 
 function populateState(obj) {
-  console.log(obj);
   return {
     type: 'POPULATE_STATE',
     payload: {

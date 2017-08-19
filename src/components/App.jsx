@@ -11,9 +11,6 @@ import Login from './LoginModal.jsx';
 const App = (props) => (
   <div style={{ position: 'relative', overflow: 'hidden' }}>
     <MuiThemeProvider>
-      <Login />
-    </MuiThemeProvider>
-    <MuiThemeProvider>
       <TipOutDrawer />
     </MuiThemeProvider>
     <MuiThemeProvider>

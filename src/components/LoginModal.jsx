@@ -62,9 +62,9 @@ export default class LoginBox extends Component {
       auth,
     } = this.props;
 
-    if (arg !== 'NO_SET_STATE') {
-      this.setState({ isOpen: false });
-    }
+    // if (arg !== 'NO_SET_STATE') {
+    //   this.setState({ isOpen: false });
+    // }
 
     populateState({ profile, tipOuts });
   }
@@ -76,9 +76,15 @@ export default class LoginBox extends Component {
       auth,
     } = this.props;
 
+    const {
+      tipOuts,
+    } = this.props.data;
+
     console.log(auth);
     if (auth.isLoaded && !auth.isEmpty) {
-      this.handlePostLogin('NO_SET_STATE');
+      if (profile.isLoaded && profile.isEmpty) {
+        this.handlePostLogin('NO_SET_STATE');
+      }
       return null;
     }
 

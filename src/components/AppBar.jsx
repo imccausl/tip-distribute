@@ -16,8 +16,7 @@ import showView from '../actions/viewAction';
 class Login extends Component {  
   render() {
     return (
-      <FlatButton label="Login"
-      />
+      <FlatButton label="Login" />
     );
   }
 }
@@ -51,9 +50,9 @@ class MainBar extends Component {
     return (
       <div style={{ position: 'fixed', zIndex: 3, width: '100%', top: 0, left: 0 }}>
         <AppBar
-          title={`${(!this.props.auth.isEmpty) ? 'Tip Management' : `Hello, ${this.props.auth.displayName}`}`}
+          title={`${(this.props.auth.isEmpty && this.props.auth.isLoaded) ? 'Tip Management' : `${this.props.profile.displayName}`}`}
           onLeftIconButtonTouchTap={this.props.showDrawer}
-          iconElementRight={(this.props.auth) ? <Logged /> : <Login />}
+          iconElementRight={(!this.props.auth.isEmpty && this.props.auth.isLoaded) ? <Logged /> : <Login />}
         />
       </div>
     );
@@ -65,6 +64,7 @@ function mapStateToProps(state) {
     showDrawer: state.showDrawer,
     view: state.activeView,
     auth: state.firebase.auth,
+    profile: state.firebase.profile,
   };
 }
 

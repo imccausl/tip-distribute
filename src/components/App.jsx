@@ -1,7 +1,9 @@
 import React from 'react';
-import { BrowserRouter, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Route } from 'react-router-dom';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import AppMain from './AppMain.jsx';
 import AppLogin from './AppLogin.jsx';
+import AppBar from './AppBar.jsx';
 
 const RouteLayout = () => (
   <main>
@@ -11,9 +13,14 @@ const RouteLayout = () => (
 );
 
 const App = () => (
-  <BrowserRouter>
-    <RouteLayout />
-  </BrowserRouter>
+  <div>
+    <MuiThemeProvider>
+      <AppBar />
+    </MuiThemeProvider>
+    <Router>
+      <RouteLayout />
+    </Router>
+  </div>
 );
 
 export default App;

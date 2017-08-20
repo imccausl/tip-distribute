@@ -6,7 +6,6 @@ import Dialog from 'material-ui/Dialog';
 import TextField from 'material-ui/TextField';
 import FlatButton from 'material-ui/FlatButton';
 import { populateState } from '../actions/tipOutActions';
-
 /* 
  WHAT NEEDS TO BE DONE IMMEDIATELY AFTER A USER LOGS IN:
   - Once a user logs in, we have to check for tip outs the user created, and/or belongs to.
@@ -35,20 +34,13 @@ function mapDispatchToProps(dispatch) {
   }, dispatch);
 }
 
-@firebaseConnect([
-  '/tipOuts',
-  '/people',
-  '/users',
-  '/stores',
-  '/roles',
-])
+@firebaseConnect()
 @connect(mapStateToProps, mapDispatchToProps)
 export default class LoginBox extends Component {
   constructor(props) {
     super(props);
 
     this.state = { isOpen: true, email: '', password: '' };
-
   }
 
   handlePostLogin(arg) {
@@ -61,12 +53,6 @@ export default class LoginBox extends Component {
       profile,
       auth,
     } = this.props;
-
-    // if (arg !== 'NO_SET_STATE') {
-    //   this.setState({ isOpen: false });
-    // }
-
-    populateState({ profile, tipOuts });
   }
 
   render() {
@@ -75,18 +61,6 @@ export default class LoginBox extends Component {
       authError,
       auth,
     } = this.props;
-
-    const {
-      tipOuts,
-    } = this.props.data;
-
-    console.log(auth);
-    if (auth.isLoaded && !auth.isEmpty) {
-      if (profile.isLoaded && profile.isEmpty) {
-        this.handlePostLogin('NO_SET_STATE');
-      }
-      return null;
-    }
 
     const actions = [
       <FlatButton label="Cancel"

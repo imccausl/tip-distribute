@@ -60,7 +60,7 @@ class TipOutListItem extends Component {
         <ListItem
           leftCheckbox={null}
           primaryText={`Week Ending ${parseDate(this.props.week)}`}
-          secondaryText={`$${this.props.cash} | Hours: ${this.state.totalHours}`}
+          secondaryText={`$${this.props.cash} | Hours: ${this.props.totalHours}`}
           secondaryTextLines={2}
           rightIcon={<NumPeopleBadge badgeContent={this.state.people} primary={true} />}
           onTouchTap={this.props.click}

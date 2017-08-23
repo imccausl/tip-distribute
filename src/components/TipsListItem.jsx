@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { ListItem } from 'material-ui/List';
 import Checkbox from 'material-ui/Checkbox';
-import NumPeopleBadge from 'material-ui/Badge';
+import NewBadge from 'material-ui/Badge';
 import IconMenu from 'material-ui/IconMenu';
 import MenuItem from 'material-ui/MenuItem';
 import IconButton from 'material-ui/IconButton';
@@ -27,30 +27,18 @@ const rightIconMenu = (
   </IconMenu>
 );
 
-class TipOutListItem extends Component {
-  static getNumOfPeople(employees) {
-    return (!employees) ? 0 : employees.length;
-  }
-
-  static getTotalHours(employees)  {
-    return (!employees) ? 0 : Math.round(
-      employees.map(emp => Number.parseFloat(emp.hours))
-        .reduce((sum, curr) => sum + curr, 0)) || 0;
-  }
-
+class TipsListItem extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      people: TipOutListItem.getNumOfPeople(this.props.employees),
-      totalHours: TipOutListItem.getTotalHours(this.props.employees),
+      tipMoney: this.props.hours * this.props.wage,
     };
   }
 
   componentWillReceiveProps(nextProps) {
     this.setState({
-      people: TipOutListItem.getNumOfPeople(nextProps.employees),
-      totalHours: TipOutListItem.getTotalHours(nextProps.employees),
+      tipMoney: nextProps.hours * nextProps.wage,
     });
   }
 
@@ -60,9 +48,9 @@ class TipOutListItem extends Component {
         <ListItem
           leftCheckbox={null}
           primaryText={`Week Ending ${parseDate(this.props.week)}`}
-          secondaryText={`$${this.props.cash} | Hours: ${this.state.totalHours}`}
+          secondaryText={`$${Math.round(this.state.tipMoney)} for ${this.props.hours} hours`}
           secondaryTextLines={2}
-          rightIcon={<NumPeopleBadge badgeContent={this.state.people} primary={true} />}
+          rightIcon={<NewBadge badgeContent="!" primary={true} />}
           onTouchTap={this.props.click}
         />
         <Divider inset={false} />
@@ -71,4 +59,4 @@ class TipOutListItem extends Component {
   }
 }
 
-export default TipOutListItem;
+export default TipsListItem;

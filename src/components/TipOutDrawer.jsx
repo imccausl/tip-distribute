@@ -19,12 +19,14 @@ import NewTipOut from './NewTipOut.jsx';
 import showModal from '../actions/modalActions';
 import { hideDrawer } from '../actions/drawerActions';
 import { populateState } from '../actions/tipOutActions';
+import { combinePeopleAndUsers } from '../helpers/populateStateHelpers';
 
 @firebaseConnect([
   { type: 'once', path: '/tipOuts' },
-'/people',
-'/users',
-'/stores',])
+  '/people',
+  '/users',
+  '/stores',
+])
 class TipOutDrawer extends Component {
   constructor(props) {
     super(props);
@@ -32,32 +34,31 @@ class TipOutDrawer extends Component {
     this.state = { isOpen: this.props.drawerOpen };
   }
 
-  componentWillReceiveProps() {
-    this.getTipOutsFromProfile();
+  componentWillReceiveProps(newProps) {
+    this.getTipOutsFromProfile(newProps);
   }
 
-  getTipOutsFromProfile() {
+  getTipOutsFromProfile(newProps) {
     const {
       profile,
       tpRequested,
       tpRequesting,
       people,
       users,
+      stores,
       fbTipOuts,
       id,
       populateState,
-    } = this.props;
+    } = newProps;
 
     if ((profile.isLoaded === true && profile.isEmpty === false) &&
        (tpRequested === true && tpRequesting === false)) {
       if (profile.tipOutsCreated) {
-        
-        console.log("FRUSTRATING!", fbTipOuts);
-        populateState({ profile, fbTipOuts });
-        
         if (users && people) {
-         
-        } 
+          // populate state will have to change depending on type of user?
+          populateState({ profile, fbTipOuts }, 'TIPS_BELONGING_TO');
+          populateState({ profile, fbTipOuts, stores, allPeople: combinePeopleAndUsers(people, users)});
+        }
       }
     }
   }
@@ -104,7 +105,7 @@ class TipOutDrawer extends Component {
           onRequestChange={() => this.props.hideDrawer()}
         >
           <Toolbar>
-            <ToolbarTitle text="Your Tip Outs" />
+            <ToolbarTitle text="Tips" />
             <ToolbarGroup>
               <IconButton><SelectIcon /></IconButton>
               {this.tipOutsMenu()}
@@ -132,10 +133,10 @@ function mapStateToProps(state) {
     tpTimestamp: state.firebase.timestamps.tipOuts,
     people: state.firebase.data.people,
     users: state.firebase.data.users,
+    stores: state.firebase.data.stores,
     data: state.firebase.data,
     uid: state.firebase.auth.uid,
     view: state.activeView,
-    tips: state.tips,
     currentTipOut: state.currentTipOut,
     drawerOpen: state.showDrawer,
   };

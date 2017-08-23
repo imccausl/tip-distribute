@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import { firebaseConnect } from 'react-redux-firebase';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import TextField from 'material-ui/TextField';
@@ -13,7 +14,26 @@ import editTipOut from '../actions/editTipOut';
 
 const defaults = true;
 
-class NewTipOut extends Component {
+function mapPropsToState(state) {
+  return {
+    tipOuts: state.tipOuts,
+    tipOutsById: state.tipOutsById,
+    currentTipOut: state.currentTipOut,
+    modalAction: state.modalAction,
+  };
+}
+
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators({
+    showModal,
+    addNewTipOut,
+    editTipOut,
+  }, dispatch);
+}
+
+@firebaseConnect([])
+@connect(mapPropsToState, mapDispatchToProps)
+export default class NewTipOut extends Component {
   static disableWeekdays(date) {
     return date.getDay() !== 0 || date.getDay() >= 5;
   }
@@ -172,23 +192,4 @@ NewTipOut.defaultProps = {
 };
 
 PropTypes.checkPropTypes(NewTipOut.propTypes, NewTipOut.props, 'prop', NewTipOut);
-
-function mapPropsToState(state) {
-  return {
-    tipOuts: state.tipOuts,
-    tipOutsById: state.tipOutsById,
-    currentTipOut: state.currentTipOut,
-    modalAction: state.modalAction,
-  };
-}
-
-function mapDispatchToProps(dispatch) {
-  return bindActionCreators({
-    showModal,
-    addNewTipOut,
-    editTipOut,
-  }, dispatch);
-}
-
-export default connect(mapPropsToState, mapDispatchToProps)(NewTipOut);
 

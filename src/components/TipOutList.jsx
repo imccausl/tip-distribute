@@ -1,29 +1,22 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { firebaseConnect, populate } from 'react-redux-firebase';
+import { firebaseConnect } from 'react-redux-firebase';
 import { List } from 'material-ui/List';
 import Subheader from 'material-ui/Subheader';
 import { bindActionCreators } from 'redux';
 import TipOutListItem from './TipOutListItem.jsx';
-import selectTipOut from '../actions/tipOutActions';
 import { hideDrawer } from '../actions/drawerActions';
 import selectPeople from '../actions/selectEmployees';
+import { populateTipOutList } from '../actions/tipOutActions';
 import selectView from '../actions/viewAction';
 import LoadingSpinner from './LoadingSpinner.jsx';
-
-const populates = {
-  child: 'store',
-  root: 'stores',
-};
+import * as stateHelpers from '../helpers/populateStateHelpers';
 
 function mapStateToProps(state) {
   return {
-    tipOuts: populate(state.firebase, 'tipOuts', populates),
-    tpRequested: state.firebase.requested.tipOuts,
-    tpRequesting: state.firebase.requesting.tipOuts,
-    tpTimestamp: state.firebase.timestamps.tipOuts,
-    uid: state.firebase.auth.uid,
-    view: state.activeView,
+    tipOuts: state.tipOuts,
+    tips: state.tips,
+    data: state.firebase.data,
     currentTipOut: state.currentTipOut,
     drawerOpen: state.showDrawer,
   };
@@ -31,19 +24,16 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return bindActionCreators({
-    selectTipOut,
     selectView,
     hideDrawer,
+    populateTipOutList,
     selectPeople }, dispatch);
 }
 
-@firebaseConnect([
-  '/stores',
-  { path: '/tipOuts', populates },
-])
+@firebaseConnect(['/users', '/people'])
 @connect(mapStateToProps, mapDispatchToProps)
 export default class TipOutList extends Component {
-  renderList() {
+  renderTipOutsList() {
     const { tipOuts } = this.props;
 
     return Object.keys(tipOuts).map((key, index) => (
@@ -53,7 +43,7 @@ export default class TipOutList extends Component {
         cash={tipOuts[key].totalCash}
         employees={tipOuts[key].people}
         click={() => {
-          this.props.selectTipOut(tipOuts[key]);
+          this.props.populateTipOutList({ tipOut: tipOuts[key], users: this.props.data.users, people: this.props.data.people });
           this.props.selectView('SHOW_EDIT_VIEW', 0);
           this.props.hideDrawer();
         }}
@@ -70,7 +60,8 @@ export default class TipOutList extends Component {
       tpTimestamp,
     } = this.props;
 
-    if (!tipOuts || (tpRequesting === true && tpRequested === false)) {
+    console.log(tipOuts.constructor);
+    if (tipOuts.constructor !== Array) {
       return <LoadingSpinner />;
     }
 
@@ -78,8 +69,11 @@ export default class TipOutList extends Component {
     return (
       <div>
         <List>
-          <Subheader>Group Tip Outs</Subheader>
-          {this.renderList()}
+          <Subheader>Tips</Subheader>
+        </List>
+        <List>
+          <Subheader>Tip Outs Created</Subheader>
+          {this.renderTipOutsList()}
         </List>
         <List>
           <Subheader>Combined Tip Outs</Subheader>

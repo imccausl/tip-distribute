@@ -7,11 +7,13 @@ import ModalAction from './reducer_show_modal';
 import ShowDrawer from './reducer_show_drawer';
 import Tips from './Tips';
 import ActiveView from './ActiveView';
+import TipsBelongingToUser from './TipsBelongingToUser';
 
 const rootReducer = combineReducers({
   firebase: firebaseStateReducer,
   tipOuts: AllTipOuts,
-  tips: Tips,
+  tips: TipsBelongingToUser,
+  tipOut: Tips,
   currentTipOut: CurrentTipOut,
   currentPerson: CurrentPerson,
   activeView: ActiveView,

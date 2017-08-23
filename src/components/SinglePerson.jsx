@@ -55,7 +55,7 @@ class SinglePerson extends Component {
     };
 
     let nameStyle = {
-      width: `${this.state.width / 1.4 - 60}px`,
+      width: `${(this.state.width / 1.4) - 60}px`,
       margin: '0 10px',
     };
 

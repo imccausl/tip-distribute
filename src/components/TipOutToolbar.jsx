@@ -21,6 +21,7 @@ import selectTipOut from '../actions/tipOutActions';
 import selectPeople from '../actions/selectEmployees';
 import updateTipOuts from '../actions/updateTipOuts';
 import makeNewId from '../helpers/makeNewId';
+import parseDate from '../helpers/dateHelpers';
 
 class TipAppBar extends Component {
   constructor(props) {
@@ -69,7 +70,7 @@ class TipAppBar extends Component {
     if (!this.props.tipOut) {
       headerText = 'No Tipout Selected';
     } else {
-      headerText = this.props.tipOut.weekEnding.concat(' | $', this.props.tipOut.totalCash);
+      headerText = parseDate(this.props.tipOut.weekEnding).concat(' | $', this.props.tipOut.totalCash);
     }
 
     return (

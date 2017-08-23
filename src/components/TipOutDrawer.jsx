@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import { firebaseConnect } from 'react-redux-firebase';
 import Drawer from 'material-ui/Drawer';
 import { Toolbar, ToolbarGroup, ToolbarTitle } from 'material-ui/Toolbar';
 import IconMenu from 'material-ui/IconMenu';
@@ -17,13 +18,48 @@ import TipOutList from './TipOutList.jsx';
 import NewTipOut from './NewTipOut.jsx';
 import showModal from '../actions/modalActions';
 import { hideDrawer } from '../actions/drawerActions';
+import { populateState } from '../actions/tipOutActions';
 
-
+@firebaseConnect([
+  { type: 'once', path: '/tipOuts' },
+'/people',
+'/users',
+'/stores',])
 class TipOutDrawer extends Component {
   constructor(props) {
     super(props);
 
     this.state = { isOpen: this.props.drawerOpen };
+  }
+
+  componentWillReceiveProps() {
+    this.getTipOutsFromProfile();
+  }
+
+  getTipOutsFromProfile() {
+    const {
+      profile,
+      tpRequested,
+      tpRequesting,
+      people,
+      users,
+      fbTipOuts,
+      id,
+      populateState,
+    } = this.props;
+
+    if ((profile.isLoaded === true && profile.isEmpty === false) &&
+       (tpRequested === true && tpRequesting === false)) {
+      if (profile.tipOutsCreated) {
+        
+        console.log("FRUSTRATING!", fbTipOuts);
+        populateState({ profile, fbTipOuts });
+        
+        if (users && people) {
+         
+        } 
+      }
+    }
   }
 
   tipOutsMenu() {
@@ -75,7 +111,7 @@ class TipOutDrawer extends Component {
             </ToolbarGroup>
           </Toolbar>
           <TipOutList />
-        </Drawer>
+          </Drawer>
         <NewTipOut open={this.state.newTipOutOpen} />
       </div>
     );
@@ -88,13 +124,25 @@ TipOutDrawer.propTypes = {
 
 function mapStateToProps(state) {
   return {
+    profile: state.firebase.profile,
+    id: state.firebase.auth.uid,
+    fbTipOuts: state.firebase.data.tipOuts,
+    tpRequested: state.firebase.requested.tipOuts,
+    tpRequesting: state.firebase.requesting.tipOuts,
+    tpTimestamp: state.firebase.timestamps.tipOuts,
+    people: state.firebase.data.people,
+    users: state.firebase.data.users,
+    data: state.firebase.data,
+    uid: state.firebase.auth.uid,
+    view: state.activeView,
+    tips: state.tips,
+    currentTipOut: state.currentTipOut,
     drawerOpen: state.showDrawer,
-    data: state.dataTree,
   };
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({ showModal, hideDrawer }, dispatch);
+  return bindActionCreators({ showModal, hideDrawer, populateState }, dispatch);
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(TipOutDrawer);

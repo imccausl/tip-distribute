@@ -13,7 +13,6 @@ import UserIsAuthenticated from './UserIsAuthenticated.jsx';
 @UserIsAuthenticated
 class AppMain extends Component {
   render() {
-    console.log(this.props);
     return (
       <div style={{ position: 'relative', overflow: 'hidden' }}>
         <MuiThemeProvider>

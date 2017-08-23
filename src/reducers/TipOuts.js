@@ -4,7 +4,7 @@ const initialState = {};
 
 export default function tipOutsReducer(state = initialState, action) {
   switch (action.type) {
-    case 'POPULATE_STATE':
+    case 'TIP_OUTS_CREATED':
       return getTipOutsCreatedByUser(action.payload.profile, action.payload.tipOuts);
     case 'ADD_NEW_TIP_OUT':
       return [
@@ -20,7 +20,7 @@ export default function tipOutsReducer(state = initialState, action) {
     case 'ADD_PEOPLE_TO_CURRENT_TIP_OUT':
       return state.map((tipOut) => {
         if (tipOut.id === action.payload.belongsTo) {
-          let appendedTipOut = Object.assign({}, tipOut);
+          const appendedTipOut = Object.assign({}, tipOut);
           appendedTipOut.employees = action.payload.employees;
           return appendedTipOut;
         }

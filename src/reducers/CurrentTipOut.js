@@ -1,7 +1,10 @@
+import { matchPeopleToTipOuts, combinePeopleAndUsers } from '../helpers/populateStateHelpers';
+
 function activeTipOut(state = null, action) {
   switch (action.type) {
     case 'DISPLAY_TIPOUT':
-      return action.payload;
+    console.log(action);
+      return matchPeopleToTipOuts(action.payload.tipOut, combinePeopleAndUsers(action.payload.people, action.payload.users));
     case 'ADD_PEOPLE_TO_CURRENT_TIP_OUT':
       const newState = Object.assign({}, state);
       newState.employees = action.payload.employees;

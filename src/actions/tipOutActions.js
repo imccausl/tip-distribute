@@ -13,7 +13,12 @@ function populateTipOutList(newState) {
 function populateState(obj, stateType = 'TIP_OUTS_CREATED') {
   return {
     type: stateType,
-    payload: { profile: obj.profile, tipOuts: obj.fbTipOuts },
+    payload: {
+      profile: obj.profile,
+      tipOuts: obj.fbTipOuts,
+      stores: obj.stores,
+      allPeople: obj.allPeople,
+    },
   };
 }
 

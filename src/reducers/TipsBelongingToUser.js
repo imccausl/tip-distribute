@@ -1,9 +1,9 @@
-import { getTipOutsBelongingToUser } from '../helpers/populateStateHelpers';
+import initializeTipsState from '../helpers/populateStateHelpers';
 
 export default function tipsBelongingToUser(state = {}, action) {
   switch(action.type) {
-    case 'TIP_OUTS_BELONGING_TO':
-      return getTipOutsBelongingToUser(action.payload.profile, action.payload.tipOuts);
+    case 'TIPS_BELONGING_TO':
+      return initializeTipsState(action.payload.profile, action.payload.tipOuts, null, null, action.type);
     default:
       return state;
   }

@@ -6,10 +6,10 @@ function combinePeopleAndUsers(people, users) {
 }
 
 function mapObj(obj, callback) {
-  return Object.keys(obj).map(key => callback(key));
+  return Object.keys(obj).map(key => callback(obj[key]));
 }
 
-function matchPeopleToTipOuts(tipOut, allPeople, stores) {
+function matchPeopleToTipOuts(tipOut, allPeople) {
   const newTipOutState = Object.assign(tipOut);
 
   newTipOutState.people = tipOut.people.map((person) => {
@@ -37,16 +37,16 @@ function calculateTotalHours(tipOut) {
   const strippedHours = tipOut.people.map(person => parseFloat(person.hours));
   const totalHours = Math.round(strippedHours.reduce((curr, prev) => curr + prev, 0));
 
-  newTipOutState.totalHours = totalHours;
+  newTipOutState.totalHours = totalHours || 0;
 
   return newTipOutState;
 }
 
 function calculateWage(tipOut) {
-  let newTipOutState = Object.assign(tipOut);
+  let newTipOutState = Object.assign({}, tipOut);
   let wage = 0;
   let totalHours = tipOut.totalHours;
-  let totalCash = tipOut.totalCash
+  let totalCash = tipOut.totalCash;
 
   if (tipOut.people && tipOut.totalHours === 0) {
     newTipOutState = calculateTotalHours(tipOut);
@@ -57,8 +57,8 @@ function calculateWage(tipOut) {
     totalHours = parseFloat(totalHours);
   }
 
-  wage = parseFloat(tipOut.totalCash) / parseFloat(newTipOutState.totalHours);
-  newTipOutState.hourlyWage = wage;
+  wage = parseFloat(totalCash) / parseFloat(totalHours);
+  newTipOutState.hourlyWage = wage || 0;
 
   return newTipOutState;
 }
@@ -68,13 +68,37 @@ function getTipOutsCreatedByUser(profile, tipOuts) {
   return profile.tipOutsCreated.map(key => tipOuts[key]);
 }
 
-function getTipsBelongingToUser(profile, id, tipOuts) {
-  return profile.belongsTo.map((key) => {    
-    const newTipOutState = Object.assign(tipOuts[key]);
-    newTipOutState.people = tipOuts[key].people.filter(person => person.id === id);
+function getTipsBelongingToUser(profile, tipOuts) {
+  let newState = [];
 
+  newState = profile.belongsTo.map((key) => {    
+    let newTipOutState = Object.assign(tipOuts[key.id]);
+
+    newTipOutState = calculateTotalHours(newTipOutState);
+    newTipOutState = calculateWage(newTipOutState);
+    newTipOutState.people = tipOuts[key.id].people.filter(person => person.id === profile.id);
+    newTipOutState.people = newTipOutState.people.pop();
+    newTipOutState.people.name = profile.displayName;
+    newTipOutState.people.belongsTo = key;
     return newTipOutState;
   });
+
+  return newState;
+}
+
+export default function initializeMainState(profile, tipOuts, allPeople, stores, type = 'TIP_OUTS') {
+  let newState = {};
+
+  if (type === 'TIP_OUTS') {
+    newState = getTipOutsCreatedByUser(profile, tipOuts);
+    newState = newState.map(tipOut => matchPeopleToTipOuts(tipOut, allPeople));
+    newState = mapObj(tipOuts, calculateTotalHours);
+    newState = mapObj(newState, calculateWage);
+  } else {
+    newState = getTipsBelongingToUser(profile, tipOuts);
+  }
+
+  return newState;
 }
 
 export {

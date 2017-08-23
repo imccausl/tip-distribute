@@ -1,19 +1,28 @@
-import { getTipOutsCreatedByUser } from '../helpers/populateStateHelpers';
+import initializeTipOutData from '../helpers/populateStateHelpers';
 
 const initialState = {};
 
 export default function tipOutsReducer(state = initialState, action) {
   switch (action.type) {
     case 'TIP_OUTS_CREATED':
-      return getTipOutsCreatedByUser(action.payload.profile, action.payload.tipOuts);
+      return initializeTipOutData(
+        action.payload.profile,
+        action.payload.tipOuts,
+        action.payload.allPeople,
+        action.payload.stores,
+      );
     case 'ADD_NEW_TIP_OUT':
       return [
         ...state,
         {
           id: action.payload.id,
-          exactDate: action.payload.exactDate,
+          creator: action.payload.creator,
+          timestamp: action.payload.exactDate,
           weekEnding: action.payload.weekEnding,
           totalCash: action.payload.totalCash,
+          hourlyWage: 0,
+          totalHours: 0,
+          store: action.payload.store,
           employees: [action.payload.employees],
         },
       ];

@@ -23,6 +23,7 @@ import { combinePeopleAndUsers } from '../helpers/populateStateHelpers';
 
 @firebaseConnect([
   '/tipOuts',
+  '/stores',
 ])
 class TipOutDrawer extends Component {
   constructor(props) {
@@ -52,10 +53,15 @@ class TipOutDrawer extends Component {
     if ((profile.isLoaded === true && profile.isEmpty === false) &&
        (tpRequested === true && tpRequesting === false)) {
       if (profile.tipOutsCreated) {
-        if (users && people) {
+        if (users && people && stores) {
           // populate state will have to change depending on type of user?
-          populateState({ profile, fbTipOuts }, 'TIPS_BELONGING_TO');
-          populateState({ profile, fbTipOuts, stores, allPeople: combinePeopleAndUsers(people, users) });
+          populateState({ profile, fbTipOuts, stores }, 'TIPS_BELONGING_TO');
+          populateState({
+            profile,
+            fbTipOuts,
+            stores,
+            allPeople: combinePeopleAndUsers(people, users),
+          });
         }
       }
     }

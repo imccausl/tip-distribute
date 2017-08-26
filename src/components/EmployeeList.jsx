@@ -11,16 +11,18 @@ import selectPeople from '../actions/selectEmployees';
 
 class EmployeeList extends Component {
   renderList() {
-    return this.props.tipOut.people.map(person => (
+    const { people } = this.props.tipOut;
+
+    return Object.keys(people).map(key => (
       <ListItem
-        key={person.id}
+        key={key}
         disabled={true}
         style={{ paddingTop: '0', paddingBottom: '0' }}
       >
         <SinglePerson
-          id={person.id}
-          name={person.name}
-          hours={person.hours}
+          id={people[key].id}
+          name={people[key].name}
+          hours={people[key].hours}
         />
       </ListItem>
     ),

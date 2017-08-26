@@ -16,14 +16,14 @@ export default function tipOutsReducer(state = initialState, action) {
         ...state,
         {
           id: action.payload.id,
-          creator: action.payload.creator,
-          timestamp: action.payload.exactDate,
+          createdBy: action.payload.createdBy,
+          timestamp: action.payload.timestamp,
           weekEnding: action.payload.weekEnding,
           totalCash: action.payload.totalCash,
           hourlyWage: 0,
           totalHours: 0,
           store: action.payload.store,
-          employees: [action.payload.employees],
+          people: [action.payload.people],
         },
       ];
     case 'ADD_PEOPLE_TO_CURRENT_TIP_OUT':

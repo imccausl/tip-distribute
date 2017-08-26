@@ -45,15 +45,19 @@ export default class TipOutList extends Component {
     if (this.props.tipOuts) {
       const { tipOuts } = this.props;
 
-      return Object.keys(tipOuts).map((key) => (
+      return Object.keys(tipOuts).map(key => (
         <TipOutListItem
           key={key}
           week={tipOuts[key].weekEnding}
           cash={tipOuts[key].totalCash}
           totalHours={tipOuts[key].totalHours}
-          employees={tipOuts[key].people}
+          people={tipOuts[key].people}
           click={() => {
-            this.props.populateTipOutList({ tipOut: tipOuts[key], users: this.props.data.users, people: this.props.data.people });
+            this.props.populateTipOutList({
+              tipOut: tipOuts[key],
+              users: this.props.data.users,
+              people: this.props.data.people
+            });
             this.props.selectView('SHOW_EDIT_VIEW', 0);
             this.props.hideDrawer();
           }}

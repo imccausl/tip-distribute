@@ -73,7 +73,8 @@ function getTipsBelongingToUser(profile, tipOuts) {
     const entryId = Object.keys(newTipOutState.people)
       .filter(person => tipOuts[key.id].people[person].id === profile.id).pop();
     const singlePerson = tipOuts[key.id].people[entryId];
-    newTipOutState.people = singlePerson;
+
+    newTipOutState.people = { ref: entryId, ...singlePerson };
 
     return newTipOutState;
   });

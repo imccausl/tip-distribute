@@ -38,6 +38,8 @@ function matchStoreToTipOuts(tipOut, stores) {
 }
 
 function calculateTotalHours(tipOut) {
+  if (!tipOut.people) return 0;
+  
   const strippedHours = Object.keys(tipOut.people)
     .map(person => parseFloat(tipOut.people[person].hours));
   const totalHours = Math.round(strippedHours.reduce((curr, prev) => curr + prev, 0));
@@ -88,7 +90,7 @@ function addHoursAndWageToTipOuts(tipOuts) {
 
   Objkeys.forEach((key) => {
     newState[key].totalHours = calculateTotalHours(newState[key]);
-    newState[key].hourlyWage = calculateWage(newState[key])
+    newState[key].hourlyWage = calculateWage(newState[key]);
   });
 
   return newState;

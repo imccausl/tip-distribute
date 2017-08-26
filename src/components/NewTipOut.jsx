@@ -71,8 +71,8 @@ export default class NewTipOut extends Component {
 
     this.state = {
       newDate: NewTipOut.parseDate(NewTipOut.getNearestWeekEnding()),
-      newExactDate: (!this.props.currentTipOut) ?
-        NewTipOut.getNearestWeekEnding() : this.props.currentTipOut.exactDate,
+      newWeekEnding: (!this.props.currentTipOut) ?
+        NewTipOut.getNearestWeekEnding() : this.props.currentTipOut.weekEnding,
       newTotalCash: (!this.props.currentTipOut) ? '200' : this.props.currentTipOut.totalCash,
     };
   }
@@ -115,8 +115,7 @@ export default class NewTipOut extends Component {
             this.props.addNewTipOut(
               {
                 id: tipOutId,
-                exactDate: this.state.newExactDate,
-                weekEnding: this.state.newDate,
+                weekEnding: this.state.newWeekEnding,
                 totalCash: this.state.newTotalCash,
                 employees: newPerson,
               });
@@ -125,7 +124,7 @@ export default class NewTipOut extends Component {
           }}
         />);
     } else if (this.props.modalAction.modal === 'EDIT_TIP_OUT_MODAL') {  
-      defaultDate = this.props.currentTipOut.exactDate;
+      defaultDate = this.props.currentTipOut.weekEnding;
 
       modalButton = (
         <FlatButton
@@ -135,7 +134,6 @@ export default class NewTipOut extends Component {
           onTouchTap={() => {
             this.props.editTipOut(this.props.currentTipOut.id,
               {
-                exactDate: this.state.newExactDate,
                 weekEnding: this.state.newDate,
                 totalCash: this.state.newTotalCash,
               });
@@ -162,7 +160,7 @@ export default class NewTipOut extends Component {
             shouldDisableDate={NewTipOut.disableWeekdays}
             defaultDate={new Date(defaultDate)}
             onChange={(event, newValue) => {
-              this.setState({ newDate: NewTipOut.parseDate(newValue), newExactDate: newValue });
+              this.setState({ newDate: NewTipOut.parseDate(newValue), newWeekEnding: newValue });
             }}
           />
           <TextField

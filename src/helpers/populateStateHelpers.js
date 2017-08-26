@@ -39,7 +39,7 @@ function matchStoreToTipOuts(tipOut, stores) {
 
 function calculateTotalHours(tipOut) {
   if (!tipOut.people) return 0;
-  
+
   const strippedHours = Object.keys(tipOut.people)
     .map(person => parseFloat(tipOut.people[person].hours));
   const totalHours = Math.round(strippedHours.reduce((curr, prev) => curr + prev, 0));
@@ -63,7 +63,12 @@ function calculateWage(tipOut) {
 
 
 function getTipOutsCreatedByUser(profile, tipOuts) {
-  return profile.tipOutsCreated.map(key => tipOuts[key]);
+  return profile.tipOutsCreated.map((key) => {
+    const tipOut = Object.assign({}, tipOuts[key]);
+    tipOut.ref = key;
+
+    return tipOut;
+  });
 }
 
 function getTipsBelongingToUser(profile, tipOuts) {
@@ -76,6 +81,7 @@ function getTipsBelongingToUser(profile, tipOuts) {
       .filter(person => tipOuts[key.id].people[person].id === profile.id).pop();
     const singlePerson = tipOuts[key.id].people[entryId];
 
+    newTipOutState.ref = key.id;
     newTipOutState.people = { ref: entryId, ...singlePerson };
 
     return newTipOutState;

@@ -35,7 +35,6 @@ function matchStoreToTipOuts(tipOuts, stores) {
 
   tipOutKeys.forEach((key) => {
     const storeKey = newTipOutState[key].store;
-    console.log(storeKey,stores);
     const storeNum = stores[storeKey];
 
     newTipOutState[key].store = storeNum;
@@ -113,7 +112,6 @@ function addHoursAndWageToTipOuts(tipOuts) {
 export default function initializeMainState(profile, tipOuts, allPeople, stores, type = 'TIP_OUTS') {
   let newState = {};
 
-  console.log("Are you there store?", stores);
   newState = addHoursAndWageToTipOuts(tipOuts);
   newState = matchStoreToTipOuts(newState, stores);
 

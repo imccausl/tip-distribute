@@ -4,6 +4,8 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { firebaseConnect } from 'react-redux-firebase';
 import Dialog from 'material-ui/Dialog';
+import MenuItem from 'material-ui/MenuItem';
+import SelectField from 'material-ui/SelectField';
 import FlatButton from 'material-ui/FlatButton';
 import TextField from 'material-ui/TextField';
 import DatePicker from 'material-ui/DatePicker';
@@ -19,6 +21,7 @@ function mapPropsToState(state) {
     tipOuts: state.tipOuts,
     tipOutsById: state.tipOutsById,
     currentTipOut: state.currentTipOut,
+    stores: state.firebase.data.stores,
     modalAction: state.modalAction,
   };
 }
@@ -74,11 +77,27 @@ export default class NewTipOut extends Component {
       newWeekEnding: (!this.props.currentTipOut) ?
         NewTipOut.getNearestWeekEnding() : this.props.currentTipOut.weekEnding,
       newTotalCash: (!this.props.currentTipOut) ? '200' : this.props.currentTipOut.totalCash,
+      newStore: '1s',
     };
+
+    this.handleStoreSelectorChange = this.handleStoreSelectorChange.bind(this);
+    this.populateStoreMenu = this.populateStoreMenu.bind(this);
   }
 
   componentWillReceiveProps(nextProps) {
     this.setState({ newTotalCash: (!nextProps.currentTipOut) ? '200' : nextProps.currentTipOut.totalCash });
+  }
+
+  populateStoreMenu() {
+    const { stores } = this.props;
+
+    return Object.keys(stores)
+      .map(key => <MenuItem value={key} primaryText={stores[key].store} />);
+  }
+
+  handleStoreSelectorChange(e, i, v) {
+    console.log("storeSelected:", v);
+    this.setState({ newStore: v });
   }
 
   render() {
@@ -117,6 +136,7 @@ export default class NewTipOut extends Component {
                 id: tipOutId,
                 weekEnding: this.state.newWeekEnding,
                 totalCash: this.state.newTotalCash,
+                store: this.state.newStore,
                 employees: newPerson,
               });
 
@@ -153,6 +173,14 @@ export default class NewTipOut extends Component {
           autoScrollBodyContent={defaults}
           open={this.props.modalAction.isOpen}
         >
+          {/* Choosing store for admins only? */}
+          <SelectField
+            floatingLabelText="Store"
+            value={this.state.newStore}
+            onChange={this.handleStoreSelectorChange}
+          >
+            {this.populateStoreMenu()}
+          </SelectField>
           <DatePicker
             autoOk={defaults}
             hintText="Week Ending"

@@ -41,7 +41,6 @@ function calculateTotalHours(tipOut) {
   const strippedHours = Object.keys(tipOut.people)
     .map(person => parseFloat(tipOut.people[person].hours));
   const totalHours = Math.round(strippedHours.reduce((curr, prev) => curr + prev, 0));
-  console.log("total horus:", totalHours);
 
   return totalHours || 0;
 }
@@ -73,10 +72,7 @@ function getTipsBelongingToUser(profile, tipOuts) {
 
     const entryId = Object.keys(newTipOutState.people)
       .filter(person => tipOuts[key.id].people[person].id === profile.id).pop();
-    const singlePerson = {
-      [entryId]: tipOuts[key.id].people[entryId],
-    };
-
+    const singlePerson = tipOuts[key.id].people[entryId];
     newTipOutState.people = singlePerson;
 
     return newTipOutState;

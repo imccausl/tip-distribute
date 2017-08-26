@@ -29,10 +29,17 @@ function matchPeopleToTipOuts(tipOut, allPeople) {
   return newTipOutState;
 }
 
-function matchStoreToTipOuts(tipOut, stores) {
-  const newTipOutState = Object.assign({}, tipOut);
+function matchStoreToTipOuts(tipOuts, stores) {
+  const newTipOutState = Object.assign({}, tipOuts);
+  const tipOutKeys = Object.keys(tipOuts);
 
-  newTipOutState.store = stores[tipOut.store];
+  tipOutKeys.forEach((key) => {
+    const storeKey = newTipOutState[key].store;
+    console.log(storeKey,stores);
+    const storeNum = stores[storeKey];
+
+    newTipOutState[key].store = storeNum;
+  });
 
   return newTipOutState;
 }
@@ -102,10 +109,13 @@ function addHoursAndWageToTipOuts(tipOuts) {
   return newState;
 }
 
+// Object as param instead of a million variables in a specific order?
 export default function initializeMainState(profile, tipOuts, allPeople, stores, type = 'TIP_OUTS') {
   let newState = {};
 
+  console.log("Are you there store?", stores);
   newState = addHoursAndWageToTipOuts(tipOuts);
+  newState = matchStoreToTipOuts(newState, stores);
 
   if (type === 'TIP_OUTS') {
     newState = getTipOutsCreatedByUser(profile, newState);

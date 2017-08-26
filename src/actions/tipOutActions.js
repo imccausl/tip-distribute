@@ -11,7 +11,6 @@ function populateTipOutList(newState) {
 }
 
 function populateState(obj, stateType = 'TIP_OUTS_CREATED') {
-  console.log("In action:", obj);
   return {
     type: stateType,
     payload: {

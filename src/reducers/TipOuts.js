@@ -15,7 +15,7 @@ export default function tipOutsReducer(state = initialState, action) {
       return [
         ...state,
         {
-          id: action.payload.id,
+          id: action.payload.ref,
           createdBy: action.payload.createdBy,
           timestamp: action.payload.timestamp,
           weekEnding: action.payload.weekEnding,
@@ -23,7 +23,7 @@ export default function tipOutsReducer(state = initialState, action) {
           hourlyWage: 0,
           totalHours: 0,
           store: action.payload.store,
-          people: [action.payload.people],
+          people: action.payload.people,
         },
       ];
     case 'ADD_PEOPLE_TO_CURRENT_TIP_OUT':

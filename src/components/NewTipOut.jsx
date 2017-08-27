@@ -19,9 +19,10 @@ const defaults = true;
 function mapPropsToState(state) {
   return {
     tipOuts: state.tipOuts,
-    tipOutsById: state.tipOutsById,
+    authId: state.firebase.auth.uid,
     currentTipOut: state.currentTipOut,
     stores: state.firebase.data.stores,
+    profile: state.firebase.profile,
     modalAction: state.modalAction,
   };
 }
@@ -34,7 +35,7 @@ function mapDispatchToProps(dispatch) {
   }, dispatch);
 }
 
-@firebaseConnect([])
+@firebaseConnect(['/tipOuts'])
 @connect(mapPropsToState, mapDispatchToProps)
 export default class NewTipOut extends Component {
   static disableWeekdays(date) {
@@ -92,11 +93,17 @@ export default class NewTipOut extends Component {
     const { stores } = this.props;
 
     return Object.keys(stores)
-      .map(key => <MenuItem value={key} primaryText={stores[key].store} />);
+      .map(key => (
+        <MenuItem
+          key={key}
+          value={key}
+          primaryText={stores[key].store}
+          people={stores[key].people}
+        />
+      ));
   }
 
   handleStoreSelectorChange(e, i, v) {
-    console.log("storeSelected:", v);
     this.setState({ newStore: v });
   }
 
@@ -123,27 +130,55 @@ export default class NewTipOut extends Component {
           primary={defaults}
           keyboardFocused={defaults.keyboardFocused}
           onTouchTap={() => {
+            // HANDEL CREATE NEW TIP OUT
+            // TODO: move into its own function.
+            const { tipOutsCreated } = this.props.profile;
+            console.log(tipOutsCreated);
+            const newTipOutPeople = this.props.stores[this.state.newStore].people;
             const tipOutId = makeNewId();
-            const newPerson = {
-              belongsTo: tipOutId,
-              id: makeNewId(),
-              name: '',
-              hours: '',
-            };
-
-            this.props.addNewTipOut(
+            let storePeople = {};
+            
+            newTipOutPeople.forEach(person => {
+              storePeople = {
+                ...storePeople,
+                [makeNewId()]: {
+                  belongsTo: tipOutId,
+                  id: person,
+                  hours: '',
+                }
+              }
+            });
+            
+            console.log(this.state.newDate);
+            this.props.firebase.push( '/tipOuts',
               {
-                id: tipOutId,
-                weekEnding: this.state.newWeekEnding,
+                createdBy: this.props.authId,
+                timestamp: Date.now(),
+                ref: tipOutId,
+                weekEnding: this.state.newDate,
+                hourlyWage: 0,
+                totalHours: 0,
                 totalCash: this.state.newTotalCash,
                 store: this.state.newStore,
-                employees: newPerson,
+                people: storePeople,
+              })
+              .then(snapshot => {
+                console.log(snapshot.key);
+                let newTipOutsCreated = [];
+
+                if (tipOutsCreated) {
+                  newTipOutsCreated = Object.assign([], tipOutsCreated);
+                }
+
+                newTipOutsCreated.push(snapshot.key);
+                console.log(newTipOutsCreated);
+                this.props.firebase.updateProfile({ tipOutsCreated: newTipOutsCreated })
               });
 
             this.props.showModal(false);
           }}
         />);
-    } else if (this.props.modalAction.modal === 'EDIT_TIP_OUT_MODAL') {  
+    } else if (this.props.modalAction.modal === 'EDIT_TIP_OUT_MODAL') {
       defaultDate = this.props.currentTipOut.weekEnding;
 
       modalButton = (

@@ -44,7 +44,6 @@ export default class TipOutList extends Component {
   renderTipOutsList() {
     if (this.props.tipOuts) {
       const { tipOuts } = this.props;
-
       return Object.keys(tipOuts).map(key => (
         <TipOutListItem
           key={key}
@@ -72,7 +71,6 @@ export default class TipOutList extends Component {
   renderTips() {
     if (this.props.tips) {
       const { tips } = this.props;
-
       return Object.keys(tips).map((key) => (
         <TipsListItem
           key={key}

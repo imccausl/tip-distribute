@@ -7,7 +7,7 @@ function activeTipOut(state = null, action) {
       return matchPeopleToTipOuts(action.payload.tipOut, combinePeopleAndUsers(action.payload.people, action.payload.users));
     case 'ADD_PEOPLE_TO_CURRENT_TIP_OUT':
       const newState = Object.assign({}, state);
-      newState.employees = action.payload.employees;
+      newState.people = action.payload.people;
       return newState;
     case 'EDIT_TIP_OUT':
       return {
@@ -15,7 +15,7 @@ function activeTipOut(state = null, action) {
         exactDate: action.payload.newData.exactDate,
         weekEnding: action.payload.newData.weekEnding,
         totalCash: action.payload.newData.totalCash,
-        employees: state.employees,
+        people: state.people,
       };
     case 'UPDATE_PERSON':
       return {

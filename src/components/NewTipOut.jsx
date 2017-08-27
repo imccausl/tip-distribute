@@ -74,7 +74,7 @@ export default class NewTipOut extends Component {
     super(props);
 
     this.state = {
-      newDate: NewTipOut.parseDate(NewTipOut.getNearestWeekEnding()),
+      newDate: NewTipOut.getNearestWeekEnding(),
       newWeekEnding: (!this.props.currentTipOut) ?
         NewTipOut.getNearestWeekEnding() : this.props.currentTipOut.weekEnding,
       newTotalCash: (!this.props.currentTipOut) ? '200' : this.props.currentTipOut.totalCash,
@@ -149,17 +149,15 @@ export default class NewTipOut extends Component {
               }
             });
             
-            console.log(this.state.newDate);
-            this.props.firebase.push( '/tipOuts',
+            console.log("Store:", this.state.newStore);
+            this.props.firebase.pushWithMeta( '/tipOuts',
               {
-                createdBy: this.props.authId,
-                timestamp: Date.now(),
                 ref: tipOutId,
-                weekEnding: this.state.newDate,
+                weekEnding: Date.parse(this.state.newDate),
                 hourlyWage: 0,
                 totalHours: 0,
                 totalCash: this.state.newTotalCash,
-                store: this.state.newStore,
+                storeRef: this.state.newStore,
                 people: storePeople,
               })
               .then(snapshot => {
@@ -223,7 +221,7 @@ export default class NewTipOut extends Component {
             shouldDisableDate={NewTipOut.disableWeekdays}
             defaultDate={new Date(defaultDate)}
             onChange={(event, newValue) => {
-              this.setState({ newDate: NewTipOut.parseDate(newValue), newWeekEnding: newValue });
+              this.setState({ newDate: newValue });
             }}
           />
           <TextField

@@ -47,7 +47,6 @@ class TipOutDrawer extends Component {
       fbTipOuts,
       firebase,
       id,
-      populateState,
     } = newProps;
 
     if ((profile.isLoaded === true && profile.isEmpty === false) &&
@@ -55,8 +54,8 @@ class TipOutDrawer extends Component {
       if (profile.tipOutsCreated) {
         if (users && people && stores) {
           // populate state will have to change depending on type of user?
-          populateState({ profile, fbTipOuts, stores }, 'TIPS_BELONGING_TO');
-          populateState({
+          this.props.populateState({ profile, fbTipOuts, stores }, 'TIPS_BELONGING_TO');
+          this.props.populateState({
             profile,
             fbTipOuts,
             stores,
@@ -96,6 +95,7 @@ class TipOutDrawer extends Component {
   }
 
   render() {
+    const { people, users } = this.props;
     if (!this.props.data) {
       //this.props.showModal(true, 'ADD_NEW_TIP_OUT', 'Add New Tip Out');
     }
@@ -116,8 +116,8 @@ class TipOutDrawer extends Component {
             </ToolbarGroup>
           </Toolbar>
           <TipOutList />
-          </Drawer>
-        <NewTipOut open={this.state.newTipOutOpen} />
+        </Drawer>
+        <NewTipOut people={combinePeopleAndUsers(people, users)} open={this.state.newTipOutOpen} />
       </div>
     );
   }

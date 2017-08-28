@@ -8,7 +8,7 @@ export default function tipOutsReducer(state = initialState, action) {
       return initializeTipOutData(
         action.payload.profile,
         action.payload.tipOuts,
-        action.payload.allPeople,
+        action.payload.people,
         action.payload.stores,
       );
     case 'ADD_NEW_TIP_OUT':

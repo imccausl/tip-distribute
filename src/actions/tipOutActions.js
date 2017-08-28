@@ -17,7 +17,7 @@ function populateState(obj, stateType = 'TIP_OUTS_CREATED') {
       profile: obj.profile,
       tipOuts: obj.fbTipOuts,
       stores: obj.stores,
-      allPeople: obj.allPeople,
+      people: obj.people,
     },
   };
 }

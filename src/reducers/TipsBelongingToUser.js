@@ -6,7 +6,7 @@ export default function tipsBelongingToUser(state = {}, action) {
       return initializeTipsState(
         action.payload.profile,
         action.payload.tipOuts,
-        null,
+        action.payload.people,
         action.payload.stores,
         action.type,
       );

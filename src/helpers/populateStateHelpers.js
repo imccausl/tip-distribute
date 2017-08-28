@@ -11,16 +11,21 @@ function mapObj(obj, callback) {
 
 function matchPeopleToTipOuts(tipOut, allPeople) {
   const newTipOutState = Object.assign({}, tipOut);
-  const tipOutPeopleWithNames = Object.keys(tipOut.people).map((person) => {
+  let tipOutPeopleWithNames = {};
+
+  Object.keys(tipOut.people).forEach((person) => {
     const personObj = tipOut.people[person];
     const personId = personObj.id;
     const displayName = (!personId) ? '' : allPeople[personId].displayName;
 
-    return {
-      belongsTo: personObj.belongsTo,
-      id: personId,
-      name: displayName,
-      hours: personObj.hours,
+    tipOutPeopleWithNames = {
+      ...tipOutPeopleWithNames,
+      [person]: {
+        belongsTo: personObj.belongsTo,
+        id: personId,
+        name: displayName,
+        hours: personObj.hours,
+      }
     };
   });
 

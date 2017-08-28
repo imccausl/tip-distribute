@@ -23,6 +23,7 @@ class EmployeeList extends Component {
           id={people[key].id}
           name={people[key].name}
           hours={people[key].hours}
+          personRef={key}
         />
       </ListItem>
     ),

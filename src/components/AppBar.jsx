@@ -46,11 +46,11 @@ class MainBar extends Component {
         />
       </IconMenu>
     );
-
+    
     return (
       <div style={{ position: 'fixed', zIndex: 3, width: '100%', top: 0, left: 0 }}>
         <AppBar
-          title={`${((this.props.auth.isEmpty && this.props.auth.isLoaded) || this.props.profile.displayName === undefined) ? 'Tip Management' : `${this.props.profile.displayName}`}`}
+          title={`${((this.props.auth.isEmpty && this.props.auth.isLoaded) || this.props.profile.name === undefined) ? 'Tip Management' : `${this.props.profile.name}`}`}
           onLeftIconButtonTouchTap={this.props.showDrawer}
           iconElementRight={(!this.props.auth.isEmpty && this.props.auth.isLoaded) ? <Logged /> : <Login />}
         />
@@ -72,4 +72,4 @@ function mapDispatchToProps(dispatch) {
   return bindActionCreators({ showDrawer, showView }, dispatch);
 }
 
-export default firebaseConnect()(connect(mapStateToProps, mapDispatchToProps)(MainBar));
+export default firebaseConnect([])(connect(mapStateToProps, mapDispatchToProps)(MainBar));

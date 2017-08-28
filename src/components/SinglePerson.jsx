@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import { firebaseConnect } from 'react-redux-firebase';
 import TextField from 'material-ui/TextField';
 import Divider from 'material-ui/Divider';
+import Snackbar from 'material-ui/Snackbar';
 import Paper from 'material-ui/Paper';
 import IconButton from 'material-ui/IconButton';
 import SvgIcon from 'material-ui/SvgIcon';
@@ -13,6 +15,7 @@ import selectTipOut from '../actions/tipOutActions';
 import selectPerson from '../actions/selectPerson';
 import showModal from '../actions/modalActions';
 
+@firebaseConnect(['/tipOuts', '/people'])
 class SinglePerson extends Component {
   static getWindowDimensions() {
     return (window.innerWidth >= 500) ? 500 : window.innerWidth;
@@ -21,7 +24,7 @@ class SinglePerson extends Component {
   constructor(props) {
     super(props);
 
-    this.state = { canUpdate: false, width: SinglePerson.getWindowDimensions() };
+    this.state = { hasUpdated: false, updateType: '', canUpdate: false, width: SinglePerson.getWindowDimensions() };
     this.updateDimensions = this.updateDimensions.bind(this);
   }
 
@@ -38,6 +41,7 @@ class SinglePerson extends Component {
   }
 
   render() {
+    const { update } = this.props.firebase;
     const xSmall = window.matchMedia('(min-width: 320px)');
     const small = window.matchMedia('(max-width: 375px)');
     const medium = window.matchMedia('(min-width: 375px)');
@@ -66,6 +70,8 @@ class SinglePerson extends Component {
     if (medium.matches && large.matches) {
       nameStyle.width = '200px';
     }
+
+    console.log("Refs loaded:", this.props.personRef);
 
     return (
       <div style={style}>
@@ -114,15 +120,23 @@ class SinglePerson extends Component {
             (e) => {
               if (this.state.canUpdate && this.props.hours !== e.target.value) {
                 this.setState({ canUpdate: false });
-                this.props.updatePerson({
-                  belongsTo: this.props.tipOut.id,
-                  name: this.props.name,
-                  id: this.props.id,
-                  hours: e.target.value,
-                });
+                console.log('updating:', this.props.personRef);
+                update(
+                  `/tipOuts/${this.props.tipOut.ref}/people/${this.props.personRef}`,
+                  {
+                    hours: e.target.value,
+                  },
+                  () => this.setState({ hasUpdated: true, updateType: 'Hours' })
+                );
               }
             }
           }
+        />
+        <Snackbar
+          open={this.state.hasUpdated}
+          message={`Changed ${this.props.name}'s ${this.state.updateType}`}
+          action="undo"
+          autoHideDuration={2000}
         />
       </div>
     );

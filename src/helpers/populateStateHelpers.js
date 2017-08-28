@@ -1,10 +1,3 @@
-function combinePeopleAndUsers(people, users) {
-  return {
-    ...people,
-    ...users,
-  };
-}
-
 function mapObj(obj, callback) {
   return Object.keys(obj).map(key => callback(obj[key]));
 }
@@ -82,14 +75,14 @@ function getTipOutsCreatedByUser(profile, tipOuts) {
   });
 }
 
-function getTipsBelongingToUser(profile, tipOuts) {
+function getTipsBelongingToUser(profile, people, tipOuts) {
   let newState = [];
 
-  newState = profile.belongsTo.map((key) => {
+  newState = people[profile.ref].belongsTo.map((key) => {
     let newTipOutState = Object.assign({}, tipOuts[key.id]);
 
     const entryId = Object.keys(newTipOutState.people)
-      .filter(person => tipOuts[key.id].people[person].id === profile.id).pop();
+      .filter(person => tipOuts[key.id].people[person].id === profile.ref).pop();
     const singlePerson = tipOuts[key.id].people[entryId];
 
     newTipOutState.ref = key.id;
@@ -124,14 +117,13 @@ export default function initializeMainState(profile, tipOuts, allPeople, stores,
     newState = getTipOutsCreatedByUser(profile, newState);
     newState = newState.map(tipOut => matchPeopleToTipOuts(tipOut, allPeople));
   } else {
-    newState = getTipsBelongingToUser(profile, newState);
+    newState = getTipsBelongingToUser(profile, allPeople, newState);
   }
 
   return newState;
 }
 
 export {
-  combinePeopleAndUsers,
   matchPeopleToTipOuts,
   matchStoreToTipOuts,
   getTipOutsCreatedByUser,

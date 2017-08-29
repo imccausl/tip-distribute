@@ -3,7 +3,6 @@ import { matchPeopleToTipOuts } from '../helpers/populateStateHelpers';
 function activeTipOut(state = null, action) {
   switch (action.type) {
     case 'DISPLAY_TIPOUT':
-    console.log(action);
       return matchPeopleToTipOuts(action.payload.tipOut, action.payload.people);
     case 'ADD_PEOPLE_TO_CURRENT_TIP_OUT':
       const newState = Object.assign({}, state);

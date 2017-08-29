@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { firebaseConnect } from 'react-redux-firebase';
+import AutoComplete from 'material-ui/AutoComplete';
 import TextField from 'material-ui/TextField';
 import Divider from 'material-ui/Divider';
 import Snackbar from 'material-ui/Snackbar';
@@ -47,6 +48,10 @@ class SinglePerson extends Component {
     const medium = window.matchMedia('(min-width: 375px)');
     const large = window.matchMedia('(max-width: 445px)');
 
+    const getPeopleFromTipOut = () => Object.keys(this.props.tipOut.people).map(key => this.props.tipOut.people[key]);
+    const getNamesOfPeople = () => getPeopleFromTipOut().map(person => person.name);
+    console.log(getPeopleFromTipOut(), getNamesOfPeople());
+
     const style = {
       padding: '0',
       margin: '0',
@@ -71,8 +76,6 @@ class SinglePerson extends Component {
       nameStyle.width = '200px';
     }
 
-    console.log("Refs loaded:", this.props.personRef);
-
     return (
       <div style={style}>
         <IconButton
@@ -89,11 +92,14 @@ class SinglePerson extends Component {
         >
           <SvgIcon><ContentRemove /></SvgIcon>
         </IconButton>
-        <TextField
+        <AutoComplete
           style={nameStyle}
           hintText="Name"
+          // dataSourceConfig={getPeopleFromTipOut()}
+          dataSource={getNamesOfPeople()}
+          filter={AutoComplete.fuzzyFilter}
           floatingLabelText="Name"
-          defaultValue={this.props.name}
+          searchText={this.props.name}
           onFocus={() => {
             this.setState({ canUpdate: true })
           }}
@@ -101,12 +107,9 @@ class SinglePerson extends Component {
             (e) => {
               if (this.state.canUpdate && this.props.name !== e.target.value) {
                 this.setState({ canUpdate: false });
-                this.props.updatePerson({
-                  belongsTo: this.props.tipOut.id,
-                  name: e.target.value,
-                  id: this.props.id,
-                  hours: this.props.hours,
-                });
+                update(`/people/${this.props.id}`, {
+                  displayName: e.target.value,
+                }, () => this.setState({ hasUpdated: true, updateType: 'Name' }));
               }
             }}
         />
@@ -120,7 +123,6 @@ class SinglePerson extends Component {
             (e) => {
               if (this.state.canUpdate && this.props.hours !== e.target.value) {
                 this.setState({ canUpdate: false });
-                console.log('updating:', this.props.personRef);
                 update(
                   `/tipOuts/${this.props.tipOut.ref}/people/${this.props.personRef}`,
                   {

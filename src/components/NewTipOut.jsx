@@ -97,8 +97,7 @@ export default class NewTipOut extends Component {
         <MenuItem
           key={key}
           value={key}
-          primaryText={stores[key].store}
-          people={stores[key].people}
+          primaryText={stores[key].storeNum}
         />
       ));
   }

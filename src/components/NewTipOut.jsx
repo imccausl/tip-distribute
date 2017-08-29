@@ -23,6 +23,7 @@ function mapPropsToState(state) {
     currentTipOut: state.currentTipOut,
     stores: state.firebase.data.stores,
     profile: state.firebase.profile,
+    people: state.firebase.data.people,
     modalAction: state.modalAction,
   };
 }
@@ -35,7 +36,7 @@ function mapDispatchToProps(dispatch) {
   }, dispatch);
 }
 
-@firebaseConnect(['/tipOuts'])
+@firebaseConnect(['/tipOuts', '/people'])
 @connect(mapPropsToState, mapDispatchToProps)
 export default class NewTipOut extends Component {
   static disableWeekdays(date) {
@@ -72,13 +73,12 @@ export default class NewTipOut extends Component {
 
   constructor(props) {
     super(props);
-
     this.state = {
       newDate: NewTipOut.getNearestWeekEnding(),
       newWeekEnding: (!this.props.currentTipOut) ?
         NewTipOut.getNearestWeekEnding() : this.props.currentTipOut.weekEnding,
       newTotalCash: (!this.props.currentTipOut) ? '200' : this.props.currentTipOut.totalCash,
-      newStore: '1s',
+      newStore: '',
     };
 
     this.handleStoreSelectorChange = this.handleStoreSelectorChange.bind(this);
@@ -86,7 +86,10 @@ export default class NewTipOut extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    this.setState({ newTotalCash: (!nextProps.currentTipOut) ? '200' : nextProps.currentTipOut.totalCash });
+    this.setState({
+      newTotalCash: (!nextProps.currentTipOut) ? '200' : nextProps.currentTipOut.totalCash,
+      newStore: (!nextProps.people) ? '' : nextProps.people[nextProps.profile.ref].storeRef,
+    });
   }
 
   populateStoreMenu() {

@@ -40,6 +40,9 @@ class MainBar extends Component {
         <MenuItem
           primaryText="Stores..."
         />
+        <MenuItem
+          primaryText="People..."
+        />
         <Divider />
         <MenuItem primaryText="Sign Out"
           onTouchTap={() => this.props.firebase.logout()}

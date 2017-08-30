@@ -1,3 +1,13 @@
+/*
+ This component talks to EmployeeList and its data is derived from the current tip out.
+ You should be able to add new people to the list, populating 'blank' entries with pre-determined
+ names of the people who work at the store. This store list is maintained separately by an administrator
+ (whoever is in charge of doing tips for the store can maintain this list through the admin functions).
+
+ From a usability perspective, it would be useful to be able to add people to the store list right from this component
+ if the person you are trying to add to the tip out does not exist in the store list.
+ */
+
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
@@ -35,7 +45,7 @@ class SinglePerson extends Component {
       nameText: this.props.name,
       personId: this.props.id,
     };
-    
+ 
     this.updateDimensions = this.updateDimensions.bind(this);
   }
 
@@ -51,19 +61,97 @@ class SinglePerson extends Component {
     this.setState({ width: SinglePerson.getWindowDimensions() });
   }
 
-  render() {
-    const { update } = this.props.firebase;
+  editPersonName() {
     const xSmall = window.matchMedia('(min-width: 320px)');
     const small = window.matchMedia('(max-width: 375px)');
     const medium = window.matchMedia('(min-width: 375px)');
     const large = window.matchMedia('(max-width: 445px)');
+
+    const nameStyle = {
+      width: `${(this.state.width / 1.4) - 60}px`,
+      margin: '0 10px',
+    };
 
     const autoCompleteConfig = {
       text: 'name',
       value: 'id',
     };
 
-    console.log(this.state.peopleList);
+    if (xSmall.matches && small.matches) {
+      nameStyle.width = '135px';
+    }
+
+    if (medium.matches && large.matches) {
+      nameStyle.width = '200px';
+    }
+
+    return (
+      <AutoComplete
+        style={nameStyle}
+        hintText="Name"
+        dataSource={this.state.peopleList}
+        dataSourceConfig={autoCompleteConfig}
+        filter={AutoComplete.fuzzyFilter}
+        floatingLabelText="Name"
+        searchText={this.state.nameText}
+        openOnFocus={true}
+        maxSearchResults={5}
+        onNewRequest={
+          (e, arr, params) => {
+            if (arr === -1) {
+              const personIndex = tpHelpers.getIndexOfPerson(this.state.peopleList, e);
+              if (personIndex > -1) {
+                console.log("Personexists!");
+                this.setState({ nameText: this.state.peopleList[personIndex].name })
+              } else {
+                // person does not exist, create a new person for store
+              }
+            } else {
+              this.setState({ nameText: e.name, personId: e.id });
+            }
+
+            console.log(e, arr, params);
+          }
+        }
+        onUpdateInput={
+          (e, arr, params) => {
+
+            console.log("Update input:", e, arr, params);
+          }
+        }
+        // onFocus={() => {
+        //   this.setState({ canUpdate: true })
+        // }}
+        // onBlur={
+        //   (e) => {
+        //     if (this.state.canUpdate && this.props.name !== e.target.value) {
+        //       this.setState({ canUpdate: false });
+        //       update(`/people/${this.props.id}`, {
+        //         displayName: e.target.value,
+        //       }, () => this.setState({ hasUpdated: true, updateType: 'Name' }));
+        //     }
+        //   }
+        // }
+      />
+    );
+  }
+
+  viewPersonName() {
+    return (
+      <TextField
+        hintText="Name"
+        floatingLabelText="Name"
+        value={this.state.nameText}
+        disabled={true}
+        underlineShow={false}
+        inputStyle={{ color: 'black' }}
+        style={{ cursor: 'arrow' }}
+      />
+    );
+  }
+
+  render() {
+    const { update } = this.props.firebase;
 
     const style = {
       padding: '0',
@@ -76,17 +164,12 @@ class SinglePerson extends Component {
       margin: '0 10px',
     };
 
-    let nameStyle = {
-      width: `${(this.state.width / 1.4) - 60}px`,
-      margin: '0 10px',
-    };
+    let NameComponent = null;
 
-    if (xSmall.matches && small.matches) {
-      nameStyle.width = '135px';
-    }
-
-    if (medium.matches && large.matches) {
-      nameStyle.width = '200px';
+    if (this.state.personId) {
+      NameComponent = this.viewPersonName();
+    } else {
+      NameComponent = this.editPersonName(update);
     }
 
     return (
@@ -105,53 +188,7 @@ class SinglePerson extends Component {
         >
           <SvgIcon><ContentRemove /></SvgIcon>
         </IconButton>
-        <AutoComplete
-          style={nameStyle}
-          hintText="Name"
-          dataSource={this.state.peopleList}
-          dataSourceConfig={autoCompleteConfig}
-          filter={AutoComplete.fuzzyFilter}
-          floatingLabelText="Name"
-          searchText={this.state.nameText}
-          openOnFocus={true}
-          maxSearchResults={5}
-          onNewRequest={
-            (e, arr, params) => {
-              if (arr === -1) {
-                const personIndex = tpHelpers.getIndexOfPerson(this.state.peopleList, e);
-                if (personIndex > -1) {
-                  console.log("Personexists!");
-                  this.setState({ nameText: this.state.peopleList[personIndex].name })
-                } else {
-                  // person does not exist, create a new person for store
-                }
-              } else {
-                this.setState({ nameText: e.name, personId: e.id });
-              }
-
-              console.log(e, arr, params);
-            }
-          }
-          onUpdateInput={
-            (e, arr, params) => {
-
-              console.log("Update input:", e, arr, params);
-            }
-          }
-          // onFocus={() => {
-          //   this.setState({ canUpdate: true })
-          // }}
-          // onBlur={
-          //   (e) => {
-          //     if (this.state.canUpdate && this.props.name !== e.target.value) {
-          //       this.setState({ canUpdate: false });
-          //       update(`/people/${this.props.id}`, {
-          //         displayName: e.target.value,
-          //       }, () => this.setState({ hasUpdated: true, updateType: 'Name' }));
-          //     }
-          //   }
-          // }
-        />
+        {NameComponent}
         <TextField
           hintText="Hours"
           floatingLabelText="Hours"

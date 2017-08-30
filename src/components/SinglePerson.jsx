@@ -15,6 +15,7 @@ import updateTipOuts from '../actions/updateTipOuts';
 import selectTipOut from '../actions/tipOutActions';
 import selectPerson from '../actions/selectPerson';
 import showModal from '../actions/modalActions';
+import * as tpHelpers from '../helpers/currentTipOutHelpers';
 
 @firebaseConnect(['/tipOuts', '/people'])
 class SinglePerson extends Component {
@@ -25,7 +26,16 @@ class SinglePerson extends Component {
   constructor(props) {
     super(props);
 
-    this.state = { hasUpdated: false, updateType: '', canUpdate: false, width: SinglePerson.getWindowDimensions() };
+    this.state = {
+      hasUpdated: false,
+      updateType: '',
+      canUpdate: false,
+      width: SinglePerson.getWindowDimensions(),
+      peopleList: tpHelpers.getPeopleFromTipOut(this.props.tipOut),
+      nameText: this.props.name,
+      personId: this.props.id,
+    };
+    
     this.updateDimensions = this.updateDimensions.bind(this);
   }
 
@@ -48,9 +58,12 @@ class SinglePerson extends Component {
     const medium = window.matchMedia('(min-width: 375px)');
     const large = window.matchMedia('(max-width: 445px)');
 
-    const getPeopleFromTipOut = () => Object.keys(this.props.tipOut.people).map(key => this.props.tipOut.people[key]);
-    const getNamesOfPeople = () => getPeopleFromTipOut().map(person => person.name);
-    console.log(getPeopleFromTipOut(), getNamesOfPeople());
+    const autoCompleteConfig = {
+      text: 'name',
+      value: 'id',
+    };
+
+    console.log(this.state.peopleList);
 
     const style = {
       padding: '0',
@@ -95,23 +108,49 @@ class SinglePerson extends Component {
         <AutoComplete
           style={nameStyle}
           hintText="Name"
-          // dataSourceConfig={getPeopleFromTipOut()}
-          dataSource={getNamesOfPeople()}
+          dataSource={this.state.peopleList}
+          dataSourceConfig={autoCompleteConfig}
           filter={AutoComplete.fuzzyFilter}
           floatingLabelText="Name"
-          searchText={this.props.name}
-          onFocus={() => {
-            this.setState({ canUpdate: true })
-          }}
-          onBlur={
-            (e) => {
-              if (this.state.canUpdate && this.props.name !== e.target.value) {
-                this.setState({ canUpdate: false });
-                update(`/people/${this.props.id}`, {
-                  displayName: e.target.value,
-                }, () => this.setState({ hasUpdated: true, updateType: 'Name' }));
+          searchText={this.state.nameText}
+          openOnFocus={true}
+          maxSearchResults={5}
+          onNewRequest={
+            (e, arr, params) => {
+              if (arr === -1) {
+                const personIndex = tpHelpers.getIndexOfPerson(this.state.peopleList, e);
+                if (personIndex > -1) {
+                  console.log("Personexists!");
+                  this.setState({ nameText: this.state.peopleList[personIndex].name })
+                } else {
+                  // person does not exist, create a new person for store
+                }
+              } else {
+                this.setState({ nameText: e.name, personId: e.id });
               }
-            }}
+
+              console.log(e, arr, params);
+            }
+          }
+          onUpdateInput={
+            (e, arr, params) => {
+
+              console.log("Update input:", e, arr, params);
+            }
+          }
+          // onFocus={() => {
+          //   this.setState({ canUpdate: true })
+          // }}
+          // onBlur={
+          //   (e) => {
+          //     if (this.state.canUpdate && this.props.name !== e.target.value) {
+          //       this.setState({ canUpdate: false });
+          //       update(`/people/${this.props.id}`, {
+          //         displayName: e.target.value,
+          //       }, () => this.setState({ hasUpdated: true, updateType: 'Name' }));
+          //     }
+          //   }
+          // }
         />
         <TextField
           hintText="Hours"

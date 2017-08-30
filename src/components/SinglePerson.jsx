@@ -61,33 +61,15 @@ class SinglePerson extends Component {
     this.setState({ width: SinglePerson.getWindowDimensions() });
   }
 
-  editPersonName() {
-    const xSmall = window.matchMedia('(min-width: 320px)');
-    const small = window.matchMedia('(max-width: 375px)');
-    const medium = window.matchMedia('(min-width: 375px)');
-    const large = window.matchMedia('(max-width: 445px)');
-
-    const nameStyle = {
-      width: `${(this.state.width / 1.4) - 60}px`,
-      margin: '0 10px',
-    };
-
+  editPersonName(style, fbSet) {
     const autoCompleteConfig = {
       text: 'name',
       value: 'id',
     };
 
-    if (xSmall.matches && small.matches) {
-      nameStyle.width = '135px';
-    }
-
-    if (medium.matches && large.matches) {
-      nameStyle.width = '200px';
-    }
-
     return (
       <AutoComplete
-        style={nameStyle}
+        style={style}
         hintText="Name"
         dataSource={this.state.peopleList}
         dataSourceConfig={autoCompleteConfig}
@@ -136,7 +118,12 @@ class SinglePerson extends Component {
     );
   }
 
-  viewPersonName() {
+  viewPersonName(style) {
+    const compStyle = {
+      ...style,
+      cursor: 'arrow',
+    };
+
     return (
       <TextField
         hintText="Name"
@@ -145,13 +132,30 @@ class SinglePerson extends Component {
         disabled={true}
         underlineShow={false}
         inputStyle={{ color: 'black' }}
-        style={{ cursor: 'arrow' }}
+        style={compStyle}
       />
     );
   }
 
   render() {
     const { update } = this.props.firebase;
+    const xSmall = window.matchMedia('(min-width: 320px)');
+    const small = window.matchMedia('(max-width: 375px)');
+    const medium = window.matchMedia('(min-width: 375px)');
+    const large = window.matchMedia('(max-width: 445px)');
+
+    const nameStyle = {
+      width: `${(this.state.width / 1.4) - 60}px`,
+      margin: '0 10px',
+    };
+
+    if (xSmall.matches && small.matches) {
+      nameStyle.width = '135px';
+    }
+
+    if (medium.matches && large.matches) {
+      nameStyle.width = '200px';
+    }
 
     const style = {
       padding: '0',
@@ -167,9 +171,9 @@ class SinglePerson extends Component {
     let NameComponent = null;
 
     if (this.state.personId) {
-      NameComponent = this.viewPersonName();
+      NameComponent = this.viewPersonName(nameStyle);
     } else {
-      NameComponent = this.editPersonName(update);
+      NameComponent = this.editPersonName(nameStyle, update);
     }
 
     return (

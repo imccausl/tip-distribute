@@ -26,11 +26,17 @@ export default function tipOutsReducer(state = initialState, action) {
           people: action.payload.people,
         },
       ];
-    case 'ADD_PEOPLE_TO_CURRENT_TIP_OUT':
+    case 'ADD_PEOPLE_TO_CURRENT_TIP_OUT': // FYI: people added here (to the full tipOutsCreated list) get
+                                          // immediately deleted because the list is then re-populated with
+                                          // the firebase source data.
       return state.map((tipOut) => {
-        if (tipOut.id === action.payload.belongsTo) {
+        if (tipOut.ref === action.payload.belongsTo) {
           const appendedTipOut = Object.assign({}, tipOut);
-          appendedTipOut.employees = action.payload.employees;
+          appendedTipOut.people = {
+            ...appendedTipOut.people,
+            ...action.payload.people,
+          };
+
           return appendedTipOut;
         }
         return tipOut;
@@ -39,7 +45,7 @@ export default function tipOutsReducer(state = initialState, action) {
       return state.map((tipOut) => {
         if (tipOut.id === action.payload.belongsTo) {
           return {
-            id: tipOut.id,
+            ref: tipOut.ref,
             exactDate: tipOut.exactDate,
             weekEnding: tipOut.weekEnding,
             totalCash: tipOut.totalCash,

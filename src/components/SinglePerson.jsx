@@ -22,7 +22,6 @@ import SvgIcon from 'material-ui/SvgIcon';
 import ContentRemove from 'material-ui/svg-icons/navigation/cancel';
 import updatePerson from '../actions/updatePerson';
 import updateTipOuts from '../actions/updateTipOuts';
-import selectTipOut from '../actions/tipOutActions';
 import selectPerson from '../actions/selectPerson';
 import showModal from '../actions/modalActions';
 import * as tpHelpers from '../helpers/currentTipOutHelpers';
@@ -235,7 +234,7 @@ function mapStateToProps(state) {
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({ updatePerson, selectTipOut, selectPerson, showModal }, dispatch);
+  return bindActionCreators({ updatePerson, selectPerson, showModal }, dispatch);
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(SinglePerson);

@@ -1,4 +1,5 @@
 import { matchPeopleToTipOuts } from '../helpers/populateStateHelpers';
+import makeNewId from '../helpers/makeNewId';
 
 function activeTipOut(state = null, action) {
   switch (action.type) {
@@ -6,7 +7,12 @@ function activeTipOut(state = null, action) {
       return matchPeopleToTipOuts(action.payload.tipOut, action.payload.people);
     case 'ADD_PEOPLE_TO_CURRENT_TIP_OUT':
       const newState = Object.assign({}, state);
-      newState.people = action.payload.people;
+
+      newState.people = {
+        ...newState.people,
+        ...action.payload.people,
+      };
+
       return newState;
     case 'EDIT_TIP_OUT':
       return {

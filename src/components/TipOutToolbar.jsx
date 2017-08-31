@@ -44,7 +44,27 @@ import updateTipOuts from '../actions/updateTipOuts';
 import makeNewId from '../helpers/makeNewId';
 import parseDate from '../helpers/dateHelpers';
 
-class TipAppBar extends Component {
+function mapStateToProps(state) {
+  return {
+    drawerOpen: state.showDrawer,
+    open: state.showModal,
+    people: state.activePeople,
+    tipOut: state.currentTipOut,
+    tipOuts: state.dataTree,
+  };
+}
+
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators({ 
+    showDrawer,
+    showModal,
+    updateTipOuts,
+    selectPeople,
+  }, dispatch);
+}
+
+@connect(mapStateToProps, mapDispatchToProps)
+export default class TipAppBar extends Component {
   constructor(props) {
     super(props);
 
@@ -134,24 +154,3 @@ class TipAppBar extends Component {
     );
   }
 }
-
-function mapStateToProps(state) {
-  return {
-    drawerOpen: state.showDrawer,
-    open: state.showModal,
-    people: state.activePeople,
-    tipOut: state.currentTipOut,
-    tipOuts: state.dataTree,
-  };
-}
-
-function mapDispatchToProps(dispatch) {
-  return bindActionCreators({ 
-    showDrawer,
-    showModal,
-    updateTipOuts,
-    selectPeople,
-  }, dispatch);
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(TipAppBar);

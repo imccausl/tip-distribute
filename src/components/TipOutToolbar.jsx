@@ -1,3 +1,25 @@
+/* TipOutToolbar Workflow
+ * Creating a new user: tips can only be assigned to people who either work at the store, or
+ * who are "phantoms" (substitute workers) from another store. In short, tip amounts and hours
+ * effectively "belong" to a store, and people receiving tips from this fund have to "belong"
+ * to that store.
+ * 
+ * At first, I approached this workflow like a spreadsheet. New users created by clicking the 
+ * "add new user" button would create a "blank" user, populated with whatever name and however 
+ * many hours the creator wanted. But this workflow doesn't work particularly well in this case,
+ * because it leaves open the opportunity to create duplicate entries. Anyone added to a tip out has
+ * to also have a record in the "people" database. They are not simply a name, but a reference to this people
+ * database. 
+ * 
+ * Consequently, I make use of MaterialUI's AutoComplete component in order to add a new user and there
+ * are two ways to do this: 1) choose a user from the autocomplete list, which should filter out users
+ * that have already been added to the tip out; 2) allow for the creation of a new user, who will then
+ * be added to the store's "person" database. This case works well in the event that there has been a new hire
+ * since the last tip out, and allows the tip out creator to add a new person to the store list quickly
+ * without having to first edit the list of store employees: it's a way to quickly combine the step of
+ * adding a new employee to the store's list AND add them to the tip out simultaneously.
+ */ 
+
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
@@ -17,7 +39,6 @@ import { showDrawer } from '../actions/drawerActions';
 import showModal from '../actions/modalActions';
 import DistributionReport from './DistributionReport.jsx';
 import ConfirmDialog from './ConfirmDialog.jsx';
-import selectTipOut from '../actions/tipOutActions';
 import selectPeople from '../actions/selectEmployees';
 import updateTipOuts from '../actions/updateTipOuts';
 import makeNewId from '../helpers/makeNewId';
@@ -85,18 +106,15 @@ class TipAppBar extends Component {
               tooltip="Add person to tipout"
               onTouchTap={() => {
                 const newPerson = {
-                  belongsTo: this.props.tipOut.id,
-                  id: makeNewId(),
-                  name: '',
-                  hours: '',
+                  [makeNewId()]: {
+                    belongsTo: this.props.tipOut.ref,
+                    id: '',
+                    name: '',
+                    hours: '',
+                  },
                 };
 
-                const newEmployees = [
-                  ...this.props.tipOut.employees,
-                  newPerson,
-                ];
-
-                this.props.updateTipOuts(this.props.tipOut.id, newEmployees);
+                this.props.updateTipOuts(this.props.tipOut.ref, newPerson);
               }}
             >
               <SvgIcon><ContentAdd /></SvgIcon>
@@ -133,7 +151,6 @@ function mapDispatchToProps(dispatch) {
     showModal,
     updateTipOuts,
     selectPeople,
-    selectTipOut,
   }, dispatch);
 }
 

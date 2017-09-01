@@ -26,8 +26,23 @@ import selectPerson from '../actions/selectPerson';
 import showModal from '../actions/modalActions';
 import * as tpHelpers from '../helpers/currentTipOutHelpers';
 
+function mapStateToProps(state) {
+  return {
+    drawerOpen: state.showDrawer,
+    firebase: state.firebase,
+    tipOuts: state.dataTree,
+    people: state.activePeople,
+    tipOut: state.currentTipOut,
+  };
+}
+
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators({ updatePerson, selectPerson, showModal }, dispatch);
+}
+
 @firebaseConnect(['/tipOuts', '/people'])
-class SinglePerson extends Component {
+@connect(mapStateToProps, mapDispatchToProps)
+export default class SinglePerson extends Component {
   static getWindowDimensions() {
     return (window.innerWidth >= 500) ? 500 : window.innerWidth;
   }
@@ -68,8 +83,6 @@ class SinglePerson extends Component {
 
     const currentlyAddedUsers = tpHelpers.getPeopleFromTipOut(this.props.tipOut);
     const allowedUsers = tpHelpers.filterUsersAddedToTipOut(this.props.peopleList, currentlyAddedUsers);
-    
-    console.log("PeopleList:", this.props.peopleList, "UsersNotOnList:", allowedUsers);
 
     return (
       <AutoComplete
@@ -240,19 +253,3 @@ class SinglePerson extends Component {
     );
   }
 }
-
-function mapStateToProps(state) {
-  return {
-    drawerOpen: state.showDrawer,
-    firebase: state.firebase,
-    tipOuts: state.dataTree,
-    people: state.activePeople,
-    tipOut: state.currentTipOut,
-  };
-}
-
-function mapDispatchToProps(dispatch) {
-  return bindActionCreators({ updatePerson, selectPerson, showModal }, dispatch);
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(SinglePerson);

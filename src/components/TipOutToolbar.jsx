@@ -23,7 +23,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import {Toolbar, ToolbarGroup, ToolbarSeparator, ToolbarTitle} from 'material-ui/Toolbar';
+import { Toolbar, ToolbarGroup, ToolbarSeparator, ToolbarTitle } from 'material-ui/Toolbar';
 import IconButton from 'material-ui/IconButton';
 import IconMenu from 'material-ui/IconMenu';
 import MenuItem from 'material-ui/MenuItem';
@@ -120,6 +120,7 @@ export default class TipAppBar extends Component {
           <ToolbarGroup>
             <ToolbarTitle text={headerText} />
           </ToolbarGroup>
+          <ToolbarSeparator />
           <ToolbarGroup>
             <IconButton
               disabled={!(this.props.tipOut)}

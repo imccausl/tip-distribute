@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { firebaseConnect } from 'react-redux-firebase';
 import PropTypes from 'prop-types';
 import { List, ListItem } from 'material-ui/List';
 import Divider from 'material-ui/Divider';
@@ -8,7 +9,9 @@ import selectEmployee from '../actions/selectPerson';
 import SinglePerson from './SinglePerson.jsx';
 import TipOutToolbar from './TipOutToolbar.jsx';
 import selectPeople from '../actions/selectEmployees';
+import { getPeopleFromStore } from '../helpers/currentTipOutHelpers';
 
+@firebaseConnect([])
 class EmployeeList extends Component {
   renderList() {
     const { people } = this.props.tipOut;
@@ -23,6 +26,7 @@ class EmployeeList extends Component {
           id={people[key].id}
           name={people[key].name}
           hours={people[key].hours}
+          peopleList={getPeopleFromStore(this.props.tipOut.storeRef, this.props.stores, this.props.allPeople)}
           personRef={key}
         />
       </ListItem>
@@ -48,6 +52,8 @@ function mapStateToProps(state) {
   return {
     tipOut: state.currentTipOut,
     people: state.activePeople,
+    stores: state.firebase.data.stores,
+    allPeople: state.firebase.data.people,
   };
 }
 

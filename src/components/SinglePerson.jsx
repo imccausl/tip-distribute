@@ -40,7 +40,6 @@ class SinglePerson extends Component {
       updateType: '',
       canUpdate: false,
       width: SinglePerson.getWindowDimensions(),
-      peopleList: tpHelpers.getPeopleFromTipOut(this.props.tipOut),
       nameText: this.props.name,
       personId: this.props.id,
     };
@@ -66,11 +65,16 @@ class SinglePerson extends Component {
       value: 'id',
     };
 
+    const currentlyAddedUsers = tpHelpers.getPeopleFromTipOut(this.props.tipOut);
+    const allowedUsers = tpHelpers.filterUsersAddedToTipOut(this.props.peopleList, currentlyAddedUsers);
+    
+    console.log("PeopleList:", this.props.peopleList, "UsersNotOnList:", allowedUsers);
+
     return (
       <AutoComplete
         style={style}
         hintText="Name"
-        dataSource={this.state.peopleList}
+        dataSource={allowedUsers}
         dataSourceConfig={autoCompleteConfig}
         filter={AutoComplete.fuzzyFilter}
         floatingLabelText="Name"
@@ -80,15 +84,16 @@ class SinglePerson extends Component {
         onNewRequest={
           (e, arr, params) => {
             if (arr === -1) {
-              const personIndex = tpHelpers.getIndexOfPerson(this.state.peopleList, e);
+              const personIndex = tpHelpers.getIndexOfPerson(this.props.peopleList, e);
               if (personIndex > -1) {
                 console.log("Personexists!");
-                this.setState({ nameText: this.state.peopleList[personIndex].name })
+                this.setState({ nameText: this.props.peopleList[personIndex].name })
               } else {
                 // person does not exist, create a new person for store
               }
             } else {
               this.setState({ nameText: e.name, personId: e.id });
+
             }
 
             console.log(e, arr, params);
@@ -142,7 +147,6 @@ class SinglePerson extends Component {
     const small = window.matchMedia('(max-width: 375px)');
     const medium = window.matchMedia('(min-width: 375px)');
     const large = window.matchMedia('(max-width: 445px)');
-
     const nameStyle = {
       width: `${(this.state.width / 1.4) - 60}px`,
       margin: '0 10px',
@@ -227,6 +231,7 @@ class SinglePerson extends Component {
 function mapStateToProps(state) {
   return {
     drawerOpen: state.showDrawer,
+    firebase: state.firebase,
     tipOuts: state.dataTree,
     people: state.activePeople,
     tipOut: state.currentTipOut,

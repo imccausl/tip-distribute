@@ -92,9 +92,10 @@ class SinglePerson extends Component {
                 console.log("Personexists!");
                 this.setState({ nameText: this.props.peopleList[personIndex].name })
               } else {
-                // person does not exist, create a new person for store
+                // person does not exist, create a new person record and add to current store
               }
             } else {
+              // Add user who already has a people record
               this.setState({ nameText: e.name, personId: e.id });
               const addPerson = {
                 id: e.id,

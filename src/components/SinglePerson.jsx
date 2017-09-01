@@ -40,6 +40,7 @@ class SinglePerson extends Component {
       updateType: '',
       canUpdate: false,
       width: SinglePerson.getWindowDimensions(),
+      newHours: this.props.hours,
       nameText: this.props.name,
       personId: this.props.id,
     };
@@ -83,6 +84,8 @@ class SinglePerson extends Component {
         maxSearchResults={5}
         onNewRequest={
           (e, arr, params) => {
+            const { pushWithMeta } = this.props.firebase;
+
             if (arr === -1) {
               const personIndex = tpHelpers.getIndexOfPerson(this.props.peopleList, e);
               if (personIndex > -1) {
@@ -93,7 +96,16 @@ class SinglePerson extends Component {
               }
             } else {
               this.setState({ nameText: e.name, personId: e.id });
+              const addPerson = {
+                id: e.id,
+                name: e.name,
+                belongsTo: this.props.tipOut.ref,
+                hours: this.state.newHours || '0',
+              };
 
+              pushWithMeta(`/tipOuts/${this.props.tipOut.ref}/people`, addPerson, (snapshot) => {
+                this.setState({ hasUpdated: true, updateType: 'Added' });
+              });
             }
 
             console.log(e, arr, params);
@@ -205,13 +217,13 @@ class SinglePerson extends Component {
           onBlur={
             (e) => {
               if (this.state.canUpdate && this.props.hours !== e.target.value) {
-                this.setState({ canUpdate: false });
+                this.setState({ canUpdate: false, newHours: e.target.value });
                 update(
                   `/tipOuts/${this.props.tipOut.ref}/people/${this.props.personRef}`,
                   {
                     hours: e.target.value,
                   },
-                  () => this.setState({ hasUpdated: true, updateType: 'Hours' })
+                  () => this.setState({ hasUpdated: true, updateType: 'Updated' })
                 );
               }
             }
@@ -219,7 +231,7 @@ class SinglePerson extends Component {
         />
         <Snackbar
           open={this.state.hasUpdated}
-          message={`Changed ${this.props.name}'s ${this.state.updateType}`}
+          message={`${this.state.updateType} ${this.props.name}`}
           action="undo"
           autoHideDuration={2000}
         />

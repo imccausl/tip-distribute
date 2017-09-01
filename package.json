@@ -4,10 +4,10 @@
   "description": "A react app for distributing tips at sbux",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "compile": "webpack",
     "start": "webpack-dev-server",
-    "deploy": "gh-pages-deploy"
+    "deploy": "gh-pages-deploy",
+    "test": "mocha --compilers js:babel-core/register tests/*.test.js"
   },
   "keywords": [
     "react",
@@ -31,6 +31,7 @@
     "eslint-config-airbnb": "^15.1.0",
     "eslint-plugin-import": "^2.7.0",
     "eslint-plugin-jsx-a11y": "^5.1.1",
+    "eslint-plugin-mocha": "^4.11.0",
     "eslint-plugin-react": "^7.1.0",
     "gh-pages-deploy": "^0.4.2",
     "html-webpack-plugin": "^2.30.1",

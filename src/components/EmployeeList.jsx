@@ -9,23 +9,24 @@ import selectEmployee from '../actions/selectPerson';
 import SinglePerson from './SinglePerson.jsx';
 import TipOutToolbar from './TipOutToolbar.jsx';
 import selectPeople from '../actions/selectEmployees';
-import { getPeopleFromStore } from '../helpers/currentTipOutHelpers';
+import { getPeopleFromStore, sortByLastName } from '../helpers/currentTipOutHelpers';
 
 @firebaseConnect([])
 class EmployeeList extends Component {
   renderList() {
     const { people } = this.props.tipOut;
+    const sortedPeople = sortByLastName(people);
 
-    return Object.keys(people).map(key => (
+    return Object.keys(sortedPeople).map(key => (
       <ListItem
         key={key}
         disabled={true}
         style={{ paddingTop: '0', paddingBottom: '0' }}
       >
         <SinglePerson
-          id={people[key].id}
-          name={people[key].name}
-          hours={people[key].hours}
+          id={sortedPeople[key].id}
+          name={sortedPeople[key].name}
+          hours={sortedPeople[key].hours}
           peopleList={getPeopleFromStore(this.props.tipOut.storeRef, this.props.stores, this.props.allPeople)}
           personRef={key}
         />

@@ -9,6 +9,7 @@
  */
 
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { firebaseConnect } from 'react-redux-firebase';
@@ -39,6 +40,46 @@ function mapDispatchToProps(dispatch) {
 @firebaseConnect(['/tipOuts', '/people'])
 @connect(mapStateToProps, mapDispatchToProps)
 export default class SinglePerson extends Component {
+  static propTypes = {
+    hours: PropTypes.string,
+    name: PropTypes.string,
+    id: PropTypes.string,
+    personRef: PropTypes.string,
+    tipOut: PropTypes.shape({
+      createdAt: PropTypes.number,
+      createdBy: PropTypes.string,
+      hourlyWage: PropTypes.number,
+      people: PropTypes.shape({
+        belongsTo: PropTypes.string,
+        id: PropTypes.string,
+        name: PropTypes.string,
+        hours: PropTypes.string,
+      }),
+      ref: PropTypes.string,
+      storeRef: PropTypes.string,
+      totalCash: PropTypes.string,
+      totalHours: PropTypes.number,
+      weekEnding: PropTypes.string,
+    }).isRequired,
+    firebase: PropTypes.shape({
+      pushWithMeta: PropTypes.func.isRequired,
+    }).isRequired,
+    peopleList: PropTypes.arrayOf(PropTypes.shape({
+      id: PropTypes.string,
+      name: PropTypes.string,
+    })).isRequired,
+    // updatePerson: PropTypes.func.isRequired,
+    selectPerson: PropTypes.func.isRequired,
+    showModal: PropTypes.func.isRequired,
+  };
+
+  static defaultProps = {
+    hours: '0',
+    name: '',
+    id: '',
+    personRef: null,
+  }
+
   static getWindowDimensions() {
     return (window.innerWidth >= 500) ? 500 : window.innerWidth;
   }
@@ -56,7 +97,7 @@ export default class SinglePerson extends Component {
       personId: this.props.id,
       myKey: this.props.personRef || null,
     };
- 
+
     this.updateDimensions = this.updateDimensions.bind(this);
   }
 
@@ -78,12 +119,12 @@ export default class SinglePerson extends Component {
       value: 'id',
     };
 
-    const currentlyAddedUsers = tpHelpers.getPeopleFromTipOut(this.props.tipOut);
-    const allowedUsers = tpHelpers.filterUsersAddedToTipOut(this.props.peopleList, currentlyAddedUsers);
+    const { tipOut, peopleList } = this.props;
+
+    const currentlyAddedUsers = tpHelpers.getPeopleFromTipOut(tipOut);
+    const allowedUsers = tpHelpers.filterUsersAddedToTipOut(peopleList, currentlyAddedUsers);
 
     const addPersonToTipOut = (id, name) => {
-      const { pushWithMeta } = this.props.firebase;
-
       const addPerson = {
         id,
         name,
@@ -93,7 +134,7 @@ export default class SinglePerson extends Component {
 
       this.setState({ nameText: name, personId: id });
 
-      pushWithMeta(`/tipOuts/${addPerson.belongsTo}/people`, addPerson).then((snapshot) => {
+      fbSet(`/tipOuts/${addPerson.belongsTo}/people`, addPerson).then((snapshot) => {
         this.setState({ hasUpdated: true, updateType: 'Added', myKey: snapshot.key });
       });
     };
@@ -110,13 +151,12 @@ export default class SinglePerson extends Component {
         openOnFocus={true}
         maxSearchResults={5}
         onNewRequest={
-          (e, arr, params) => {
-
+          (e, arr) => {
             if (arr === -1) {
-              const personIndex = tpHelpers.getIndexOfPerson(this.props.peopleList, e);
+              const personIndex = tpHelpers.getIndexOfPerson(peopleList, e);
               if (personIndex > -1) {
                 console.log("Personexists!");
-                this.setState({ nameText: this.props.peopleList[personIndex].name });
+                this.setState({ nameText: peopleList[personIndex].name });
               } else {
                 // person does not exist, create a new person record and add to current store
                 // TODO: Another case: person exists, but is not from the store (phantom case)
@@ -181,11 +221,12 @@ export default class SinglePerson extends Component {
     };
 
     let NameComponent = null;
+    const { pushWithMeta } = this.props.firebase;
 
     if (this.state.personId) {
       NameComponent = this.viewPersonName(nameStyle);
     } else {
-      NameComponent = this.editPersonName(nameStyle, update);
+      NameComponent = this.editPersonName(nameStyle, pushWithMeta);
     }
 
     const deleteButton = () => {

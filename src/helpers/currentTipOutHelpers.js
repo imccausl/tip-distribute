@@ -15,8 +15,28 @@ export function getPeopleFromStore(storeNum, stores, people) {
   });
 }
 
-export function sortByLastName(tipOut) {
-  
+export function sortByLastName(people) {
+  const getLastName = (name) => {
+    const nameParts = name.split(' ');
+    return nameParts.pop();
+  };
+
+  const sortedKeys = Object.keys(people).sort((a, b) => {
+    const lastName1 = getLastName(people[a].name);
+    const lastName2 = getLastName(people[b].name);
+
+    if (lastName1 > lastName2) return 1;
+    if (lastName1 < lastName2) return -1;
+    return 0;
+  });
+
+  let sortedPeople = {};
+
+  sortedKeys.forEach((key) => {
+    sortedPeople[key] = people[key];
+  });
+
+  return sortedPeople;
 }
 
 export function filterUsersAddedToTipOut(allUsers, usersAdded) {

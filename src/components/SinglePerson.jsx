@@ -55,6 +55,7 @@ export default class SinglePerson extends Component {
       newHours: this.props.hours,
       nameText: this.props.name,
       personId: this.props.id,
+      myKey: this.props.key || null,
     };
  
     this.updateDimensions = this.updateDimensions.bind(this);
@@ -81,6 +82,23 @@ export default class SinglePerson extends Component {
     const currentlyAddedUsers = tpHelpers.getPeopleFromTipOut(this.props.tipOut);
     const allowedUsers = tpHelpers.filterUsersAddedToTipOut(this.props.peopleList, currentlyAddedUsers);
 
+    function addPersonToTipOut(id, name) {
+      const { pushWithMeta } = this.props.firebase;
+
+      const addPerson = {
+        id,
+        name,
+        belongsTo: this.props.tipOut.ref,
+        hours: this.state.newHours || '0',
+      };
+
+      this.setState({ nameText: name, personId: id });
+
+      pushWithMeta(`/tipOuts/${addPerson.belongsTo}/people`, addPerson, (snapshot) => {
+        this.setState({ hasUpdated: true, updateType: 'Added', myKey: snapshot.key });
+      });
+    }
+
     return (
       <AutoComplete
         style={style}
@@ -94,53 +112,22 @@ export default class SinglePerson extends Component {
         maxSearchResults={5}
         onNewRequest={
           (e, arr, params) => {
-            const { pushWithMeta } = this.props.firebase;
 
             if (arr === -1) {
               const personIndex = tpHelpers.getIndexOfPerson(this.props.peopleList, e);
               if (personIndex > -1) {
                 console.log("Personexists!");
-                this.setState({ nameText: this.props.peopleList[personIndex].name })
+                this.setState({ nameText: this.props.peopleList[personIndex].name });
               } else {
                 // person does not exist, create a new person record and add to current store
+                // TODO: Another case: person exists, but is not from the store (phantom case)
               }
             } else {
               // Add user who already has a people record
-              this.setState({ nameText: e.name, personId: e.id });
-              const addPerson = {
-                id: e.id,
-                name: e.name,
-                belongsTo: this.props.tipOut.ref,
-                hours: this.state.newHours || '0',
-              };
-
-              pushWithMeta(`/tipOuts/${this.props.tipOut.ref}/people`, addPerson, (snapshot) => {
-                this.setState({ hasUpdated: true, updateType: 'Added' });
-              });
+              addPersonToTipOut(e.id, e.name);
             }
-
-            console.log(e, arr, params);
           }
         }
-        onUpdateInput={
-          (e, arr, params) => {
-
-            console.log("Update input:", e, arr, params);
-          }
-        }
-        // onFocus={() => {
-        //   this.setState({ canUpdate: true })
-        // }}
-        // onBlur={
-        //   (e) => {
-        //     if (this.state.canUpdate && this.props.name !== e.target.value) {
-        //       this.setState({ canUpdate: false });
-        //       update(`/people/${this.props.id}`, {
-        //         displayName: e.target.value,
-        //       }, () => this.setState({ hasUpdated: true, updateType: 'Name' }));
-        //     }
-        //   }
-        // }
       />
     );
   }

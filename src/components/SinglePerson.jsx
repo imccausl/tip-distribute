@@ -230,7 +230,7 @@ export default class SinglePerson extends Component {
           }}
           onTouchTap={() => {
             this.props.selectPerson({ belongsTo: this.props.tipOut.id, name: this.props.name, id: this.props.id, hours: this.props.hours });
-            this.props.showModal(true, 'MODAL_CONFIRM_DELETE_PERSON', 'Delete Person', { personKey: this.state.myKey, tipOutRef: this.props.tipOut.ref });
+            this.props.showModal(true, 'MODAL_CONFIRM_DELETE_PERSON', 'Remove Person', { personKey: this.state.myKey, tipOutRef: this.props.tipOut.ref });
           }}
         >
           <SvgIcon><ContentRemove /></SvgIcon>

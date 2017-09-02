@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { firebaseConnect } from 'react-redux-firebase';
 import { bindActionCreators } from 'redux';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
@@ -20,6 +21,7 @@ function mapDispatchToProps(dispatch) {
   return bindActionCreators({ showModal, deleteTipOut, deletePerson }, dispatch);
 }
 
+@firebaseConnect()
 @connect(mapStateToProps, mapDispatchToProps)
 export default class ConfirmDialog extends Component {
   render() {
@@ -31,7 +33,7 @@ export default class ConfirmDialog extends Component {
         label="Cancel"
         primary={false}
         onTouchTap={() => this.props.showModal(false)}
-      />
+      />,
     ];
 
     if (!this.props.modalAction || !this.props.currentTipOut) {
@@ -65,7 +67,9 @@ export default class ConfirmDialog extends Component {
           labelColor="#ffffff"
           onTouchTap={
             () => {
-              this.props.deletePerson(this.props.currentPerson.id, this.props.currentTipOut.id);
+              // remove user
+              console.log("user:", this.props.modalAction.data.personKey, "tipOut:", this.props.modalAction.data.tipOutRef);
+              this.props.firebase.remove(`/tipOuts/${this.props.modalAction.data.tipOutRef}/people/${this.props.modalAction.data.personKey}`).catch(err=>console.error(err));
               this.props.showModal(false);
             }
           }

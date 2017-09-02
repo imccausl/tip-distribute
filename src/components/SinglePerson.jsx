@@ -26,7 +26,6 @@ import * as tpHelpers from '../helpers/currentTipOutHelpers';
 function mapStateToProps(state) {
   return {
     drawerOpen: state.showDrawer,
-    firebase: state.firebase,
     tipOuts: state.dataTree,
     people: state.activePeople,
     tipOut: state.currentTipOut,
@@ -55,7 +54,7 @@ export default class SinglePerson extends Component {
       newHours: this.props.hours,
       nameText: this.props.name,
       personId: this.props.id,
-      myKey: this.props.key || null,
+      myKey: this.props.personRef || null,
     };
  
     this.updateDimensions = this.updateDimensions.bind(this);
@@ -82,7 +81,7 @@ export default class SinglePerson extends Component {
     const currentlyAddedUsers = tpHelpers.getPeopleFromTipOut(this.props.tipOut);
     const allowedUsers = tpHelpers.filterUsersAddedToTipOut(this.props.peopleList, currentlyAddedUsers);
 
-    function addPersonToTipOut(id, name) {
+    const addPersonToTipOut = (id, name) => {
       const { pushWithMeta } = this.props.firebase;
 
       const addPerson = {
@@ -94,10 +93,10 @@ export default class SinglePerson extends Component {
 
       this.setState({ nameText: name, personId: id });
 
-      pushWithMeta(`/tipOuts/${addPerson.belongsTo}/people`, addPerson, (snapshot) => {
+      pushWithMeta(`/tipOuts/${addPerson.belongsTo}/people`, addPerson).then((snapshot) => {
         this.setState({ hasUpdated: true, updateType: 'Added', myKey: snapshot.key });
       });
-    }
+    };
 
     return (
       <AutoComplete
@@ -189,8 +188,12 @@ export default class SinglePerson extends Component {
       NameComponent = this.editPersonName(nameStyle, update);
     }
 
-    return (
-      <div style={style}>
+    const deleteButton = () => {
+      if (!this.state.myKey) {
+        return null;
+      }
+
+      return (
         <IconButton
           style={{
             position: 'absolute',
@@ -200,11 +203,17 @@ export default class SinglePerson extends Component {
           }}
           onTouchTap={() => {
             this.props.selectPerson({ belongsTo: this.props.tipOut.id, name: this.props.name, id: this.props.id, hours: this.props.hours });
-            this.props.showModal(true, 'MODAL_CONFIRM_DELETE_PERSON', 'Delete Person');
+            this.props.showModal(true, 'MODAL_CONFIRM_DELETE_PERSON', 'Delete Person', { personKey: this.state.myKey, tipOutRef: this.props.tipOut.ref });
           }}
         >
           <SvgIcon><ContentRemove /></SvgIcon>
         </IconButton>
+      );
+    }
+
+    return (
+      <div style={style}>
+        {deleteButton()}
         {NameComponent}
         <TextField
           hintText="Hours"
@@ -214,22 +223,20 @@ export default class SinglePerson extends Component {
           onFocus={() => this.setState({ canUpdate: true })}
           onBlur={
             (e) => {
-              if (this.state.canUpdate && this.props.hours !== e.target.value) {
+              if (this.state.canUpdate && this.state.newHours !== e.target.value) {
                 this.setState({ canUpdate: false, newHours: e.target.value });
                 update(
-                  `/tipOuts/${this.props.tipOut.ref}/people/${this.props.personRef}`,
+                  `/tipOuts/${this.props.tipOut.ref}/people/${this.state.myKey}`,
                   {
                     hours: e.target.value,
-                  },
-                  () => this.setState({ hasUpdated: true, updateType: 'Updated' })
-                );
+                  }).then(() => this.setState({ hasUpdated: true, updateType: 'Updated' }));
               }
             }
           }
         />
         <Snackbar
           open={this.state.hasUpdated}
-          message={`${this.state.updateType} ${this.props.name}`}
+          message={`${this.state.updateType} ${this.state.nameText}`}
           action="undo"
           autoHideDuration={2000}
         />

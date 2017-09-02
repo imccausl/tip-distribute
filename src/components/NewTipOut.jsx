@@ -13,6 +13,7 @@ import addNewTipOut from '../actions/addNewTipOut';
 import makeNewId from '../helpers/makeNewId';
 import showModal from '../actions/modalActions';
 import editTipOut from '../actions/editTipOut';
+import tipOutShape from '../models/tipOut.model';
 
 const defaults = true;
 
@@ -39,6 +40,23 @@ function mapDispatchToProps(dispatch) {
 @firebaseConnect(['/tipOuts', '/people'])
 @connect(mapPropsToState, mapDispatchToProps)
 export default class NewTipOut extends Component {
+  static propTypes = {
+    showModal: PropTypes.func.isRequired,
+    addNewTipOut: PropTypes.func.isRequired,
+    editTipOut: PropTypes.func.isRequired,
+    modalAction: PropTypes.shape({
+      modal: PropTypes.string,
+      title: PropTypes.title,
+      isOpen: PropTypes.boolean,
+    }),
+    currentTipOut: PropTypes.shape(tipOutShape),
+  };
+
+  static defaultProps = {
+    modalAction: false,
+    currentTipOut: null,
+  };
+
   static disableWeekdays(date) {
     return date.getDay() !== 0 || date.getDay() >= 5;
   }
@@ -140,7 +158,7 @@ export default class NewTipOut extends Component {
             const tipOutId = makeNewId();
             let storePeople = {};
             
-            newTipOutPeople.forEach(person => {
+            newTipOutPeople.forEach((person) => {
               storePeople = {
                 ...storePeople,
                 [makeNewId()]: {
@@ -162,7 +180,7 @@ export default class NewTipOut extends Component {
                 storeRef: this.state.newStore,
                 people: storePeople,
               })
-              .then(snapshot => {
+              .then((snapshot) => {
                 console.log(snapshot.key);
                 let newTipOutsCreated = [];
 
@@ -238,19 +256,4 @@ export default class NewTipOut extends Component {
     return null;
   }
 }
-
-NewTipOut.propTypes = {
-  showModal: PropTypes.func.isRequired,
-  addNewTipOut: PropTypes.func.isRequired,
-  editTipOut: PropTypes.func.isRequired,
-  modalAction: PropTypes.object,
-  currentTipOut: PropTypes.object,
-};
-
-NewTipOut.defaultProps = {
-  modalAction: false,
-  currentTipOut: null,
-};
-
-PropTypes.checkPropTypes(NewTipOut.propTypes, NewTipOut.props, 'prop', NewTipOut);
 

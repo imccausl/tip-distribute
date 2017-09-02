@@ -17,6 +17,8 @@ export function getPeopleFromStore(storeNum, stores, people) {
 
 export function sortByLastName(people) {
   const getLastName = (name) => {
+    // TODO: Get the last word in a name to use as last name, identify and flag phantoms for separate sorting"
+    
     const nameParts = name.split(' ');
     return nameParts.pop();
   };

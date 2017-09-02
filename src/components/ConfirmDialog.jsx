@@ -8,12 +8,19 @@ import FlatButton from 'material-ui/FlatButton';
 import RaisedButton from 'material-ui/RaisedButton';
 import showModal from '../actions/modalActions';
 import { deleteTipOut, deletePerson } from '../actions/delete';
+import {
+  getIndexOfTipOutCreatedInUserRecord,
+  getAllPeopleBelongingToTipOut,
+  getIndexOfTipOutInBelongsTo,
+} from '../helpers/currentTipOutHelpers';
 
 function mapStateToProps(state) {
   return {
     modalAction: state.modalAction,
     currentTipOut: state.currentTipOut,
     currentPerson: state.currentPerson,
+    users: state.firebase.data.users,
+    people: state.firebase.data.people,
   };
 }
 
@@ -21,7 +28,7 @@ function mapDispatchToProps(dispatch) {
   return bindActionCreators({ showModal, deleteTipOut, deletePerson }, dispatch);
 }
 
-@firebaseConnect()
+@firebaseConnect([ '/users', '/people'])
 @connect(mapStateToProps, mapDispatchToProps)
 export default class ConfirmDialog extends Component {
   render() {
@@ -41,6 +48,10 @@ export default class ConfirmDialog extends Component {
     }
 
     if (this.props.modalAction.modal === 'MODAL_CONFIRM_DELETE') {
+      const { tipOut } = this.props.modalAction.data;
+      const { set, remove } = this.props.firebase;
+      const { users, people } = this.props;
+
       const deleteConfirm = (
         <RaisedButton
           label="Delete"
@@ -48,8 +59,40 @@ export default class ConfirmDialog extends Component {
           labelColor="#ffffff"
           onTouchTap={
             () => {
-              this.props.deleteTipOut(this.props.currentTipOut.id);
-              this.props.showModal(false);
+              // Remove the tipOut from firebase, and the tipOutsCreated record from profile,
+              // and the tipOut belongsTo records in each user that is a member of the tipOut.
+              const tipOutCreatedIndex = getIndexOfTipOutCreatedInUserRecord(users, tipOut);
+              const tipOutCreatedRecord = users[tipOut.createdBy].tipOutsCreated;
+              const allPeople = getAllPeopleBelongingToTipOut(tipOut);
+              tipOutCreatedRecord.splice(tipOutCreatedIndex, 1);
+              
+              console.log(tipOutCreatedRecord, tipOut.ref);
+              console.log(tipOutCreatedIndex, allPeople);
+
+              // remove tipOut from people's belongsTo record
+              allPeople.forEach((person) => {
+                const belongsToRecord = people[person].belongsTo;
+                const belongsToIndex = getIndexOfTipOutInBelongsTo(belongsToRecord, tipOut.ref);
+                belongsToRecord.splice(belongsToIndex, 1);
+
+                console.log(belongsToRecord);
+
+                if (belongsToIndex !== -1) {
+                  set(`/people/${person}/belongsTo/`, belongsToRecord)
+                    .then(()=>console.log("Removed from:", people[person]));
+                }
+              });
+
+              // remove tipOut from creator's tipOutsCreated record
+
+              set(`/users/${tipOut.createdBy}/tipOutsCreated/`, tipOutCreatedRecord).then(
+                () => {
+                  remove(`/tipOuts/${tipOut.ref}`)
+                    .then(() => console.log("success"));
+                  this.props.deleteTipOut(this.props.currentTipOut.id)
+                  this.props.showModal(false);
+                },
+              );
             }
           }
         />

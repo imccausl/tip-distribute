@@ -72,6 +72,8 @@ export default class TipAppBar extends Component {
   }
 
   MainMenu() {
+    const { tipOut } = this.props;
+
     return (
       <div>
         <MenuItem
@@ -97,7 +99,7 @@ export default class TipAppBar extends Component {
           leftIcon={<DeleteIcon />}
           onTouchTap={
             () => {
-              this.props.showModal(true, 'MODAL_CONFIRM_DELETE', 'Delete Tip Out');
+              this.props.showModal(true, 'MODAL_CONFIRM_DELETE', 'Delete Tip Out', { tipOut });
             }
           }
         />

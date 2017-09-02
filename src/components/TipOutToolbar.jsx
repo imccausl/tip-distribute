@@ -128,6 +128,9 @@ export default class TipAppBar extends Component {
               disabled={!(this.props.tipOut)}
               tooltip="Add person to tipout"
               onTouchTap={() => {
+                // if you create a new person, it is not saved to firebase until
+                // you fill in the data -- either choosing a person who already has
+                // a people record, or creating a new people record for the person.
                 const newPerson = {
                   [makeNewId()]: {
                     belongsTo: this.props.tipOut.ref,

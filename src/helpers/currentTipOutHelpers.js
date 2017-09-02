@@ -6,6 +6,29 @@ export function getIndexOfPerson(list, name) {
   return list.map(person => person.name.toLowerCase()).indexOf(name.toLowerCase());
 }
 
+export function getIndexOfTipOutCreatedInUserRecord(users, tipOut) {
+  const tipOutCreator = tipOut.createdBy;
+  return users[tipOutCreator].tipOutsCreated.indexOf(tipOut.ref);
+}
+
+export function getAllPeopleBelongingToTipOut(tipOut) {
+  const { people } = tipOut;
+
+  return Object.keys(people).map(person => people[person].id);
+}
+
+export function getIndexOfTipOutInBelongsTo(userBelongsTo, tipOutRef) {
+  let index = null;
+
+  userBelongsTo.forEach((record) => {
+    if (record.id === tipOutRef) {
+      index = record.id;
+    }
+  });
+
+  return index;
+}
+
 export function getPeopleFromStore(storeNum, stores, people) {
   return stores[storeNum].people.map((id) => {
     return {

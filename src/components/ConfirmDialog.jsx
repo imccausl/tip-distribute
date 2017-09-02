@@ -8,7 +8,20 @@ import RaisedButton from 'material-ui/RaisedButton';
 import showModal from '../actions/modalActions';
 import { deleteTipOut, deletePerson } from '../actions/delete';
 
-class ConfirmDialog extends Component {
+function mapStateToProps(state) {
+  return {
+    modalAction: state.modalAction,
+    currentTipOut: state.currentTipOut,
+    currentPerson: state.currentPerson,
+  };
+}
+
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators({ showModal, deleteTipOut, deletePerson }, dispatch);
+}
+
+@connect(mapStateToProps, mapDispatchToProps)
+export default class ConfirmDialog extends Component {
   render() {
     let actions = [];
     let message = 'Are you sure?';
@@ -25,7 +38,7 @@ class ConfirmDialog extends Component {
       return null;
     }
 
-    if(this.props.modalAction.modal === 'MODAL_CONFIRM_DELETE') {
+    if (this.props.modalAction.modal === 'MODAL_CONFIRM_DELETE') {
       const deleteConfirm = (
         <RaisedButton
           label="Delete"
@@ -33,7 +46,7 @@ class ConfirmDialog extends Component {
           labelColor="#ffffff"
           onTouchTap={
             () => {
-              this.props.deleteTipOut(this.props.currentTipOut.id);              
+              this.props.deleteTipOut(this.props.currentTipOut.id);
               this.props.showModal(false);
             }
           }
@@ -78,20 +91,7 @@ class ConfirmDialog extends Component {
   }
 }
 
-function mapStateToProps(state) {
-  return {
-    modalAction: state.modalAction,
-    currentTipOut: state.currentTipOut,
-    currentPerson: state.currentPerson,
-  };
-}
-
-function mapDispatchToProps(dispatch) {
-  return bindActionCreators({ showModal, deleteTipOut, deletePerson }, dispatch);
-}
-
 ConfirmDialog.propTypes = {
 
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(ConfirmDialog);

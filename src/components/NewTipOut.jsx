@@ -21,6 +21,7 @@ function mapPropsToState(state) {
   return {
     tipOuts: state.tipOuts,
     authId: state.firebase.auth.uid,
+    fbTipOuts: state.firebase.data.tipOuts,
     currentTipOut: state.currentTipOut,
     stores: state.firebase.data.stores,
     profile: state.firebase.profile,
@@ -130,7 +131,7 @@ export default class NewTipOut extends Component {
   render() {
     let modalButton = null;
     let defaultDate = '';
-    const disabledButton = !(this.props.data);
+    const disabledButton = !(this.props.fbTipOuts);
     const cancelButton = [(<FlatButton
       label="Cancel"
       disabled={disabledButton}

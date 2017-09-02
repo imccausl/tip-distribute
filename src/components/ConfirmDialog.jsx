@@ -76,7 +76,7 @@ export default class ConfirmDialog extends Component {
         />
       );
 
-      message = `Are you sure you want to permanently delete ${this.props.currentPerson.name} from this tip out?`;
+      message = `Are you sure you want to permanently remove ${this.props.currentPerson.name} from this tip out?`;
       actions = cancel.concat(deleteConfirm);
     }
 

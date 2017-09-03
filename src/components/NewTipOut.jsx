@@ -151,10 +151,8 @@ export default class NewTipOut extends Component {
           primary={defaults}
           keyboardFocused={defaults.keyboardFocused}
           onTouchTap={() => {
-            // HANDEL CREATE NEW TIP OUT
+            // HANDLE CREATE NEW TIP OUT
             // TODO: move into its own function.
-            const { tipOutsCreated } = this.props.profile;
-            console.log(tipOutsCreated);
             const newTipOutPeople = this.props.stores[this.state.newStore].people;
             const tipOutId = makeNewId();
             let storePeople = {};
@@ -170,7 +168,6 @@ export default class NewTipOut extends Component {
               }
             });
             
-            console.log("Store:", this.state.newStore);
             this.props.firebase.pushWithMeta( '/tipOuts',
               {
                 ref: tipOutId,
@@ -183,15 +180,10 @@ export default class NewTipOut extends Component {
               })
               .then((snapshot) => {
                 console.log(snapshot.key);
-                let newTipOutsCreated = [];
+                let newTipOutsCreated = { id: snapshot.key };
 
-                if (tipOutsCreated) {
-                  newTipOutsCreated = Object.assign([], tipOutsCreated);
-                }
-
-                newTipOutsCreated.push(snapshot.key);
                 console.log(newTipOutsCreated);
-                this.props.firebase.updateProfile({ tipOutsCreated: newTipOutsCreated })
+                this.props.firebase.pushWithMeta(`/stores/${this.state.newStore}/tipOuts`, newTipOutsCreated);
               });
 
             this.props.showModal(false);

@@ -153,6 +153,7 @@ export default class NewTipOut extends Component {
           onTouchTap={() => {
             // HANDLE CREATE NEW TIP OUT
             // TODO: move into its own function.
+            // TODO: add record to people/store/person/belongsTo
             const newTipOutPeople = this.props.stores[this.state.newStore].people;
             const tipOutId = makeNewId();
             let storePeople = {};
@@ -167,23 +168,26 @@ export default class NewTipOut extends Component {
                 }
               }
             });
-            
-            this.props.firebase.pushWithMeta( '/tipOuts',
-              {
-                ref: tipOutId,
+
+            const newTipOut = {
+              [tipOutId]: {
                 weekEnding: Date.parse(this.state.newDate),
                 hourlyWage: 0,
                 totalHours: 0,
                 totalCash: this.state.newTotalCash,
                 storeRef: this.state.newStore,
                 people: storePeople,
-              })
-              .then((snapshot) => {
-                console.log(snapshot.key);
-                let newTipOutsCreated = { id: snapshot.key };
+              }
+            }
+            
+            this.props.firebase.update( '/tipOuts', newTipOut);
+            const newTipOutsCreated = { id: tipOutId };
 
-                console.log(newTipOutsCreated);
-                this.props.firebase.pushWithMeta(`/stores/${this.state.newStore}/tipOuts`, newTipOutsCreated);
+            console.log(newTipOutsCreated);
+            this.props.firebase.pushWithMeta(`/stores/${this.state.newStore}/tipOuts`, newTipOutsCreated)
+              .then((snapshot) => {
+                console.log("Do I ever get here?", snapshot.key);
+                this.props.firebase.update(`/tipOuts/${tipOutId}/`, { ref: snapshot.key });
               });
 
             this.props.showModal(false);

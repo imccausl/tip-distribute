@@ -32,10 +32,14 @@ function matchStoreToTipOuts(tipOuts, stores) {
   const tipOutKeys = Object.keys(tipOuts);
 
   tipOutKeys.forEach((key) => {
-    const storeKey = newTipOutState[key].store;
-    const storeNum = stores[storeKey];
+    const storeKey = newTipOutState[key].storeRef;
+    const storeNum = stores[storeKey].storeNum;
+    const address = stores[storeKey].address;
 
-    newTipOutState[key].store = storeNum;
+    newTipOutState[key].storeInfo = {
+      storeNum,
+      address,
+    };
   });
 
   return newTipOutState;
@@ -66,9 +70,12 @@ function calculateWage(tipOut) {
 }
 
 
-function getTipOutsCreatedByUser(profile, tipOuts) {
-  return profile.tipOutsCreated.map((key) => {
-    const tipOut = Object.assign({}, tipOuts[key]);
+function getTipOutsBelongingToStore(storeRef, stores, tipOuts) {
+  const tipOutsBelongingToStore = stores[storeRef].tipOuts;
+
+  return Object.keys(tipOutsBelongingToStore).map((key) => {
+    const tipOutRef = tipOutsBelongingToStore[key].id;
+    const tipOut = Object.assign({}, tipOuts[tipOutRef]);
     tipOut.ref = key;
 
     return tipOut;
@@ -79,7 +86,7 @@ function getTipsBelongingToUser(profile, people, tipOuts) {
   let newState = [];
 
   newState = people[profile.ref].belongsTo.map((key) => {
-    let newTipOutState = Object.assign({}, tipOuts[key.id]);
+    const newTipOutState = Object.assign({}, tipOuts[key.id]);
 
     const entryId = Object.keys(newTipOutState.people)
       .filter(person => tipOuts[key.id].people[person].id === profile.ref).pop();
@@ -106,15 +113,20 @@ function addHoursAndWageToTipOuts(tipOuts) {
   return newState;
 }
 
+function getUsersStore(profile, people) {
+  return people[profile.ref].storeRef;
+}
 // Object as param instead of a million variables in a specific order?
 export default function initializeMainState(profile, tipOuts, allPeople, stores, type = 'TIP_OUTS') {
   let newState = {};
+  const userStore = getUsersStore(profile, allPeople);
 
   newState = addHoursAndWageToTipOuts(tipOuts);
   newState = matchStoreToTipOuts(newState, stores);
 
   if (type === 'TIP_OUTS') {
-    newState = getTipOutsCreatedByUser(profile, newState);
+    newState = getTipOutsBelongingToStore(userStore, stores, newState);
+    console.log(newState, "After getTipOutsBelongingToStore");
     newState = newState.map(tipOut => matchPeopleToTipOuts(tipOut, allPeople));
   } else {
     newState = getTipsBelongingToUser(profile, allPeople, newState);
@@ -126,7 +138,7 @@ export default function initializeMainState(profile, tipOuts, allPeople, stores,
 export {
   matchPeopleToTipOuts,
   matchStoreToTipOuts,
-  getTipOutsCreatedByUser,
+  getTipOutsBelongingToStore,
   getTipsBelongingToUser,
   calculateTotalHours,
   calculateWage,

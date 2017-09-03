@@ -50,10 +50,13 @@ class TipOutDrawer extends Component {
 
     if ((profile.isLoaded === true && profile.isEmpty === false) &&
        (tpRequested === true && tpRequesting === false)) {
-      if (profile.tipOutsCreated) {
-        if (users && people && stores) {
-          // populate state will have to change depending on type of user?
-          this.props.populateState({ profile, fbTipOuts, stores, people }, 'TIPS_BELONGING_TO');
+      if (users && people && stores) {
+        // Tips belonging to is always run no matter what kind of user
+        this.props.populateState({ profile, fbTipOuts, stores, people }, 'TIPS_BELONGING_TO');
+
+        // Tip Outs are only loaded if user is an admin, signified by code 1r.
+        console.log(profile.role);
+        if (profile.role === '1r') {
           this.props.populateState({
             profile,
             fbTipOuts,

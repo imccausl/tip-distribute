@@ -27,7 +27,7 @@ function mapDispatchToProps(dispatch) {
   return bindActionCreators({ showModal, deleteTipOut, deletePerson }, dispatch);
 }
 
-@firebaseConnect([ '/users', '/people'])
+@firebaseConnect([ '/users', '/people', '/tipOuts' ])
 @connect(mapStateToProps, mapDispatchToProps)
 export default class ConfirmDialog extends Component {
   render() {

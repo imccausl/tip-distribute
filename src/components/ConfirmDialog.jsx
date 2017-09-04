@@ -9,9 +9,7 @@ import RaisedButton from 'material-ui/RaisedButton';
 import showModal from '../actions/modalActions';
 import { deleteTipOut, deletePerson } from '../actions/delete';
 import {
-  getIndexOfTipOutCreatedInUserRecord,
   getAllPeopleBelongingToTipOut,
-  getIndexOfTipOutInBelongsTo,
 } from '../helpers/currentTipOutHelpers';
 
 function mapStateToProps(state) {
@@ -21,6 +19,7 @@ function mapStateToProps(state) {
     currentPerson: state.currentPerson,
     users: state.firebase.data.users,
     people: state.firebase.data.people,
+    stores: state.firebase.data.stores,
   };
 }
 
@@ -50,7 +49,7 @@ export default class ConfirmDialog extends Component {
     if (this.props.modalAction.modal === 'MODAL_CONFIRM_DELETE') {
       const { tipOut } = this.props.modalAction.data;
       const { set, remove } = this.props.firebase;
-      const { users, people } = this.props;
+      const { users, people, stores } = this.props;
 
       const deleteConfirm = (
         <RaisedButton
@@ -61,38 +60,40 @@ export default class ConfirmDialog extends Component {
             () => {
               // Remove the tipOut from firebase, and the tipOutsCreated record from profile,
               // and the tipOut belongsTo records in each user that is a member of the tipOut.
-              const tipOutCreatedIndex = getIndexOfTipOutCreatedInUserRecord(users, tipOut);
-              const tipOutCreatedRecord = users[tipOut.createdBy].tipOutsCreated;
+              const tipOutCreatedRecord = stores[tipOut.storeRef].tipOuts[tipOut.ref];
               const allPeople = getAllPeopleBelongingToTipOut(tipOut);
-              tipOutCreatedRecord.splice(tipOutCreatedIndex, 1);
               
               console.log(tipOutCreatedRecord, tipOut.ref);
-              console.log(tipOutCreatedIndex, allPeople);
 
               // remove tipOut from people's belongsTo record
               allPeople.forEach((person) => {
-                const belongsToRecord = people[person].belongsTo;
-                const belongsToIndex = getIndexOfTipOutInBelongsTo(belongsToRecord, tipOut.ref);
-                belongsToRecord.splice(belongsToIndex, 1);
+                const belongsToRecord = people[person].belongsTo || null;
+                
+                // there may not be a belongsTo record for the person 
+                // if the tip out hasn't been set as distributed. If it doesn't exist,
+                // ignore it and carry on erasing the tip out from existence.
+                if (belongsToRecord) {
+                  console.log(tipOut.id, tipOut.ref);
+                  const belongsToIndex = getIndexOfTipOutInBelongsTo(belongsToRecord, tipOut.id);
+                  const newBelongsToRecord = belongsToRecord.filter(record => record.id !== tipOut.id);
+                  console.log("New belongsToRecord:", newBelongsToRecord);
 
-                console.log(belongsToRecord);
-
-                if (belongsToIndex !== -1) {
-                  set(`/people/${person}/belongsTo/`, belongsToRecord)
+                  set(`/people/${person}/belongsTo/`, newBelongsToRecord)
                     .then(()=>console.log("Removed from:", people[person]));
                 }
               });
 
               // remove tipOut from creator's tipOutsCreated record
-
-              set(`/users/${tipOut.createdBy}/tipOutsCreated/`, tipOutCreatedRecord).then(
-                () => {
-                  remove(`/tipOuts/${tipOut.ref}`)
-                    .then(() => console.log("success"));
-                  this.props.deleteTipOut(this.props.currentTipOut.id)
-                  this.props.showModal(false);
-                },
-              );
+              remove(`/stores/${tipOut.storeRef}/tipOuts/${tipOut.ref}`);
+              // remove the tip out itself.
+              console.log("deleting tipOut:", tipOut.id);
+              remove(`/tipOuts/${tipOut.id}`, () => {
+                console.log("success");
+                // if deleting the tip out is successful, then remove it from the local
+                // in-memory redux store and then close the modal.
+                this.props.deleteTipOut(this.props.currentTipOut.id)
+                this.props.showModal(false);
+              });
             }
           }
         />

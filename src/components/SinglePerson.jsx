@@ -235,7 +235,7 @@ export default class SinglePerson extends Component {
               id: this.props.id,
               hours: this.props.hours,
             });
-            this.props.showModal(true, 'MODAL_CONFIRM_DELETE_PERSON', 'Remove Person', { personKey: this.state.myKey, tipOutRef: this.props.tipOut.ref });
+            this.props.showModal(true, 'MODAL_CONFIRM_DELETE_PERSON', 'Remove Person', { personKey: this.state.myKey, personId: this.state.personId, tipOutRef: this.props.tipOut.id });
           }}
         >
           <SvgIcon><ContentRemove /></SvgIcon>

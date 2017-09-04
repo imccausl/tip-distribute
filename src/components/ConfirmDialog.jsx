@@ -113,7 +113,17 @@ export default class ConfirmDialog extends Component {
             () => {
               // remove user
               console.log("user:", this.props.modalAction.data.personKey, "tipOut:", this.props.modalAction.data.tipOutRef);
-              this.props.firebase.remove(`/tipOuts/${this.props.modalAction.data.tipOutRef}/people/${this.props.modalAction.data.personKey}`).catch(err=>console.error(err));
+              this.props.firebase.remove(`/tipOuts/${this.props.modalAction.data.tipOutRef}/people/${this.props.modalAction.data.personKey}`);
+              
+              // if person is assigned an id, it means they have a record of belonging to this
+              // tip out in the person database, so remove it too.
+              if (this.props.modalAction.data.personId) {
+                const belongsToRecord = this.props.people[this.props.modalAction.data.personId].belongsTo;
+                const newBelongsToRecord = belongsToRecord.filter(record => record.id !== this.props.modalAction.data.tipOutRef);
+
+                this.props.firebase.set(`/people/${this.props.modalAction.data.personId}/belongsTo`, newBelongsToRecord);
+              }
+
               this.props.showModal(false);
             }
           }

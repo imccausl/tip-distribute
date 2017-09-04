@@ -215,7 +215,7 @@ export default class NewTipOut extends Component {
           primary={defaults}
           keyboardFocused={defaults.keyboardFocused}
           onTouchTap={() => {
-            this.props.editTipOut(this.props.currentTipOut.id,
+            this.props.firebase.update(`/tipOuts/${this.props.currentTipOut.id}`,
               {
                 weekEnding: this.state.newDate,
                 totalCash: this.state.newTotalCash,

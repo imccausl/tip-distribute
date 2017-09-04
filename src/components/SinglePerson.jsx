@@ -134,8 +134,8 @@ export default class SinglePerson extends Component {
         console.log(newPersonBelongsToRecord);
 
         this.props.firebase.set(`/people/${id}/belongsTo`, newPersonBelongsToRecord)
-          .catch(err => console.log(err));
-      }).catch(err => console.log(err));
+          .catch(err => console.log(err)); // temporary error handling placeholder
+      }).catch(err => console.log(err)); // temporary error handling placeholder
     };
 
     return (

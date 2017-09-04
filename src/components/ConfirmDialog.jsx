@@ -10,7 +10,8 @@ import showModal from '../actions/modalActions';
 import { deleteTipOut, deletePerson } from '../actions/delete';
 import { getAllPeopleBelongingToTipOut } from '../helpers/currentTipOutHelpers';
 import parseDate from '../helpers/dateHelpers';
-
+import tipOutShape from '../models/tipOut.model';
+import personShape from '../models/person.model';
 
 function mapStateToProps(state) {
   return {
@@ -30,6 +31,23 @@ function mapDispatchToProps(dispatch) {
 @firebaseConnect([ '/users', '/people', '/tipOuts' ])
 @connect(mapStateToProps, mapDispatchToProps)
 export default class ConfirmDialog extends Component {
+  static propTypes = {
+    modalAction: PropTypes.shape({
+      modal: PropTypes.string.isRequired,
+      title: PropTypes.string.isRequired,
+      isOpen: PropTypes.bool.isRequired,
+      data: PropTypes.object.isRequired,
+    }).isRequired,
+    firebase: PropTypes.shape({
+      set: PropTypes.func.isRequired,
+      remove: PropTypes.func.isRequired,
+    }).isRequired,
+    showModal: PropTypes.func.isRequired,
+    deleteTipOut: PropTypes.func.isRequired,
+    currentTipOut: PropTypes.shape(tipOutShape).isRequired,
+    currentPerson: PropTypes.shape(personShape).isRequired,
+  }
+
   render() {
     let actions = [];
     let message = 'Are you sure?';
@@ -73,25 +91,20 @@ export default class ConfirmDialog extends Component {
                 // if the tip out hasn't been set as distributed. If it doesn't exist,
                 // ignore it and carry on erasing the tip out from existence.
                 if (belongsToRecord) {
-                  console.log(tipOut.id, tipOut.ref);
-                  const belongsToIndex = getIndexOfTipOutInBelongsTo(belongsToRecord, tipOut.id);
                   const newBelongsToRecord = belongsToRecord.filter(record => record.id !== tipOut.id);
-                  console.log("New belongsToRecord:", newBelongsToRecord);
 
                   set(`/people/${person}/belongsTo/`, newBelongsToRecord)
-                    .then(()=>console.log("Removed from:", people[person]));
+                    .then(()=>console.log("Removed from:", people[person])); // temporary placeholder for confirmation logic
                 }
               });
 
               // remove tipOut from creator's tipOutsCreated record
               remove(`/stores/${tipOut.storeRef}/tipOuts/${tipOut.ref}`);
               // remove the tip out itself.
-              console.log("deleting tipOut:", tipOut.id);
               remove(`/tipOuts/${tipOut.id}`, () => {
-                console.log("success");
                 // if deleting the tip out is successful, then remove it from the local
                 // in-memory redux store and then close the modal.
-                this.props.deleteTipOut(this.props.currentTipOut.id)
+                this.props.deleteTipOut(this.props.currentTipOut.id);
                 this.props.showModal(false);
               });
             }
@@ -148,8 +161,3 @@ export default class ConfirmDialog extends Component {
     return null;
   }
 }
-
-ConfirmDialog.propTypes = {
-
-};
-

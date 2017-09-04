@@ -8,6 +8,9 @@
  if the person you are trying to add to the tip out does not exist in the store list.
  */
 
+// TODO: Once the tip out has been distributed, it should be locked and no changes should be allowed.
+//       So to facilitate this, I need to add and check for a "isDistributed" boolean within the tip out.
+
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';

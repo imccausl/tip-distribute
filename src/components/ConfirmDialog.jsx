@@ -8,9 +8,9 @@ import FlatButton from 'material-ui/FlatButton';
 import RaisedButton from 'material-ui/RaisedButton';
 import showModal from '../actions/modalActions';
 import { deleteTipOut, deletePerson } from '../actions/delete';
-import {
-  getAllPeopleBelongingToTipOut,
-} from '../helpers/currentTipOutHelpers';
+import { getAllPeopleBelongingToTipOut } from '../helpers/currentTipOutHelpers';
+import parseDate from '../helpers/dateHelpers';
+
 
 function mapStateToProps(state) {
   return {
@@ -99,7 +99,7 @@ export default class ConfirmDialog extends Component {
         />
       );
 
-      message = `Are you sure you want to permanently delete this tip out of $${this.props.currentTipOut.totalCash} for the week ending ${this.props.currentTipOut.weekEnding}?`;
+      message = `Are you sure you want to permanently delete this tip out of $${this.props.currentTipOut.totalCash} for the week ending ${parseDate(this.props.currentTipOut.weekEnding)}?`;
       actions = cancel.concat(deleteConfirm);
     }
 

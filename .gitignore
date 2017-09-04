@@ -4,3 +4,5 @@ node_modules/
 src/helpers/dummyData.js
 src/config/firebaseConfig.js
 src/helpers/dataStructure.json
+.firebaserc
+firebase.json

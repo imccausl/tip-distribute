@@ -1,25 +1,42 @@
-import dummyData from '../helpers/dummyData';
+import initializeTipOutData from '../helpers/populateStateHelpers';
 
-const initialState = dummyData || [];
+const initialState = {};
 
 export default function tipOutsReducer(state = initialState, action) {
   switch (action.type) {
+    case 'TIP_OUTS_CREATED':
+      return initializeTipOutData(
+        action.payload.profile,
+        action.payload.tipOuts,
+        action.payload.people,
+        action.payload.stores,
+      );
     case 'ADD_NEW_TIP_OUT':
       return [
         ...state,
         {
-          id: action.payload.id,
-          exactDate: action.payload.exactDate,
+          id: action.payload.ref,
+          createdBy: action.payload.createdBy,
+          timestamp: action.payload.timestamp,
           weekEnding: action.payload.weekEnding,
           totalCash: action.payload.totalCash,
-          employees: [action.payload.employees],
+          hourlyWage: 0,
+          totalHours: 0,
+          store: action.payload.store,
+          people: action.payload.people,
         },
       ];
-    case 'ADD_PEOPLE_TO_CURRENT_TIP_OUT':
+    case 'ADD_PEOPLE_TO_CURRENT_TIP_OUT': // FYI: people added here (to the full tipOutsCreated list) get
+                                          // immediately deleted because the list is then re-populated with
+                                          // the firebase source data.
       return state.map((tipOut) => {
-        if (tipOut.id === action.payload.belongsTo) {
-          let appendedTipOut = Object.assign({}, tipOut);
-          appendedTipOut.employees = action.payload.employees;
+        if (tipOut.ref === action.payload.belongsTo) {
+          const appendedTipOut = Object.assign({}, tipOut);
+          appendedTipOut.people = {
+            ...appendedTipOut.people,
+            ...action.payload.people,
+          };
+
           return appendedTipOut;
         }
         return tipOut;
@@ -28,7 +45,7 @@ export default function tipOutsReducer(state = initialState, action) {
       return state.map((tipOut) => {
         if (tipOut.id === action.payload.belongsTo) {
           return {
-            id: tipOut.id,
+            ref: tipOut.ref,
             exactDate: tipOut.exactDate,
             weekEnding: tipOut.weekEnding,
             totalCash: tipOut.totalCash,

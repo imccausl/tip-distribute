@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { firebaseConnect } from 'react-redux-firebase';
 import PropTypes from 'prop-types';
 import { List, ListItem } from 'material-ui/List';
 import Divider from 'material-ui/Divider';
@@ -6,20 +7,28 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import selectEmployee from '../actions/selectPerson';
 import SinglePerson from './SinglePerson.jsx';
+import TipOutToolbar from './TipOutToolbar.jsx';
 import selectPeople from '../actions/selectEmployees';
+import { getPeopleFromStore, sortByLastName } from '../helpers/currentTipOutHelpers';
 
+@firebaseConnect([])
 class EmployeeList extends Component {
   renderList() {
-    return this.props.tipOut.employees.map(employee => (
+    const { people } = this.props.tipOut;
+    const sortedPeople = sortByLastName(people);
+
+    return Object.keys(sortedPeople).map(key => (
       <ListItem
-        key={employee.id}
+        key={key}
         disabled={true}
         style={{ paddingTop: '0', paddingBottom: '0' }}
       >
         <SinglePerson
-          id={employee.id}
-          name={employee.name}
-          hours={employee.hours}
+          id={sortedPeople[key].id}
+          name={sortedPeople[key].name}
+          hours={sortedPeople[key].hours}
+          peopleList={getPeopleFromStore(this.props.tipOut.storeRef, this.props.stores, this.props.allPeople)}
+          personRef={key}
         />
       </ListItem>
     ),
@@ -30,7 +39,8 @@ class EmployeeList extends Component {
     if (!this.props.tipOut) return null;
 
     return (
-      <div style={{margin: '60px 0', zIndex: '0'}}>
+      <div>
+        <TipOutToolbar />
         <List>
           {this.renderList()}
         </List>
@@ -43,6 +53,8 @@ function mapStateToProps(state) {
   return {
     tipOut: state.currentTipOut,
     people: state.activePeople,
+    stores: state.firebase.data.stores,
+    allPeople: state.firebase.data.people,
   };
 }
 

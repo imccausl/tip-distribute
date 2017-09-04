@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { ListItem } from 'material-ui/List';
 import Checkbox from 'material-ui/Checkbox';
-import NumPeopleBadge from 'material-ui/Badge';
+import NewBadge from 'material-ui/Badge';
 import IconMenu from 'material-ui/IconMenu';
 import MenuItem from 'material-ui/MenuItem';
 import IconButton from 'material-ui/IconButton';
@@ -27,22 +27,18 @@ const rightIconMenu = (
   </IconMenu>
 );
 
-class TipOutListItem extends Component {
-  static getNumOfPeople(people) {
-    return (!people) ? 0 : Object.keys(people).length;
-  }
-
+class TipsListItem extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      people: TipOutListItem.getNumOfPeople(this.props.people),
+      tipMoney: this.props.hours * this.props.wage,
     };
   }
 
   componentWillReceiveProps(nextProps) {
     this.setState({
-      people: TipOutListItem.getNumOfPeople(nextProps.people),
+      tipMoney: nextProps.hours * nextProps.wage,
     });
   }
 
@@ -52,9 +48,9 @@ class TipOutListItem extends Component {
         <ListItem
           leftCheckbox={null}
           primaryText={`Week Ending ${parseDate(this.props.week)}`}
-          secondaryText={`$${this.props.cash} | Hours: ${this.props.totalHours}`}
+          secondaryText={`$${Math.round(this.state.tipMoney)} for ${this.props.hours} hours`}
           secondaryTextLines={2}
-          rightIcon={<NumPeopleBadge badgeContent={this.state.people} primary={true} />}
+          rightIcon={<NewBadge badgeContent="!" primary={true} />}
           onTouchTap={this.props.click}
         />
         <Divider inset={false} />
@@ -63,4 +59,4 @@ class TipOutListItem extends Component {
   }
 }
 
-export default TipOutListItem;
+export default TipsListItem;

@@ -1,6 +1,11 @@
 {
   "presets": [
-    ["latest", { "modules": false }],
+    ["env"],
     "react"
+  ],
+  "plugins": [
+    "transform-decorators-legacy",
+    "transform-object-rest-spread",
+    "transform-class-properties"
   ]
 }

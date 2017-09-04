@@ -49,8 +49,7 @@ class Distribution extends Component {
       const hourlyAmount = parseFloat(this.props.tipOut.totalCash) / totalHours;
       console.log("Hourly amount:", hourlyAmount);
 
-      return Math.round(parseFloat(hours) * hourlyAmount)
-       ;
+      return Math.round(parseFloat(hours) * hourlyAmount);
     }
 
     return this.state.people.map((employee) =>
@@ -81,7 +80,6 @@ class Distribution extends Component {
 
   render() {
   if (!this.props.tipOut) return null;
-  console.log(this.props.tipOut);
   const actions = [
       <FlatButton
         label="Close"

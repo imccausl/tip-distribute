@@ -1,10 +1,18 @@
+import { matchPeopleToTipOuts } from '../helpers/populateStateHelpers';
+import makeNewId from '../helpers/makeNewId';
+
 function activeTipOut(state = null, action) {
   switch (action.type) {
     case 'DISPLAY_TIPOUT':
-      return action.payload;
+      return matchPeopleToTipOuts(action.payload.tipOut, action.payload.people);
     case 'ADD_PEOPLE_TO_CURRENT_TIP_OUT':
       const newState = Object.assign({}, state);
-      newState.employees = action.payload.employees;
+
+      newState.people = {
+        ...newState.people,
+        ...action.payload.people,
+      };
+
       return newState;
     case 'EDIT_TIP_OUT':
       return {
@@ -12,7 +20,7 @@ function activeTipOut(state = null, action) {
         exactDate: action.payload.newData.exactDate,
         weekEnding: action.payload.newData.weekEnding,
         totalCash: action.payload.newData.totalCash,
-        employees: state.employees,
+        people: state.people,
       };
     case 'UPDATE_PERSON':
       return {
@@ -20,7 +28,7 @@ function activeTipOut(state = null, action) {
         exactDate: state.exactDate,
         weekEnding: state.weekEnding,
         totalCash: state.totalCash,
-        employees: state.employees.map(
+        people: state.people.map(
           employee => (employee.id === action.payload.id) ? { id: action.payload.id, name: action.payload.name, hours: action.payload.hours } : employee,
         ),
       };
@@ -32,7 +40,7 @@ function activeTipOut(state = null, action) {
         exactDate: state.exactDate,
         weekEnding: state.weekEnding,
         totalCash: state.totalCash,
-        employees: state.employees.filter(employee => employee.id !== action.payload.id),
+        people: state.people.filter(person => person.id !== action.payload.id),
       };
     default:
       return state;

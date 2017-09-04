@@ -1,16 +1,22 @@
 import { combineReducers } from 'redux';
-import DataTree from './DataTree';
+import { firebaseStateReducer } from 'react-redux-firebase';
+import AllTipOuts from './TipOuts';
 import CurrentTipOut from './CurrentTipOut';
 import CurrentPerson from './CurrentPerson';
 import ModalAction from './reducer_show_modal';
 import ShowDrawer from './reducer_show_drawer';
-import ActivePeople from './reducer_active_employees';
+import Tips from './Tips';
+import ActiveView from './ActiveView';
+import TipsBelongingToUser from './TipsBelongingToUser';
 
 const rootReducer = combineReducers({
-  dataTree: DataTree,
+  firebase: firebaseStateReducer,
+  tipOuts: AllTipOuts,
+  tips: TipsBelongingToUser,
+  tipOut: Tips,
   currentTipOut: CurrentTipOut,
   currentPerson: CurrentPerson,
-  activePeople: ActivePeople,
+  activeView: ActiveView,
   modalAction: ModalAction,
   showDrawer: ShowDrawer,
 });

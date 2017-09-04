@@ -1,26 +1,25 @@
 import React from 'react';
+import { BrowserRouter as Router, Route } from 'react-router-dom';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import darkBaseTheme from 'material-ui/styles/baseThemes/darkBaseTheme';
-import getMuiTheme from 'material-ui/styles/getMuiTheme';
-import ViewArea from './ViewArea.jsx';
+import AppMain from './AppMain.jsx';
+import AppLogin from './AppLogin.jsx';
 import AppBar from './AppBar.jsx';
-import BottomBar from './BottomBar.jsx';
-import TipOutDrawer from './TipOutDrawer.jsx';
+
+const RouteLayout = () => (
+  <main>
+    <Route path="/" exact component={AppMain} />
+    <Route path="/login" component={AppLogin} />
+  </main>
+);
 
 const App = () => (
-  <div style={{ position: 'relative', overflow: 'hidden' }}>
-    <MuiThemeProvider>
-      <TipOutDrawer />
-    </MuiThemeProvider>
+  <div>
     <MuiThemeProvider>
       <AppBar />
     </MuiThemeProvider>
-    <MuiThemeProvider>
-      <ViewArea />
-    </MuiThemeProvider>
-    <MuiThemeProvider>
-      <BottomBar />
-    </MuiThemeProvider>
+    <Router>
+      <RouteLayout />
+    </Router>
   </div>
 );
 

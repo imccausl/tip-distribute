@@ -3,3 +3,6 @@ node_modules/
 *.log
 src/helpers/dummyData.js
 src/config/firebaseConfig.js
+git src/helpers/dataStructure.json
+.firebaserc
+firebase.json

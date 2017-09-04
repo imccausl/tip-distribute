@@ -1,0 +1,486 @@
+{
+  "users": {
+      "uK5mp44wMxMGB3ELS1taXbSutZO2": {
+      "ref": "0u",
+      "photoURL": null,
+      "email": "imccausl@gmail.com",
+      "name": "Ian McCausland",
+      "emailVerified": true,
+      "phoneNumber": null,
+      "superuser": true,
+      "role": "1r"
+    }
+  },
+  "people": {
+    "0u": {
+      "displayName": "Ian McCausland",
+      "partnerNum": "2007047",
+      "storeRef": "1s",
+      "totalHours": null,
+      "belongsTo": [
+        { "id": "1z", "pickedUp": false },
+        { "id": "2z", "pickedUp": false }
+      ]
+    },
+    "1u": {
+      "displayName": "Sam C",
+      "partnerNum": "",
+      "totalHours": null,
+      "belongsTo": [
+        { "id": "2z", "pickedUp": false }
+      ]
+    },
+    "2u": {
+      "displayName": "Susan",
+      "totalHours": null,
+      "belongsTo": [
+        { "id": "1z", "pickedUp": false },
+        { "id": "2z", "pickedUp": false }
+      ]
+    },
+    "3u": {
+      "displayName": "Jihyun",
+      "totalHours": null,
+      "belongsTo": [
+        { "id": "1z", "pickedUp": false },
+        { "id": "2z", "pickedUp": false }
+      ]
+    },
+    "4u": {
+      "displayName": "Jun hee",
+      "totalHours": null,
+      "belongsTo": [
+        { "id": "1z", "pickedUp": false },
+        { "id": "2z", "pickedUp": false }
+      ]
+    },
+    "5u": {
+      "displayName": "Kathleen",
+      "totalHours": null,
+      "belongsTo": [
+        { "id": "1z", "pickedUp": false },
+        { "id": "2z", "pickedUp": false }
+      ]
+    },
+    "6u": {
+      "displayName": "Tina",
+      "totalHours": null,
+      "belongsTo": [
+        { "id": "1z", "pickedUp": false },
+        { "id": "2z", "pickedUp": false }
+      ]
+    },
+    "7u": {
+      "displayName": "Jung ah",
+      "totalHours": null,
+      "belongsTo": [
+        { "id": "1z", "pickedUp": false },
+        { "id": "2z", "pickedUp": false }
+      ]
+    },
+    "8u": {
+      "displayName": "Chang seok",
+      "totalHours": null,
+      "belongsTo": [
+        { "id": "1z", "pickedUp": false },
+        { "id": "2z", "pickedUp": false }
+      ]
+    },
+    "9u": {
+      "displayName": "Shikha",
+      "belongsTo": [
+        { "id": "1z", "pickedUp": false },
+        { "id": "2z", "pickedUp": false }
+      ]
+    },
+    "10u": {
+      "displayName": "Jeanyoung",
+      "totalHours": null,
+      "belongsTo": [
+        { "id": "1z", "pickedUp": false },
+        { "id": "2z", "pickedUp": false }
+      ]
+    },
+    "11u": {
+      "displayName": "Giselle",
+      "totalHours": null,
+      "belongsTo": [
+        { "id": "1z", "pickedUp": false },
+        { "id": "2z", "pickedUp": false }
+      ]
+    },
+    "12u": {
+      "displayName": "Kirsten",
+      "totalHours": null,
+      "belongsTo": [
+        { "id": "1z", "pickedUp": false },
+        { "id": "2z", "pickedUp": false }
+      ]
+    },
+    "13u": {
+      "displayName": "Drishti",
+      "totalHours": null,
+      "belongsTo": [
+        { "id": "1z", "pickedUp": false },
+        { "id": "2z", "pickedUp": false }
+      ]
+    },
+    "14u": {
+      "displayName": "Khavy",
+      "totalHours": null,
+      "belongsTo": [
+          { "id": "1z", "pickedUp": false },
+          { "id": "2z", "pickedUp": false }
+      ]
+    },
+    "15u": {
+      "displayName": "Olachi",
+      "totalHours": null,
+      "belongsTo": [
+        { "id": "1z", "pickedUp": false },
+        { "id": "2z", "pickedUp": false }
+      ]
+    },
+    "16u": {
+      "displayName": "Trevor",
+      "totalHours": null,
+      "belongsTo": [
+        { "id": "1z", "pickedUp": false },
+        { "id": "2z", "pickedUp": false }
+      ]
+    },
+    "17u": {
+      "displayName": "Phantom 1371141",
+      "totalHours": null,
+      "belongsTo": [
+        { "id": "2z", "pickedUp": false }
+      ]
+    },
+    "18u": {
+      "displayName": "Phantom 2083962",
+      "totalHours": null,
+      "belongsTo": [
+        { "id": "2z", "pickedUp": false }
+      ]
+    },
+    "19u": {
+      "displayName": "Phantom 2112628",
+      "totalHours": null,
+      "belongsTo": [
+        { "id": "2z", "pickedUp": false }
+      ]
+    },
+    "20u": {
+      "displayName": "Phantom 2237721",
+      "totalHours": null,
+      "belongsTo": [
+        { "id": "2z", "pickedUp": false }
+      ]
+    },
+    "21u": {
+      "displayName": "Phantom 2282726",
+      "totalHours": null,
+      "belongsTo": [
+        { "id": "2z", "pickedUp": false }
+      ]
+    },
+    "22u": {
+      "displayName": "Phantom 2354731",
+      "totalHours": null,
+      "belongsTo": [
+        { "id": "2z", "pickedUp": false }
+      ]
+    }
+  },
+  "roles": {
+    "1r": {
+      "type": "admin"
+    },
+    "2r": {
+      "type": "user"
+    },
+    "3r": {
+      "type": "guest"
+    }
+  },
+  "stores": {
+    "1s": {
+      "storeNum": "4402",
+      "address": "1250 Bay Street Toronto, ON",
+      "tipOuts": {
+        "zz4402-001": {
+          "createdBy": "uK5mp44wMxMGB3ELS1taXbSutZO2",
+          "createdOn": 1504409719473,
+          "id": "1z"
+        },
+        "zz4402-002": {
+          "createdBy": "uK5mp44wMxMGB3ELS1taXbSutZO2",
+          "createdOn": 1504409719473,
+          "id": "2z"
+        }
+      },
+      "people": [
+        "0u",
+        "1u",
+        "2u",
+        "3u",
+        "4u",
+        "5u",
+        "6u",
+        "7u",
+        "8u",
+        "9u",
+        "10u",
+        "11u",
+        "12u",
+        "13u",
+        "14u",
+        "15u",
+        "16u"
+      ]
+    },
+    "2s": {
+      "storeNum": "22841",
+      "address": "Cumberland & Critchley Lane Toronto, ON",
+      "people": [
+        "17u",
+        "18u",
+        "19u",
+        "20u",
+        "21u",
+        "22u"
+      ]
+    },
+    "0s": {
+      "storeNum": "000000",
+      "address": "Unassigned",
+      "people": [
+      ]
+    }
+  },
+  "tipOuts": {
+    "1z": {
+      "createdBy": "uK5mp44wMxMGB3ELS1taXbSutZO2",
+      "timestamp": "2017-07-23T04:00:00.000Z",
+      "weekEnding": "2017-07-23T04:00:00.000Z",
+      "isDistributed": false,
+      "totalCash": "240",
+      "totalHours": "0",
+      "hourlyWage": "0",
+      "storeRef": "1s",
+      "ref": "zz4402-001",
+      "id": "1z",
+      "people": {
+        "z1p": {
+          "belongsTo": "1z",
+          "id": "2u",
+          "hours": "31.6"
+        },
+        "z2p": {
+          "belongsTo": "1z",
+          "id": "3u",
+          "hours": "39.47"
+        },
+        "z3p": {
+          "belongsTo": "1z",
+          "id": "4u",
+          "hours": "14.25"
+        },
+        "z4p": {
+          "belongsTo": "1z",
+          "id": "5u",
+          "hours": "38.97"
+        },
+        "z5p": {
+          "belongsTo": "1z",
+          "id": "6u",
+          "hours": "19.58"
+        },
+        "z6p": {
+          "belongsTo": "1z",
+          "id": "7u",
+          "hours": "37.19"
+        },
+        "z7p": {
+          "belongsTo": "1z",
+          "id": "8u",
+          "hours": "34.64"
+        },
+        "z8p": {
+          "belongsTo": "1z",
+          "id": "9u",
+          "hours": "23.94"
+        },
+        "z9p": {
+          "belongsTo": "1z",
+          "id": "0u",
+          "hours": "41.15"
+        },
+        "z10p": {
+          "belongsTo": "1z",
+          "id": "10u",
+          "hours": "27.65"
+        },
+        "z11p": {
+          "belongsTo": "1z",
+          "id": "11u",
+          "hours": "27.43"
+        },
+        "z12p": {
+          "belongsTo": "1z",
+          "id": "12u",
+          "hours": "14.3"
+        },
+        "z13p": {
+          "belongsTo": "1z",
+          "id": "13u",
+          "hours": "15.38"
+        },
+        "z14p": {
+          "belongsTo": "1z",
+          "id": "14u",
+          "hours": "25.23"
+        },
+        "z15p": {
+          "belongsTo": "1z",
+          "id": "15u",
+          "hours": "22.27"
+        },
+        "z16p": {
+          "belongsTo": "1z",
+          "id": "16u",
+          "hours": "39"
+        }
+      }
+    },
+    "2z": {
+      "createdBy": "uK5mp44wMxMGB3ELS1taXbSutZO2",
+      "timestamp": "2017-07-30T04:00:00.000Z",
+      "weekEnding": "2017-07-30T04:00:00.000Z",
+      "isDistributed": true,
+      "totalCash": "231",
+      "totalHours": "0",
+      "hourlyWage": "0",
+      "storeRef": "1s",
+      "ref": "zz4402-002",
+      "id": "2z",
+      "people": {
+        "x1p": {
+          "belongsTo": "2z",
+          "id": "1u",
+          "hours": "15.35"
+        },
+        "144p": {
+          "belongsTo": "2z",
+          "id": "2u",
+          "hours": "38.9"
+        },
+        "x2p": {
+          "belongsTo": "2z",
+          "id": "3u",
+          "hours": "27.28"
+        },
+        "x3p": {
+          "belongsTo": "2z",
+          "id": "4u",
+          "hours": "21.97"
+        },
+        "xz4p": {
+          "belongsTo": "2z",
+          "id": "5u",
+          "hours": "51.23"
+        },
+        "x5p": {
+          "belongsTo": "2z",
+          "id": "6u",
+          "hours": "16.63"
+        },
+        "x6p": {
+          "belongsTo": "2z",
+          "id": "7u",
+          "hours": "34.29"
+        },
+        "cx7p": {
+          "belongsTo": "2z",
+          "id": "8u",
+          "hours": "37.78"
+        },
+        "vd8p": {
+          "belongsTo": "2z",
+          "id": "9u",
+          "hours": "22.26"
+        },
+        "x9p": {
+          "belongsTo": "2z",
+          "id": "0u",
+          "hours": "41.7"
+        },
+        "x10p": {
+          "belongsTo": "2z",
+          "id": "10u",
+          "hours": "26.42"
+        },
+        "x11p": {
+          "belongsTo": "2z",
+          "id": "11u",
+          "hours": "36.27"
+        },
+        "x12p": {
+          "belongsTo": "2z",
+          "id": "12u",
+          "hours": "13.77"
+        },
+        "x13p": {
+          "belongsTo": "2z",
+          "id": "13u",
+          "hours": "24.65"
+        },
+        "x14p": {
+          "belongsTo": "2z",
+          "id": "14u",
+          "hours": "27.67"
+        },
+        "x15p": {
+          "belongsTo": "2z",
+          "id": "15u",
+          "hours": "12.62"
+        },
+        "x16p": {
+          "belongsTo": "2z",
+          "id": "16u",
+          "hours": "39.27"
+        },
+        "x17p": {
+          "belongsTo": "2z",
+          "id": "17u",
+          "hours": "2.59"
+        },
+        "x18p": {
+          "belongsTo": "2z",
+          "id": "18u",
+          "hours": "3.13"
+        },
+        "x19p": {
+          "belongsTo": "2z",
+          "id": "19u",
+          "hours": "3"
+        },
+        "x20p": {
+          "belongsTo": "2z",
+          "id": "20u",
+          "hours": "3.12"
+        },
+        "x21p": {
+          "belongsTo": "2z",
+          "id": "21u",
+          "hours": "4.02"
+        },
+        "x22p": {
+          "belongsTo": "2z",
+          "id": "22u",
+          "hours": "4.03"
+        }
+      }
+    }
+  }
+}

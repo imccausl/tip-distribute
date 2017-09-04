@@ -57,6 +57,7 @@ class TipOutDrawer extends Component {
         // Tip Outs are only loaded if user is an admin, signified by code 1r.
         console.log(profile.role);
         if (profile.role === '1r') {
+          console.log("You are logged in as an administrator");
           this.props.populateState({
             profile,
             fbTipOuts,

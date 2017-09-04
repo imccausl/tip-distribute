@@ -229,14 +229,19 @@ export default class SinglePerson extends Component {
             margin: '5px 0',
           }}
           onTouchTap={() => {
-            this.props.selectPerson({ belongsTo: this.props.tipOut.id, name: this.props.name, id: this.props.id, hours: this.props.hours });
+            this.props.selectPerson({
+              belongsTo: this.props.tipOut.id,
+              name: this.props.name,
+              id: this.props.id,
+              hours: this.props.hours,
+            });
             this.props.showModal(true, 'MODAL_CONFIRM_DELETE_PERSON', 'Remove Person', { personKey: this.state.myKey, tipOutRef: this.props.tipOut.ref });
           }}
         >
           <SvgIcon><ContentRemove /></SvgIcon>
         </IconButton>
       );
-    }
+    };
 
     return (
       <div style={style}>

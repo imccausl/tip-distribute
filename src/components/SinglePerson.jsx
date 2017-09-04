@@ -29,8 +29,9 @@ function mapStateToProps(state) {
   return {
     drawerOpen: state.showDrawer,
     tipOuts: state.dataTree,
-    people: state.activePeople,
+    people: state.firebase.data.people,
     tipOut: state.currentTipOut,
+
   };
 }
 
@@ -114,7 +115,7 @@ export default class SinglePerson extends Component {
       const addPerson = {
         id,
         name,
-        belongsTo: this.props.tipOut.ref,
+        belongsTo: this.props.tipOut.id,
         hours: this.state.newHours || '0',
       };
 
@@ -122,7 +123,19 @@ export default class SinglePerson extends Component {
 
       fbSet(`/tipOuts/${addPerson.belongsTo}/people`, addPerson).then((snapshot) => {
         this.setState({ hasUpdated: true, updateType: 'Added', myKey: snapshot.key });
-      });
+
+        const personBelongsToRecord = this.props.people[id].belongsTo;
+        const newPersonBelongsToRecord = personBelongsToRecord.concat({
+          id: this.props.tipOut.id,
+          isPending: true,
+          pickedUp: false,
+        });
+  
+        console.log(newPersonBelongsToRecord);
+
+        this.props.firebase.set(`/people/${id}/belongsTo`, newPersonBelongsToRecord)
+          .catch(err => console.log(err));
+      }).catch(err => console.log(err));
     };
 
     return (

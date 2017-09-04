@@ -159,14 +159,21 @@ export default class NewTipOut extends Component {
             let storePeople = {};
             
             newTipOutPeople.forEach((person) => {
+              const personBelongsToRecord = this.props.people[person].belongsTo;
+              const newBelongsToRecord = personBelongsToRecord.concat({ id: tipOutId, pickedUp: false, isPending: true });
+
               storePeople = {
                 ...storePeople,
                 [makeNewId()]: {
                   belongsTo: tipOutId,
                   id: person,
                   hours: '',
-                }
-              }
+                },
+              };
+
+              // create record for each person now belonging to tip out
+              console.log("Adding record:", newBelongsToRecord);
+              this.props.firebase.set(`/people/${person}/belongsTo`, newBelongsToRecord);
             });
 
             const newTipOut = {
@@ -176,6 +183,7 @@ export default class NewTipOut extends Component {
                 totalHours: 0,
                 totalCash: this.state.newTotalCash,
                 storeRef: this.state.newStore,
+                id: tipOutId,
                 people: storePeople,
               }
             }
@@ -183,6 +191,7 @@ export default class NewTipOut extends Component {
             this.props.firebase.update( '/tipOuts', newTipOut);
             const newTipOutsCreated = { id: tipOutId };
 
+            // create record of new tip out in tipOuts key of store 
             console.log(newTipOutsCreated);
             this.props.firebase.pushWithMeta(`/stores/${this.state.newStore}/tipOuts`, newTipOutsCreated)
               .then((snapshot) => {

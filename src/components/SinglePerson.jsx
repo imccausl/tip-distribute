@@ -258,7 +258,7 @@ export default class SinglePerson extends Component {
               if (this.state.canUpdate && this.state.newHours !== e.target.value) {
                 this.setState({ canUpdate: false, newHours: e.target.value });
                 update(
-                  `/tipOuts/${this.props.tipOut.ref}/people/${this.state.myKey}`,
+                  `/tipOuts/${this.props.tipOut.id}/people/${this.state.myKey}`,
                   {
                     hours: e.target.value,
                   }).then(() => this.setState({ hasUpdated: true, updateType: 'Updated' }));

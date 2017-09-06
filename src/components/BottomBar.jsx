@@ -34,7 +34,7 @@ class BottomBar extends Component {
             <BottomNavigationItem
               label="Distribute"
               icon={<MoneyIcon />}
-              onTouchTap={() => this.select(1)}
+              onTouchTap={() => this.props.selectView('SHOW_DISTRIBUTE_TIPS', 1)}
             />
           </BottomNavigation>
         </Paper>

@@ -112,7 +112,7 @@ class TipOutDrawer extends Component {
           onRequestChange={() => this.props.hideDrawer()}
         >
           <Toolbar>
-            <ToolbarTitle text="Tips" />
+            <ToolbarTitle text="Tips" /> 
             <ToolbarGroup>
               <IconButton><SelectIcon /></IconButton>
               {this.tipOutsMenu()}

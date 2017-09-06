@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import EmployeeList from './EmployeeList.jsx';
 import UserProfile from './UserProfile.jsx';
 import DistributeTips from './DistributionReport.jsx';
+import EditStorePeople from './EditStorePeople.jsx';
 
 class ViewArea extends Component {
   render() {
@@ -12,7 +13,7 @@ class ViewArea extends Component {
         zIndex: '0',
       };
 
-      if (view === 0) {
+      if (view === 0 || view === 2) {
         viewStyle.margin = '110px 0';
       }
 
@@ -26,7 +27,9 @@ class ViewArea extends Component {
         case 'SHOW_USER_PROFILE':
           return <UserProfile />;
         case 'SHOW_DISTRIBUTE_TIPS':
-          return <DistributeTips />
+          return <DistributeTips />;
+        case 'SHOW_EDIT_PEOPLE':
+          return <EditStorePeople />;
         default:
           return null;
       }

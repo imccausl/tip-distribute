@@ -37,7 +37,6 @@ import MoneyIcon from 'material-ui/svg-icons/editor/monetization-on';
 import ContentAdd from 'material-ui/svg-icons/social/person-add';
 import { showDrawer } from '../actions/drawerActions';
 import showModal from '../actions/modalActions';
-import DistributionReport from './DistributionReport.jsx';
 import ConfirmDialog from './ConfirmDialog.jsx';
 import selectPeople from '../actions/selectEmployees';
 import updateTipOuts from '../actions/updateTipOuts';
@@ -155,7 +154,6 @@ export default class TipAppBar extends Component {
           </ToolbarGroup>
         </Toolbar>
         <ConfirmDialog />
-        <DistributionReport isOpen={this.state.distributionOpen} resetState={() => this.setState({ distributionOpen: false })} />
       </div>
     );
   }

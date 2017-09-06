@@ -4,27 +4,24 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import Dialog from 'material-ui/Dialog';
+import Paper from 'material-ui/Paper';
+import Badge from 'material-ui/Badge';
+import { Card, CardActions, CardHeader, CardTitle, CardText } from 'material-ui/Card';
 import Table, { TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn } from 'material-ui/Table';
 import FlatButton from 'material-ui/FlatButton';
 import { hideModal } from '../actions/modalActions';
-
-const dialogStyle = {
-  width: '80%',
-  maxWidth: 'none',
-  height: '100vh',
-  maxHeight: 'none',
-};
+import { calculateTotalHours, calculateWage } from '../helpers/populateStateHelpers';
+import parseDate from '../helpers/dateHelpers';
 
 class Distribution extends Component {
   constructor(props) {
     super(props);
 
-    this.state = { people: (!this.props.tipOut) ? null : this.props.tipOut.employees, open: false };
+    this.state = { people: (!this.props.tipOut) ? null : this.props.tipOut.people, open: false };
   }
 
   componentWillReceiveProps(newProps) {
-    this.setState({ people: (!this.props.tipOut) ? null : this.props.tipOut.employees, open: newProps.isOpen });
+    this.setState({ people: (!newProps.tipOut) ? null : newProps.tipOut.people, open: newProps.isOpen });
   }
 
   makeRows() {
@@ -37,85 +34,75 @@ class Distribution extends Component {
         return 0;
       }
 
-      const allHours = this.state.people.map( employee => {
-        if (!employee) {
-          return 0;
-        }
-
-        return parseFloat(employee.hours);
-      });
-
-      const totalHours = allHours.reduce((prev, curr) => prev + curr);
-      const hourlyAmount = parseFloat(this.props.tipOut.totalCash) / totalHours;
+      // const totalHours = calculateTotalHours(this.props.tipOut);
+      const hourlyAmount = calculateWage(this.props.tipOut);
       console.log("Hourly amount:", hourlyAmount);
 
       return Math.round(parseFloat(hours) * hourlyAmount);
     }
 
-    return this.state.people.map((employee) =>
+    return Object.keys(this.state.people).map((key) =>
       {
-        if (!employee) {
+        const person = this.state.people[key];
+
+        if (!person) {
           return null;
         }
 
+        const wage = getTipOut(person.hours);
+
+        const barStyle = {
+          width: `${((wage * this.props.tipOut.totalCash) / 100) + 20}px`,
+          maxWidth: '100%',
+          backgroundColor: 'lightblue',
+          fontSize: '20px',
+          padding: '5px',
+          margin: '0',
+          color: 'black',
+        };
+
         return (
-      <TableRow key={employee.id}>
-        <TableRowColumn>{employee.name}</TableRowColumn>
-        <TableRowColumn>{employee.hours}</TableRowColumn>
-        <TableRowColumn>{'$' + getTipOut(employee.hours)}</TableRowColumn>
-      </TableRow>
+          <Card style={{marginBottom: '5px'}} key={person.id}>
+            <CardHeader 
+              title={person.name}
+              subtitle={`Worked ${person.hours} hours`}
+            />
+            <CardText>
+              <div
+                className="bar"
+                style={barStyle}
+              >
+              {`$${wage}`}
+              </div>
+            </CardText>
+            </Card>
     )});
   }
 
-  getTotalHours() {
-    if (!this.state.people) {
-      return 0;
-    }
-
-    return Math.round(this.state.people.map(person => parseFloat(person.hours)).reduce((sum, curr) => sum + curr));
-  }
-
-  getTotalTipOut() {
-  }
-
   render() {
-  if (!this.props.tipOut) return null;
-  const actions = [
+    if (!this.props.tipOut) return null;
+    const actions = [
       <FlatButton
         label="Close"
         primary={true}
         onTouchTap={() => {
-          this.props.resetState();
-          this.setState({ open: false });
+          
         }}
       />,
     ];
 
   return (
-  <Dialog
-    title="Tip Distribution Report"
-    open={this.state.open}
-    contentStyle={dialogStyle}
-    autoScrollBodyContent={true}
-    modal={true}
-    actions={actions}
-    >
-      <Table>
-        <TableHeader adjustForCheckbox={false} displaySelectAll={false}>
-          <TableRow>
-            <TableHeaderColumn>Name</TableHeaderColumn>
-            <TableHeaderColumn>Hours ({this.getTotalHours()})</TableHeaderColumn>
-            <TableHeaderColumn>Tip Out</TableHeaderColumn>
-          </TableRow>
-        </TableHeader>
-        <TableBody displayRowCheckbox={false}>
-          {this.makeRows()}
-         
-        </TableBody>
-      </Table>
-    </Dialog>
-);
-}
+    <Card>
+      <CardHeader
+        title={`Week Ending ${parseDate(this.props.tipOut.weekEnding)}`}
+        subtitle={`$${this.props.tipOut.totalCash} earned for ${this.props.tipOut.totalHours} hours | ${parseFloat(this.props.tipOut.hourlyWage).toFixed(2)}/hour`}
+      />
+      <CardText>
+        {this.makeRows()}
+      </CardText>
+    </Card>
+    );
+  }
 }
 
 function mapStateToProps(state) {

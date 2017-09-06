@@ -4,13 +4,13 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import Paper from 'material-ui/Paper';
-import Badge from 'material-ui/Badge';
 import { Card, CardActions, CardHeader, CardTitle, CardText } from 'material-ui/Card';
-import Table, { TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn } from 'material-ui/Table';
+import Checkbox from 'material-ui/Checkbox';
 import FlatButton from 'material-ui/FlatButton';
+import Divider from 'material-ui/Divider';
+import RaisedButton from 'material-ui/RaisedButton';
 import { hideModal } from '../actions/modalActions';
-import { calculateTotalHours, calculateWage } from '../helpers/populateStateHelpers';
+import { calculateWage } from '../helpers/populateStateHelpers';
 import parseDate from '../helpers/dateHelpers';
 
 class Distribution extends Component {
@@ -67,6 +67,7 @@ class Distribution extends Component {
               title={person.name}
               subtitle={`Worked ${person.hours} hours`}
             />
+            <Divider />
             <CardText>
               <div
                 className="bar"
@@ -75,6 +76,12 @@ class Distribution extends Component {
               {`$${wage}`}
               </div>
             </CardText>
+            <Divider />
+            <CardActions>
+              <Checkbox
+                label="Completed"
+              />
+            </CardActions>
             </Card>
     )});
   }
@@ -92,14 +99,24 @@ class Distribution extends Component {
     ];
 
   return (
-    <Card>
+    <Card style={{ margin: '10px 5px 5px 5px' }}>
       <CardHeader
         title={`Week Ending ${parseDate(this.props.tipOut.weekEnding)}`}
         subtitle={`$${this.props.tipOut.totalCash} earned for ${this.props.tipOut.totalHours} hours | ${parseFloat(this.props.tipOut.hourlyWage).toFixed(2)}/hour`}
+        style={{ backgroundColor: 'lightgrey' }}
       />
       <CardText>
         {this.makeRows()}
       </CardText>
+      <CardActions>
+        <RaisedButton
+          label="Finalize"
+          primary={true}
+        />
+        <FlatButton
+        label="Select All"
+      />
+      </CardActions>
     </Card>
     );
   }

@@ -13,13 +13,9 @@ import MoreIcon from 'material-ui/svg-icons/navigation/more-vert';
 import { showDrawer } from '../actions/drawerActions';
 import showView from '../actions/viewAction';
 
-class Login extends Component {  
-  render() {
-    return (
-      <FlatButton label="Login" />
-    );
-  }
-}
+const Login = () => (
+  <FlatButton label="Login" />
+);
 
 class MainBar extends Component {
   render() {

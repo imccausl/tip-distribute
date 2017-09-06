@@ -1,3 +1,6 @@
+// TODO: Do not allow changing of store when editing tip outs (things will get too complicated, I think).
+// TODO: Only allow changing of store when creating a tip out if access allows (superuser = true).
+
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -14,6 +17,7 @@ import makeNewId from '../helpers/makeNewId';
 import showModal from '../actions/modalActions';
 import editTipOut from '../actions/editTipOut';
 import tipOutShape from '../models/tipOut.model';
+import parseDate from '../helpers/dateHelpers';
 
 const defaults = true;
 
@@ -43,7 +47,7 @@ function mapDispatchToProps(dispatch) {
 export default class NewTipOut extends Component {
   static propTypes = {
     showModal: PropTypes.func.isRequired,
-    addNewTipOut: PropTypes.func.isRequired,
+    // addNewTipOut: PropTypes.func.isRequired,
     editTipOut: PropTypes.func.isRequired,
     modalAction: PropTypes.shape({
       modal: PropTypes.string,
@@ -211,7 +215,7 @@ export default class NewTipOut extends Component {
           primary={defaults}
           keyboardFocused={defaults.keyboardFocused}
           onTouchTap={() => {
-            this.props.editTipOut(this.props.currentTipOut.id,
+            this.props.firebase.update(`/tipOuts/${this.props.currentTipOut.id}`,
               {
                 weekEnding: this.state.newDate,
                 totalCash: this.state.newTotalCash,

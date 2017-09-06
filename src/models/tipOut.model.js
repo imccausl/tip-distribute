@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 const tipOutModel = {
   createdAt: PropTypes.number,
   createdBy: PropTypes.string,
+  isDistributed: PropTypes.bool,
   hourlyWage: PropTypes.number,
   people: PropTypes.shape({
     belongsTo: PropTypes.string,
@@ -11,6 +12,7 @@ const tipOutModel = {
     hours: PropTypes.string,
   }),
   ref: PropTypes.string,
+  id: PropTypes.string,
   storeRef: PropTypes.string,
   totalCash: PropTypes.string,
   totalHours: PropTypes.number,

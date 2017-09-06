@@ -5,6 +5,7 @@ import { BottomNavigation, BottomNavigationItem } from 'material-ui/BottomNaviga
 import EditIcon from 'material-ui/svg-icons/editor/mode-edit';
 import MoneyIcon from 'material-ui/svg-icons/editor/monetization-on';
 import StatsIcon from 'material-ui/svg-icons/editor/show-chart';
+import PeopleIcon from 'material-ui/svg-icons/action/supervisor-account';
 import Paper from 'material-ui/Paper';
 import selectView from '../actions/viewAction';
 
@@ -34,7 +35,12 @@ class BottomBar extends Component {
             <BottomNavigationItem
               label="Distribute"
               icon={<MoneyIcon />}
-              onTouchTap={() => this.select(1)}
+              onTouchTap={() => this.props.selectView('SHOW_DISTRIBUTE_TIPS', 1)}
+            />
+            <BottomNavigationItem
+              label="People"
+              icon={<PeopleIcon />}
+              onTouchTap={() => this.props.selectView('SHOW_EDIT_PEOPLE', 2)}
             />
           </BottomNavigation>
         </Paper>

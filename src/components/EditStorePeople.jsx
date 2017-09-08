@@ -26,8 +26,8 @@ export default class EditStorePeople extends Component {
 
     const userPeopleRecord = this.props.people[this.props.profile.ref];
     const userStore = this.props.stores[userPeopleRecord.storeRef];
-    
-    this.state = { userStore };
+
+    this.state = { userStore, userPeopleRecord };
   }
 
   render() {
@@ -37,8 +37,6 @@ export default class EditStorePeople extends Component {
         let personEmail = null;
         const personRecord = this.props.people[person];
 
-        console.log("PersonRecord:", personRecord);
-
         if (personRecord.userRef) {
           personEmail = this.props.users[personRecord.userRef].email;
         }
@@ -46,9 +44,10 @@ export default class EditStorePeople extends Component {
         return (
           <StorePerson
             key={person}
+            id={person}
             name={personRecord.displayName}
             partnerNum={personRecord.partnerNum}
-            storeRef={personRecord.storeRef}
+            storeRef={this.state.userPeopleRecord.storeRef}
             email={personEmail}
           />
         );
@@ -60,14 +59,26 @@ export default class EditStorePeople extends Component {
         <div style={{ position: 'fixed', zIndex: '5', width: '100%', top: '60px', left: '0' }}>
           <Toolbar>
             <ToolbarGroup>
-              <ToolbarTitle text={`People at Store ${this.state.userStore.storeNum}`} />
+              <ToolbarTitle text={`Store ${this.state.userStore.storeNum}`} />
             </ToolbarGroup>
             <ToolbarSeparator />
             <ToolbarGroup>
               <IconButton
                 tooltip="Add person to store"
                 onTouchTap={() => {
+                  const newPerson = {
+                    belongsTo: [],
+                    displayName: '',
+                    partnerNum: '',
+                    storeRef: this.state.userPeopleRecord.storeRef,
+                    userRef: null,
+                  };
 
+                  this.props.firebase.pushWithMeta('/people/', newPerson)
+                    .then((snapshot) => {
+                      const updatedStorePeople = this.state.userStore.people.concat(snapshot.key);
+                      this.props.firebase.set(`/stores/${this.state.userPeopleRecord.storeRef}/people`, updatedStorePeople);
+                    });
                 }}
               >
                 <SvgIcon><ContentAdd /></SvgIcon>
@@ -82,7 +93,7 @@ export default class EditStorePeople extends Component {
           </Toolbar>
         </div>
 
-        <div style={{ margin: '70px 0' }}>
+        <div style={{ margin: '120px 0 0 0' }}>
           {renderPeople()}
         </div>
       </div>

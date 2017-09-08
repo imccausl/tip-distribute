@@ -117,11 +117,6 @@ export default class TipOutList extends Component {
 
     return (
       <div>
-        <List>
-          <ListItem
-            primaryText="Daily Tip Drops"
-          />
-        </List>
         {populateList('Your Tips', this.renderTips)}
         {populateList('Tip Outs Created By You', this.renderTipOutsList)}
         <List>

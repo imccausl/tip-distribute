@@ -6,3 +6,4 @@ src/config/firebaseConfig.js
 git src/helpers/dataStructure.json
 .firebaserc
 firebase.json
+src/helpers/dataStructure.json

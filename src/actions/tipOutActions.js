@@ -22,7 +22,17 @@ function populateState(obj, stateType = 'TIP_OUTS_CREATED') {
   };
 }
 
+function deletePersonFromTipOut(personKey) {
+  return {
+    type: 'DELETE_PERSON',
+    payload: {
+      personKey,
+    },
+  };
+}
+
 export {
   populateTipOutList,
   populateState,
+  deletePersonFromTipOut,
 };

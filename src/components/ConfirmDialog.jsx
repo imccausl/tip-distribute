@@ -8,6 +8,7 @@ import FlatButton from 'material-ui/FlatButton';
 import RaisedButton from 'material-ui/RaisedButton';
 import showModal from '../actions/modalActions';
 import { deleteTipOut, deletePerson } from '../actions/delete';
+import { deletePersonFromTipOut, populateTipOutList } from '../actions/tipOutActions';
 import { getAllPeopleBelongingToTipOut } from '../helpers/currentTipOutHelpers';
 import parseDate from '../helpers/dateHelpers';
 import tipOutShape from '../models/tipOut.model';
@@ -18,6 +19,7 @@ function mapStateToProps(state) {
     modalAction: state.modalAction,
     currentTipOut: state.currentTipOut,
     currentPerson: state.currentPerson,
+    tipOuts: state.firebase.data.tipOuts,
     users: state.firebase.data.users,
     people: state.firebase.data.people,
     stores: state.firebase.data.stores,
@@ -25,10 +27,10 @@ function mapStateToProps(state) {
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({ showModal, deleteTipOut, deletePerson }, dispatch);
+  return bindActionCreators({ showModal, deleteTipOut, deletePerson, deletePersonFromTipOut, populateTipOutList }, dispatch);
 }
 
-@firebaseConnect([ '/users', '/people', '/tipOuts' ])
+@firebaseConnect(['/tipOuts'])
 @connect(mapStateToProps, mapDispatchToProps)
 export default class ConfirmDialog extends Component {
   static propTypes = {
@@ -46,6 +48,7 @@ export default class ConfirmDialog extends Component {
     deleteTipOut: PropTypes.func.isRequired,
     currentTipOut: PropTypes.shape(tipOutShape).isRequired,
     currentPerson: PropTypes.shape(personShape).isRequired,
+    deletePersonFromTipOut: PropTypes.func.isRequired,
   }
 
   render() {
@@ -80,13 +83,11 @@ export default class ConfirmDialog extends Component {
               // and the tipOut belongsTo records in each user that is a member of the tipOut.
               const tipOutCreatedRecord = stores[tipOut.storeRef].tipOuts[tipOut.ref];
               const allPeople = getAllPeopleBelongingToTipOut(tipOut);
-              
-              console.log(tipOutCreatedRecord, tipOut.ref);
 
               // remove tipOut from people's belongsTo record
               allPeople.forEach((person) => {
                 const belongsToRecord = people[person].belongsTo || null;
-                
+
                 // there may not be a belongsTo record for the person 
                 // if the tip out hasn't been set as distributed. If it doesn't exist,
                 // ignore it and carry on erasing the tip out from existence.
@@ -116,7 +117,7 @@ export default class ConfirmDialog extends Component {
       actions = cancel.concat(deleteConfirm);
     }
 
-    if(this.props.modalAction.modal === 'MODAL_CONFIRM_DELETE_PERSON') {
+    if (this.props.modalAction.modal === 'MODAL_CONFIRM_DELETE_PERSON') {
       const deleteConfirm = (
         <RaisedButton
           label="Delete"
@@ -124,25 +125,31 @@ export default class ConfirmDialog extends Component {
           labelColor="#ffffff"
           onTouchTap={
             () => {
-              // remove user
-              console.log("user:", this.props.modalAction.data.personKey, "tipOut:", this.props.modalAction.data.tipOutRef);
+              // remove person from tip out
               this.props.firebase.remove(`/tipOuts/${this.props.modalAction.data.tipOutRef}/people/${this.props.modalAction.data.personKey}`);
-              
               // if person is assigned an id, it means they have a record of belonging to this
               // tip out in the person database, so remove it too.
               if (this.props.modalAction.data.personId) {
                 const belongsToRecord = this.props.people[this.props.modalAction.data.personId].belongsTo;
-                const newBelongsToRecord = belongsToRecord.filter(record => record.id !== this.props.modalAction.data.tipOutRef);
+                let newBelongsToRecord = belongsToRecord.filter(record => record.id !== this.props.modalAction.data.tipOutRef);
+                if (!newBelongsToRecord) {
+                  newBelongsToRecord = [];
+                }
 
                 this.props.firebase.set(`/people/${this.props.modalAction.data.personId}/belongsTo`, newBelongsToRecord);
               }
-
+              // delete person from redux store (currentTipOut)
+              this.props.deletePersonFromTipOut(this.props.modalAction.data.personKey);
               this.props.showModal(false);
             }
           }
         />
       );
 
+      // if (!this.props.CurrentPerson) {
+      //   message = '';
+      // }
+      
       message = `Are you sure you want to permanently remove ${this.props.currentPerson.name} from this tip out?`;
       actions = cancel.concat(deleteConfirm);
     }

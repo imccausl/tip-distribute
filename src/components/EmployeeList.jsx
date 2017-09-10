@@ -11,10 +11,28 @@ import TipOutToolbar from './TipOutToolbar.jsx';
 import selectPeople from '../actions/selectEmployees';
 import { getPeopleFromStore, sortByLastName } from '../helpers/currentTipOutHelpers';
 
-@firebaseConnect([])
+@firebaseConnect(['/tipOuts'])
 class EmployeeList extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      tipOut: this.props.tipOut,
+      stores: this.props.stores,
+      allPeople: this.props.allPeople,
+    };
+  }
+
+  componentWillReceiveProps(newProps) {
+    this.setState({
+      tipOut: newProps.tipOut,
+      stores: newProps.stores,
+      allPeople: newProps.allPeople,
+    });
+  }
+
   renderList() {
-    const { people } = this.props.tipOut;
+    const { people } = this.state.tipOut;
     const sortedPeople = sortByLastName(people);
 
     return Object.keys(sortedPeople).map(key => (
@@ -27,7 +45,7 @@ class EmployeeList extends Component {
           id={sortedPeople[key].id}
           name={sortedPeople[key].name}
           hours={sortedPeople[key].hours}
-          peopleList={getPeopleFromStore(this.props.tipOut.storeRef, this.props.stores, this.props.allPeople)}
+          peopleList={getPeopleFromStore(this.state.tipOut.storeRef, this.state.stores, this.state.allPeople)}
           personRef={key}
         />
       </ListItem>
@@ -36,7 +54,7 @@ class EmployeeList extends Component {
   }
 
   render() {
-    if (!this.props.tipOut) return null;
+    if (!this.state.tipOut) return null;
 
     return (
       <div>
@@ -54,6 +72,7 @@ function mapStateToProps(state) {
     tipOut: state.currentTipOut,
     people: state.activePeople,
     stores: state.firebase.data.stores,
+    tipOuts: state.firebase.data.tipOuts,
     allPeople: state.firebase.data.people,
   };
 }

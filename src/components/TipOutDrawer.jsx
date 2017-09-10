@@ -23,16 +23,26 @@ import { populateState } from '../actions/tipOutActions';
 @firebaseConnect([
   '/tipOuts',
   '/stores',
+  '/people',
 ])
 class TipOutDrawer extends Component {
   constructor(props) {
     super(props);
 
-    this.state = { isOpen: this.props.drawerOpen };
+    this.state = { isOpen: this.props.drawerOpen, fbTipOuts: this.props.fbTipOuts, people: this.props.people };
+    this.getTipOutsFromProfile = this.getTipOutsFromProfile.bind(this);
   }
 
   componentWillReceiveProps(newProps) {
-    this.getTipOutsFromProfile(newProps);
+    const newTipOutData = this.props.firebase.ref('/tipOuts').once('value').then((snapshot) => {
+      const fbTipOuts = snapshot.val();
+      this.setState({ fbTipOuts: fbTipOuts });
+      const newPeopleData = this.props.firebase.ref('/people').once('value').then((peopleSnap) => {
+        const people = peopleSnap.val();
+        this.setState({ people });
+        this.getTipOutsFromProfile(newProps);
+      });
+    });
   }
 
   getTipOutsFromProfile(newProps) {
@@ -40,13 +50,11 @@ class TipOutDrawer extends Component {
       profile,
       tpRequested,
       tpRequesting,
-      people,
       users,
       stores,
-      fbTipOuts,
-      firebase,
-      id,
     } = newProps;
+
+    const { fbTipOuts, people } = this.state;
 
     if ((profile.isLoaded === true && profile.isEmpty === false) &&
        (tpRequested === true && tpRequesting === false)) {
@@ -55,7 +63,6 @@ class TipOutDrawer extends Component {
         this.props.populateState({ profile, fbTipOuts, stores, people }, 'TIPS_BELONGING_TO');
 
         // Tip Outs are only loaded if user is an admin, signified by code 1r.
-        console.log(profile.role);
         if (profile.role === '1r') {
           console.log("You are logged in as an administrator");
           this.props.populateState({
@@ -101,7 +108,9 @@ class TipOutDrawer extends Component {
   }
 
   render() {
-    const { people, users } = this.props;
+    const { users } = this.props;
+    const { people } = this.state;
+    
     if (!this.props.data) {
       //this.props.showModal(true, 'ADD_NEW_TIP_OUT', 'Add New Tip Out');
     }
@@ -115,7 +124,7 @@ class TipOutDrawer extends Component {
           onRequestChange={() => this.props.hideDrawer()}
         >
           <Toolbar>
-            <ToolbarTitle text="Tips" /> 
+            <ToolbarTitle text="Tips" />
             <ToolbarGroup>
               <IconButton><SelectIcon /></IconButton>
               {this.tipOutsMenu()}
@@ -144,7 +153,6 @@ function mapStateToProps(state) {
     people: state.firebase.data.people,
     users: state.firebase.data.users,
     stores: state.firebase.data.stores,
-    data: state.firebase.data,
     uid: state.firebase.auth.uid,
     view: state.activeView,
     currentTipOut: state.currentTipOut,

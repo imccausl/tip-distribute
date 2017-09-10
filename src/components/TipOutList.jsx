@@ -31,7 +31,7 @@ function mapDispatchToProps(dispatch) {
     selectPeople }, dispatch);
 }
 
-@firebaseConnect(['/users', '/people'])
+@firebaseConnect(['/users', '/people', '/tipOuts'])
 @connect(mapStateToProps, mapDispatchToProps)
 export default class TipOutList extends Component {
   constructor(props) {
@@ -97,7 +97,7 @@ export default class TipOutList extends Component {
       tpRequested,
       tpTimestamp,
     } = this.props;
-
+    
     if (tipOuts.constructor !== Array) {
       return <LoadingSpinner />;
     }
@@ -111,7 +111,7 @@ export default class TipOutList extends Component {
           </List>
         );
       }
-  
+
       return null;
     }
 

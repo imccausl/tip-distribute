@@ -30,9 +30,15 @@ export default class EditStorePeople extends Component {
     this.state = { userStore, userPeopleRecord };
   }
 
+  componentWillReceiveProps(newProps) {
+    const userPeopleRecord = newProps.people[newProps.profile.ref];
+    const userStore = newProps.stores[userPeopleRecord.storeRef];
+
+    this.setState({ userStore, userPeopleRecord });
+  }
+
   render() {
     const renderPeople = () => {
-      console.log("Store people:", this.state.userStore);
       return this.state.userStore.people.map((person) => {
         let personEmail = null;
         const personRecord = this.props.people[person];

@@ -31,7 +31,6 @@ import tipOutShape from '../models/tipOut.model';
 function mapStateToProps(state) {
   return {
     drawerOpen: state.showDrawer,
-    tipOuts: state.dataTree,
     people: state.firebase.data.people,
     tipOut: state.currentTipOut,
 
@@ -86,6 +85,9 @@ export default class SinglePerson extends Component {
       nameText: this.props.name,
       personId: this.props.id,
       myKey: this.props.personRef || null,
+      tipOut: this.props.tipOut,
+      peopleList: this.props.peopleList,
+      people: this.props.people,
     };
 
     this.updateDimensions = this.updateDimensions.bind(this);
@@ -93,6 +95,14 @@ export default class SinglePerson extends Component {
 
   componentDidMount() {
     window.addEventListener('resize', this.updateDimensions);
+  }
+
+  componentWillReceiveProps(newProps) {
+    this.setState({
+      tipOut: newProps.tipOut,
+      peopleList: newProps.peopleList,
+      people: newProps.people,
+    });
   }
 
   componentWillUnmount() {
@@ -109,7 +119,7 @@ export default class SinglePerson extends Component {
       value: 'id',
     };
 
-    const { tipOut, peopleList } = this.props;
+    const { tipOut, peopleList } = this.state;
 
     const currentlyAddedUsers = tpHelpers.getPeopleFromTipOut(tipOut);
     const allowedUsers = tpHelpers.filterUsersAddedToTipOut(peopleList, currentlyAddedUsers);
@@ -118,7 +128,7 @@ export default class SinglePerson extends Component {
       const addPerson = {
         id,
         name,
-        belongsTo: this.props.tipOut.id,
+        belongsTo: this.state.tipOut.id,
         hours: this.state.newHours || '0',
       };
 
@@ -127,14 +137,12 @@ export default class SinglePerson extends Component {
       fbSet(`/tipOuts/${addPerson.belongsTo}/people`, addPerson).then((snapshot) => {
         this.setState({ hasUpdated: true, updateType: 'Added', myKey: snapshot.key });
 
-        const personBelongsToRecord = this.props.people[id].belongsTo;
+        const personBelongsToRecord = this.state.people[id].belongsTo;
         const newPersonBelongsToRecord = personBelongsToRecord.concat({
-          id: this.props.tipOut.id,
+          id: this.state.tipOut.id,
           isPending: true,
           pickedUp: false,
         });
-  
-        console.log(newPersonBelongsToRecord);
 
         this.props.firebase.set(`/people/${id}/belongsTo`, newPersonBelongsToRecord)
           .catch(err => console.log(err)); // temporary error handling placeholder
@@ -246,7 +254,7 @@ export default class SinglePerson extends Component {
           }}
           onTouchTap={() => {
             this.props.selectPerson({
-              belongsTo: this.props.tipOut.id,
+              belongsTo: this.state.tipOut.id,
               name: this.props.name,
               id: this.props.id,
               hours: this.props.hours,

@@ -111,7 +111,7 @@ export default class NewTipOut extends Component {
   componentWillReceiveProps(nextProps) {
     this.setState({
       newTotalCash: (!nextProps.currentTipOut) ? '200' : nextProps.currentTipOut.totalCash,
-      newStore: (!nextProps.people) ? '' : nextProps.people[nextProps.profile.ref].storeRef,
+      newStore: (!nextProps.people || !nextProps.profile.ref) ? '' : nextProps.people[nextProps.profile.ref].storeRef,
     });
   }
 

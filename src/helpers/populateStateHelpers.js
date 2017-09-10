@@ -84,8 +84,9 @@ function getTipOutsBelongingToStore(storeRef, stores, tipOuts) {
 
 function getTipsBelongingToUser(profile, people, tipOuts) {
   let newState = [];
+  const tips = people[profile.ref].belongsTo || [];
 
-  newState = people[profile.ref].belongsTo.map((key) => {
+  newState = tips.map((key) => {
     const newTipOutState = Object.assign({}, tipOuts[key.id]);
 
     const entryId = Object.keys(newTipOutState.people)

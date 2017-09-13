@@ -17,8 +17,6 @@ import personShape from '../models/person.model';
 function mapStateToProps(state) {
   return {
     modalAction: state.modalAction,
-    currentTipOut: state.currentTipOut,
-    currentPerson: state.currentPerson,
     tipOuts: state.firebase.data.tipOuts,
     users: state.firebase.data.users,
     people: state.firebase.data.people,
@@ -30,7 +28,7 @@ function mapDispatchToProps(dispatch) {
   return bindActionCreators({ showModal, deleteTipOut, deletePerson, deletePersonFromTipOut, populateTipOutList }, dispatch);
 }
 
-@firebaseConnect(['/tipOuts'])
+@firebaseConnect()
 @connect(mapStateToProps, mapDispatchToProps)
 export default class ConfirmDialog extends Component {
   static propTypes = {
@@ -51,6 +49,24 @@ export default class ConfirmDialog extends Component {
     deletePersonFromTipOut: PropTypes.func.isRequired,
   }
 
+  constructor(props) {
+    super(props);
+    this.state = {
+      currentTipOut: null,
+      currentPerson: null,
+    };
+  }
+
+  componentWillReceiveProps(newProps) {
+    if (newProps.modalAction) {
+      if (newProps.modalAction.isOpen) {
+        const currentTipOut = newProps.tipOuts[newProps.modalAction.data.tipOutRef] || '';
+        const currentPerson = newProps.people[newProps.modalAction.data.personId];
+        this.setState({ currentTipOut, currentPerson });
+      }
+    }
+  }
+
   render() {
     let actions = [];
     let message = 'Are you sure?';
@@ -63,14 +79,16 @@ export default class ConfirmDialog extends Component {
       />,
     ];
 
-    if (!this.props.modalAction || !this.props.currentTipOut) {
+    console.log("hellllooo?", this.props.modalAction)
+    
+    if (!this.props.modalAction) {
       return null;
     }
 
     if (this.props.modalAction.modal === 'MODAL_CONFIRM_DELETE') {
       const { tipOut } = this.props.modalAction.data;
       const { set, remove } = this.props.firebase;
-      const { users, people, stores } = this.props;
+      const { users, people, stores, tipOuts } = this.props;
 
       const deleteConfirm = (
         <RaisedButton
@@ -79,10 +97,13 @@ export default class ConfirmDialog extends Component {
           labelColor="#ffffff"
           onTouchTap={
             () => {
+              const { storeRef, tipOutRef } = this.props.modalAction.data
+              const { tipOuts } = this.props.tipOuts;
+
               // Remove the tipOut from firebase, and the tipOutsCreated record from profile,
               // and the tipOut belongsTo records in each user that is a member of the tipOut.
-              const tipOutCreatedRecord = stores[tipOut.storeRef].tipOuts[tipOut.ref];
-              const allPeople = getAllPeopleBelongingToTipOut(tipOut);
+              const tipOutCreatedRecord = stores[storeRef].tipOuts[tipOutRef];
+              const allPeople = getAllPeopleBelongingToTipOut(tipOuts[tipOutRef]);
 
               // remove tipOut from people's belongsTo record
               allPeople.forEach((person) => {
@@ -118,6 +139,7 @@ export default class ConfirmDialog extends Component {
     }
 
     if (this.props.modalAction.modal === 'MODAL_CONFIRM_DELETE_PERSON') {
+      console.log(this.state.currentPerson);
       const deleteConfirm = (
         <RaisedButton
           label="Delete"
@@ -125,21 +147,28 @@ export default class ConfirmDialog extends Component {
           labelColor="#ffffff"
           onTouchTap={
             () => {
-              // remove person from tip out
-              this.props.firebase.remove(`/tipOuts/${this.props.modalAction.data.tipOutRef}/people/${this.props.modalAction.data.personKey}`);
+              const { tipOutRef, personKey, personId } = this.props.modalAction.data;
+              const { tipOuts, people } = this.props;
+
               // if person is assigned an id, it means they have a record of belonging to this
               // tip out in the person database, so remove it too.
-              if (this.props.modalAction.data.personId) {
-                const belongsToRecord = this.props.people[this.props.modalAction.data.personId].belongsTo;
-                let newBelongsToRecord = belongsToRecord.filter(record => record.id !== this.props.modalAction.data.tipOutRef);
+              if (personId) {
+                const belongsToRecord = people[personId].belongsTo;
+                console.log(belongsToRecord);
+
+                let newBelongsToRecord = belongsToRecord.filter(record => record.id !== tipOutRef);
                 if (!newBelongsToRecord) {
                   newBelongsToRecord = [];
                 }
 
-                this.props.firebase.set(`/people/${this.props.modalAction.data.personId}/belongsTo`, newBelongsToRecord);
+                this.props.firebase.set(`/people/${personId}/belongsTo`, newBelongsToRecord);
               }
+
+              // remove person from tip out
+              this.props.firebase.remove(`/tipOuts/${tipOutRef}/people/${personKey}`);
+
               // delete person from redux store (currentTipOut)
-              this.props.deletePersonFromTipOut(this.props.modalAction.data.personKey);
+              // this.props.deletePersonFromTipOut(this.props.modalAction.data.personKey);
               this.props.showModal(false);
             }
           }
@@ -150,7 +179,7 @@ export default class ConfirmDialog extends Component {
       //   message = '';
       // }
       
-      message = `Are you sure you want to permanently remove ${this.props.currentPerson.name} from this tip out?`;
+      message = `Are you sure you want to permanently remove ${this.state.currentPerson.displayName} from this tip out?`;
       actions = cancel.concat(deleteConfirm);
     }
 

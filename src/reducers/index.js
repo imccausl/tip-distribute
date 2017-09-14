@@ -11,11 +11,6 @@ import TipsBelongingToUser from './TipsBelongingToUser';
 
 const rootReducer = combineReducers({
   firebase: firebaseStateReducer,
-  tipOuts: AllTipOuts,
-  tips: TipsBelongingToUser,
-  tipOut: Tips,
-  currentTipOut: CurrentTipOut,
-  currentPerson: CurrentPerson,
   activeView: ActiveView,
   modalAction: ModalAction,
   showDrawer: ShowDrawer,

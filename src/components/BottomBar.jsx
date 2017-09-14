@@ -24,18 +24,18 @@ class BottomBar extends Component {
     return (
       <div style={{ position: 'fixed', bottom: 0, left: 0, width: '100%', zIndex: '5' }}>
         <Paper zDepth={1}>
-          <BottomNavigation selectedIndex={this.props.view.payload}>
+          <BottomNavigation selectedIndex={this.props.view.payload.selection}>
             <BottomNavigationItem
               label="Edit"
               icon={<EditIcon />}
               onTouchTap={() => {
-                this.props.selectView('SHOW_EDIT_VIEW', 0);
+                this.props.selectView('SHOW_EDIT_VIEW', 0, this.props.view.payload.key);
               }}
             />
             <BottomNavigationItem
               label="Distribute"
               icon={<MoneyIcon />}
-              onTouchTap={() => this.props.selectView('SHOW_DISTRIBUTE_TIPS', 1)}
+              onTouchTap={() => this.props.selectView('SHOW_DISTRIBUTE_TIPS', 1, this.props.view.payload.key)}
             />
             <BottomNavigationItem
               label="People"

@@ -131,7 +131,11 @@ export default function initializeMainState(profile, tipOuts, allPeople, stores,
 
   if (type === 'TIP_OUTS') {
     newState = getTipOutsBelongingToStore(userStore, stores, newState);
-    newState = Object.keys(newState).map(tipOut => matchPeopleToTipOuts(newState[tipOut], allPeople));
+    
+    Object.keys(newState).forEach((tipOut) => {
+      const matchedPeopleTipOut = matchPeopleToTipOuts(newState[tipOut], allPeople);
+      newState[tipOut].people = matchedPeopleTipOut.people;
+    });
   } else {
     newState = getTipsBelongingToUser(profile, allPeople, newState);
   }

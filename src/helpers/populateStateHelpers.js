@@ -32,9 +32,10 @@ function matchStoreToTipOuts(tipOuts, stores) {
   const tipOutKeys = Object.keys(tipOuts);
 
   tipOutKeys.forEach((key) => {
-    const storeKey = newTipOutState[key].storeRef;
+    const storeKey = newTipOutState[key].storeRef;    
     const storeNum = stores[storeKey].storeNum;
     const address = stores[storeKey].address;
+
 
     newTipOutState[key].storeInfo = {
       storeNum,
@@ -72,14 +73,17 @@ function calculateWage(tipOut) {
 
 function getTipOutsBelongingToStore(storeRef, stores, tipOuts) {
   const tipOutsBelongingToStore = stores[storeRef].tipOuts;
+  const storeTipOuts = {};
 
-  return Object.keys(tipOutsBelongingToStore).map((key) => {
+  Object.keys(tipOutsBelongingToStore).forEach((key) => {
     const tipOutRef = tipOutsBelongingToStore[key].id;
     const tipOut = Object.assign({}, tipOuts[tipOutRef]);
-    tipOut.ref = key;
 
-    return tipOut;
+    tipOut.ref = key;
+    storeTipOuts[tipOutRef] = tipOut;
   });
+
+  return storeTipOuts;
 }
 
 function getTipsBelongingToUser(profile, people, tipOuts) {
@@ -127,8 +131,7 @@ export default function initializeMainState(profile, tipOuts, allPeople, stores,
 
   if (type === 'TIP_OUTS') {
     newState = getTipOutsBelongingToStore(userStore, stores, newState);
-    console.log(newState, "After getTipOutsBelongingToStore");
-    newState = newState.map(tipOut => matchPeopleToTipOuts(tipOut, allPeople));
+    newState = Object.keys(newState).map(tipOut => matchPeopleToTipOuts(newState[tipOut], allPeople));
   } else {
     newState = getTipsBelongingToUser(profile, allPeople, newState);
   }

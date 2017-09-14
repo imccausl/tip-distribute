@@ -17,11 +17,11 @@ class Distribution extends Component {
   constructor(props) {
     super(props);
 
-    this.state = { people: (!this.props.tipOut) ? null : this.props.tipOut.people, open: false };
+    this.state = { people: (!this.props.viewModel) ? null : this.props.viewModel.people, open: false };
   }
 
   componentWillReceiveProps(newProps) {
-    this.setState({ people: (!newProps.tipOut) ? null : newProps.tipOut.people, open: newProps.isOpen });
+    this.setState({ people: (!newProps.viewModel) ? null : newProps.viewModel.people, open: newProps.isOpen });
   }
 
   makeRows() {
@@ -35,7 +35,7 @@ class Distribution extends Component {
       }
 
       // const totalHours = calculateTotalHours(this.props.tipOut);
-      const hourlyAmount = calculateWage(this.props.tipOut);
+      const hourlyAmount = calculateWage(this.props.viewModel);
       console.log("Hourly amount:", hourlyAmount);
 
       return Math.round(parseFloat(hours) * hourlyAmount);
@@ -44,15 +44,16 @@ class Distribution extends Component {
     return Object.keys(this.state.people).map((key) =>
       {
         const person = this.state.people[key];
-
+        
         if (!person) {
           return null;
         }
 
+        const personName = this.props.allPeople[person.id].displayName;
         const wage = getTipOut(person.hours);
 
         const barStyle = {
-          width: `${((wage * this.props.tipOut.totalCash) / 100) + 20}px`,
+          width: `${((wage * this.props.viewModel.totalCash) / 100) + 20}px`,
           maxWidth: '100%',
           backgroundColor: 'lightblue',
           fontSize: '20px',
@@ -64,7 +65,7 @@ class Distribution extends Component {
         return (
           <Card style={{marginBottom: '5px'}} key={person.id}>
             <CardHeader 
-              title={person.name}
+              title={personName}
               subtitle={`Worked ${person.hours} hours`}
             />
             <Divider />
@@ -87,7 +88,7 @@ class Distribution extends Component {
   }
 
   render() {
-    if (!this.props.tipOut) return null;
+    if (!this.props.viewModel) return null;
     const actions = [
       <FlatButton
         label="Close"
@@ -101,8 +102,8 @@ class Distribution extends Component {
   return (
     <Card style={{ margin: '10px 5px 5px 5px' }}>
       <CardHeader
-        title={`Week Ending ${parseDate(this.props.tipOut.weekEnding)}`}
-        subtitle={`$${this.props.tipOut.totalCash} earned for ${this.props.tipOut.totalHours} hours | ${parseFloat(this.props.tipOut.hourlyWage).toFixed(2)}/hour`}
+        title={`Week Ending ${parseDate(this.props.viewModel.weekEnding)}`}
+        subtitle={`$${this.props.viewModel.totalCash} earned for ${this.props.viewModel.totalHours} hours | ${parseFloat(this.props.viewModel.hourlyWage).toFixed(2)}/hour`}
         style={{ backgroundColor: 'lightgrey' }}
       />
       <CardText>
@@ -122,13 +123,7 @@ class Distribution extends Component {
   }
 }
 
-function mapStateToProps(state) {
-  return {
-    tipOut: state.currentTipOut,
-  };
-}
-
 function mapDispatchToProps(dispatch) {
   return bindActionCreators({ hideModal }, dispatch);
 }
-export default connect(mapStateToProps, mapDispatchToProps)(Distribution);
+export default connect(mapDispatchToProps)(Distribution);

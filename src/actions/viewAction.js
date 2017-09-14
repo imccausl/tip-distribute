@@ -1,6 +1,6 @@
-export default function viewAction(type, selection) {
+export default function viewAction(type, selection, key) {
   return {
     type,
-    payload: selection,
+    payload: { selection, key },
   };
 }

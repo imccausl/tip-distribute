@@ -37,7 +37,6 @@ export default class LoggedIn extends Component {
   }
 
   componentWillReceiveProps(newProps) {
-    console.log(newProps);
     this.getTipOutsFromUsersStore(newProps);
   }
 
@@ -57,7 +56,6 @@ export default class LoggedIn extends Component {
       const INIT_TYPE = 'USER_TIPS';
 
       const userAppState = initializeMainState(profile, tipOuts, people, stores, INIT_TYPE);
-      console.log("userAppState:", userAppState)
       let adminAppState = null;
 
       // is user admin?

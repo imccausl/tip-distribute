@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { firebaseConnect } from 'react-redux-firebase';
 import Drawer from 'material-ui/Drawer';
 import { Toolbar, ToolbarGroup, ToolbarTitle } from 'material-ui/Toolbar';
 import IconMenu from 'material-ui/IconMenu';
@@ -18,64 +17,8 @@ import TipOutList from './TipOutList.jsx';
 import NewTipOut from './NewTipOut.jsx';
 import showModal from '../actions/modalActions';
 import { hideDrawer } from '../actions/drawerActions';
-import { populateState } from '../actions/tipOutActions';
 
-@firebaseConnect([
-  '/tipOuts',
-  '/stores',
-  '/people',
-])
 class TipOutDrawer extends Component {
-  constructor(props) {
-    super(props);
-
-    this.state = { isOpen: this.props.drawerOpen, fbTipOuts: this.props.fbTipOuts, people: this.props.people };
-    this.getTipOutsFromProfile = this.getTipOutsFromProfile.bind(this);
-  }
-
-  componentWillReceiveProps(newProps) {
-    const newTipOutData = this.props.firebase.ref('/tipOuts').once('value').then((snapshot) => {
-      const fbTipOuts = snapshot.val();
-      this.setState({ fbTipOuts: fbTipOuts });
-      const newPeopleData = this.props.firebase.ref('/people').once('value').then((peopleSnap) => {
-        const people = peopleSnap.val();
-        this.setState({ people });
-        this.getTipOutsFromProfile(newProps);
-      });
-    });
-  }
-
-  getTipOutsFromProfile(newProps) {
-    const {
-      profile,
-      tpRequested,
-      tpRequesting,
-      users,
-      stores,
-    } = newProps;
-
-    const { fbTipOuts, people } = this.state;
-
-    if ((profile.isLoaded === true && profile.isEmpty === false) &&
-       (tpRequested === true && tpRequesting === false)) {
-      if (users && people && stores) {
-        // Tips belonging to is always run no matter what kind of user
-        this.props.populateState({ profile, fbTipOuts, stores, people }, 'TIPS_BELONGING_TO');
-
-        // Tip Outs are only loaded if user is an admin, signified by code 1r.
-        if (profile.role === '1r') {
-          console.log("You are logged in as an administrator");
-          this.props.populateState({
-            profile,
-            fbTipOuts,
-            stores,
-            people,
-          });
-        }
-      }
-    }
-  }
-
   tipOutsMenu() {
     return (
       <IconMenu
@@ -108,9 +51,8 @@ class TipOutDrawer extends Component {
   }
 
   render() {
-    const { users } = this.props;
-    const { people } = this.state;
-    
+    const { userAppState, adminAppState, people, users } = this.props;
+
     if (!this.props.data) {
       //this.props.showModal(true, 'ADD_NEW_TIP_OUT', 'Add New Tip Out');
     }
@@ -130,9 +72,14 @@ class TipOutDrawer extends Component {
               {this.tipOutsMenu()}
             </ToolbarGroup>
           </Toolbar>
-          <TipOutList />
+          <TipOutList
+            userAppState={userAppState}
+            adminAppState={adminAppState}
+            people={people}
+            users={users}
+          />
         </Drawer>
-        <NewTipOut people={people} open={this.state.newTipOutOpen} />
+        <NewTipOut people={people} open={this.props.newTipOutOpen} />
       </div>
     );
   }
@@ -144,24 +91,14 @@ TipOutDrawer.propTypes = {
 
 function mapStateToProps(state) {
   return {
-    profile: state.firebase.profile,
-    id: state.firebase.auth.uid,
-    fbTipOuts: state.firebase.data.tipOuts,
-    tpRequested: state.firebase.requested.tipOuts,
-    tpRequesting: state.firebase.requesting.tipOuts,
-    tpTimestamp: state.firebase.timestamps.tipOuts,
-    people: state.firebase.data.people,
-    users: state.firebase.data.users,
-    stores: state.firebase.data.stores,
-    uid: state.firebase.auth.uid,
     view: state.activeView,
-    currentTipOut: state.currentTipOut,
+    newTipOutOpen: state.modalAction,
     drawerOpen: state.showDrawer,
   };
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({ showModal, hideDrawer, populateState }, dispatch);
+  return bindActionCreators({ showModal, hideDrawer }, dispatch);
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(TipOutDrawer);

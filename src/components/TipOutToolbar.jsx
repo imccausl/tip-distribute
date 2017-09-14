@@ -37,7 +37,6 @@ import MoneyIcon from 'material-ui/svg-icons/editor/monetization-on';
 import ContentAdd from 'material-ui/svg-icons/social/person-add';
 import { showDrawer } from '../actions/drawerActions';
 import showModal from '../actions/modalActions';
-import ConfirmDialog from './ConfirmDialog.jsx';
 import selectPeople from '../actions/selectEmployees';
 import updateTipOuts from '../actions/updateTipOuts';
 import makeNewId from '../helpers/makeNewId';
@@ -47,9 +46,6 @@ function mapStateToProps(state) {
   return {
     drawerOpen: state.showDrawer,
     open: state.showModal,
-    people: state.activePeople,
-    tipOut: state.currentTipOut,
-    tipOuts: state.dataTree,
   };
 }
 
@@ -108,11 +104,12 @@ export default class TipAppBar extends Component {
 
   render() {
     let headerText = '';
+    const { viewModel } = this.props;
 
-    if (!this.props.tipOut) {
+    if (!viewModel) {
       headerText = 'No Tipout Selected';
     } else {
-      headerText = parseDate(this.props.tipOut.weekEnding).concat(' | $', this.props.tipOut.totalCash);
+      headerText = parseDate(viewModel.weekEnding).concat(' | $', viewModel.totalCash);
     }
 
     return (
@@ -124,7 +121,7 @@ export default class TipAppBar extends Component {
           <ToolbarSeparator />
           <ToolbarGroup>
             <IconButton
-              disabled={!(this.props.tipOut)}
+              disabled={!(viewModel)}
               tooltip="Add person to tipout"
               onTouchTap={() => {
                 // if you create a new person, it is not saved to firebase until
@@ -132,14 +129,14 @@ export default class TipAppBar extends Component {
                 // a people record, or creating a new people record for the person.
                 const newPerson = {
                   [makeNewId()]: {
-                    belongsTo: this.props.tipOut.ref,
+                    belongsTo: viewModel.ref,
                     id: '',
                     name: '',
                     hours: '',
                   },
                 };
 
-                this.props.updateTipOuts(this.props.tipOut.ref, newPerson);
+                this.props.updateTipOuts(viewModel.ref, newPerson);
               }}
             >
               <SvgIcon><ContentAdd /></SvgIcon>
@@ -153,7 +150,6 @@ export default class TipAppBar extends Component {
             </IconMenu>
           </ToolbarGroup>
         </Toolbar>
-        <ConfirmDialog />
       </div>
     );
   }

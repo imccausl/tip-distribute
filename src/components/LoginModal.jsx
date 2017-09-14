@@ -24,7 +24,6 @@ function mapStateToProps(state) {
     auth: state.firebase.auth,
     authError: state.firebase.authError,
     profile: state.firebase.profile,
-    data: state.firebase.data,
   };
 }
 
@@ -44,15 +43,15 @@ export default class LoginBox extends Component {
   }
 
   handlePostLogin(arg) {
-    const {
-      tipOuts,
-    } = this.props.data;
+    // const {
+    //   tipOuts,
+    // } = this.props.data;
 
-    const {
-      populateState,
-      profile,
-      auth,
-    } = this.props;
+    // const {
+    //   populateState,
+    //   profile,
+    //   auth,
+    // } = this.props;
   }
 
   render() {
@@ -63,9 +62,6 @@ export default class LoginBox extends Component {
     } = this.props;
 
     const actions = [
-      <FlatButton label="Cancel"
-        onTouchTap={() => this.setState({ isOpen: false })}
-      />,
       <FlatButton
         disabled={!this.state.email && !this.state.password}
         onTouchTap={() => {
@@ -74,7 +70,6 @@ export default class LoginBox extends Component {
               email: this.state.email,
               password: this.state.password,
             })
-            .then(() => this.handlePostLogin())
             .catch((error) => {
               this.setState({ email: '', password: '' });
               console.log("Error!!!!", error, authError)

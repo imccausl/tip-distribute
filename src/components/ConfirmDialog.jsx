@@ -78,8 +78,6 @@ export default class ConfirmDialog extends Component {
         onTouchTap={() => this.props.showModal(false)}
       />,
     ];
-
-    console.log("hellllooo?", this.props.modalAction)
     
     if (!this.props.modalAction) {
       return null;
@@ -139,7 +137,6 @@ export default class ConfirmDialog extends Component {
     }
 
     if (this.props.modalAction.modal === 'MODAL_CONFIRM_DELETE_PERSON') {
-      console.log(this.state.currentPerson);
       const deleteConfirm = (
         <RaisedButton
           label="Delete"
@@ -154,8 +151,6 @@ export default class ConfirmDialog extends Component {
               // tip out in the person database, so remove it too.
               if (personId) {
                 const belongsToRecord = people[personId].belongsTo;
-                console.log(belongsToRecord);
-
                 let newBelongsToRecord = belongsToRecord.filter(record => record.id !== tipOutRef);
                 if (!newBelongsToRecord) {
                   newBelongsToRecord = [];

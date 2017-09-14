@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { firebaseConnect } from 'react-redux-firebase';
 import { List, ListItem } from 'material-ui/List';
 import Subheader from 'material-ui/Subheader';
 import { bindActionCreators } from 'redux';
@@ -15,10 +14,6 @@ import * as stateHelpers from '../helpers/populateStateHelpers';
 
 function mapStateToProps(state) {
   return {
-    tipOuts: state.tipOuts,
-    tips: state.tips,
-    data: state.firebase.data,
-    currentTipOut: state.currentTipOut,
     drawerOpen: state.showDrawer,
   };
 }
@@ -31,7 +26,6 @@ function mapDispatchToProps(dispatch) {
     selectPeople }, dispatch);
 }
 
-@firebaseConnect(['/users', '/people', '/tipOuts'])
 @connect(mapStateToProps, mapDispatchToProps)
 export default class TipOutList extends Component {
   constructor(props) {
@@ -42,22 +36,17 @@ export default class TipOutList extends Component {
   }
 
   renderTipOutsList() {
-    if (this.props.tipOuts) {
-      const { tipOuts } = this.props;
-      return Object.keys(tipOuts).map(key => (
+    const { adminAppState, people } = this.props;
+    if (adminAppState) {
+      return Object.keys(adminAppState).map(key => (
         <TipOutListItem
           key={key}
-          week={tipOuts[key].weekEnding}
-          cash={tipOuts[key].totalCash}
-          totalHours={tipOuts[key].totalHours}
-          people={tipOuts[key].people}
+          week={adminAppState[key].weekEnding}
+          cash={adminAppState[key].totalCash}
+          totalHours={adminAppState[key].totalHours}
+          people={adminAppState[key].people}
           click={() => {
-            this.props.populateTipOutList({
-              tipOut: tipOuts[key],
-              users: this.props.data.users,
-              people: this.props.data.people
-            });
-            this.props.selectView('SHOW_EDIT_VIEW', 0);
+            this.props.selectView('SHOW_EDIT_VIEW', 0, key);
             this.props.hideDrawer();
           }}
         />
@@ -69,14 +58,15 @@ export default class TipOutList extends Component {
   }
 
   renderTips() {
-    if (this.props.tips) {
-      const { tips } = this.props;
-      return Object.keys(tips).map((key) => (
+    const { userAppState } = this.props;
+
+    if (userAppState) {
+      return Object.keys(userAppState).map((key) => (
         <TipsListItem
           key={key}
-          week={tips[key].weekEnding}
-          wage={tips[key].hourlyWage}
-          hours={tips[key].people.hours}
+          week={userAppState[key].weekEnding}
+          wage={userAppState[key].hourlyWage}
+          hours={userAppState[key].people.hours}
           click={() => {
             // this.props.populateTipOutList({ tipOut: tipOuts[key], users: this.props.data.users, people: this.props.data.people });
             // this.props.selectView('SHOW_EDIT_VIEW', 0);
@@ -92,13 +82,11 @@ export default class TipOutList extends Component {
 
   render() {
     const {
-      tipOuts,
-      tpRequesting,
-      tpRequested,
-      tpTimestamp,
+      adminAppState,
+      userAppState,
     } = this.props;
     
-    if (tipOuts.constructor !== Array) {
+    if (!adminAppState || !userAppState) {
       return <LoadingSpinner />;
     }
 

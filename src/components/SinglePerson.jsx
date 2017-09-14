@@ -11,6 +11,9 @@
 // TODO: Once the tip out has been distributed, it should be locked and no changes should be allowed.
 //       So to facilitate this, I need to add and check for a "isDistributed" boolean within the tip out.
 
+// removing a person from a tipOut has to check whether the person is hidden and delete that person
+// from people record if it was previously hidden.
+
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -31,9 +34,6 @@ import tipOutShape from '../models/tipOut.model';
 function mapStateToProps(state) {
   return {
     drawerOpen: state.showDrawer,
-    people: state.firebase.data.people,
-    tipOut: state.currentTipOut,
-
   };
 }
 
@@ -41,7 +41,7 @@ function mapDispatchToProps(dispatch) {
   return bindActionCreators({ updatePerson, selectPerson, showModal }, dispatch);
 }
 
-@firebaseConnect(['/tipOuts', '/people'])
+@firebaseConnect()
 @connect(mapStateToProps, mapDispatchToProps)
 export default class SinglePerson extends Component {
   static propTypes = {
@@ -53,7 +53,7 @@ export default class SinglePerson extends Component {
     firebase: PropTypes.shape({
       pushWithMeta: PropTypes.func.isRequired,
     }).isRequired,
-    peopleList: PropTypes.arrayOf(PropTypes.shape({
+    storePeopleList: PropTypes.arrayOf(PropTypes.shape({
       id: PropTypes.string,
       name: PropTypes.string,
     })).isRequired,
@@ -85,9 +85,7 @@ export default class SinglePerson extends Component {
       nameText: this.props.name,
       personId: this.props.id,
       myKey: this.props.personRef || null,
-      tipOut: this.props.tipOut,
-      peopleList: this.props.peopleList,
-      people: this.props.people,
+      people: this.props.allPeople,
     };
 
     this.updateDimensions = this.updateDimensions.bind(this);
@@ -95,14 +93,6 @@ export default class SinglePerson extends Component {
 
   componentDidMount() {
     window.addEventListener('resize', this.updateDimensions);
-  }
-
-  componentWillReceiveProps(newProps) {
-    this.setState({
-      tipOut: newProps.tipOut,
-      peopleList: newProps.peopleList,
-      people: newProps.people,
-    });
   }
 
   componentWillUnmount() {
@@ -232,8 +222,7 @@ export default class SinglePerson extends Component {
 
     let NameComponent = null;
     const { pushWithMeta } = this.props.firebase;
-
-    if (this.state.personId) {
+    if (this.props.id) {
       NameComponent = this.viewPersonName(nameStyle);
     } else {
       NameComponent = this.editPersonName(nameStyle, pushWithMeta);
@@ -253,13 +242,13 @@ export default class SinglePerson extends Component {
             margin: '5px 0',
           }}
           onTouchTap={() => {
-            this.props.selectPerson({
-              belongsTo: this.state.tipOut.id,
-              name: this.props.name,
-              id: this.props.id,
-              hours: this.props.hours,
-            });
-            this.props.showModal(true, 'MODAL_CONFIRM_DELETE_PERSON', 'Remove Person', { personKey: this.state.myKey, personId: this.state.personId, tipOutRef: this.props.tipOut.id });
+            // this.props.selectPerson({
+            //   belongsTo: this.props.tipOut.id,
+            //   name: this.props.name,
+            //   id: this.props.id,
+            //   hours: this.props.hours,
+            // });
+            this.props.showModal(true, 'MODAL_CONFIRM_DELETE_PERSON', 'Remove Person', { personKey: this.state.myKey, personId: this.state.personId, tipOutRef: this.props.belongsTo, storeRef: this.props.storeRef });
           }}
         >
           <SvgIcon><ContentRemove /></SvgIcon>

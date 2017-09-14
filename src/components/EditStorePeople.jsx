@@ -18,7 +18,6 @@ function mapStateToProps(state) {
   };
 }
 
-@firebaseConnect(['/stores', '/people', '/users'])
 @connect(mapStateToProps)
 export default class EditStorePeople extends Component {
   constructor(props) {

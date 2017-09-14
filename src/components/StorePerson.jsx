@@ -19,7 +19,7 @@ function mapStateToProps(state) {
   };
 }
 
-@firebaseConnect(['/stores', '/people'])
+@firebaseConnect()
 @connect(mapStateToProps)
 export default class StorePerson extends Component {
   constructor(props) {

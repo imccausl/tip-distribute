@@ -23,13 +23,9 @@ const defaults = true;
 
 function mapPropsToState(state) {
   return {
-    tipOuts: state.tipOuts,
     authId: state.firebase.auth.uid,
     fbTipOuts: state.firebase.data.tipOuts,
-    currentTipOut: state.currentTipOut,
-    stores: state.firebase.data.stores,
     profile: state.firebase.profile,
-    people: state.firebase.data.people,
     modalAction: state.modalAction,
   };
 }
@@ -42,7 +38,7 @@ function mapDispatchToProps(dispatch) {
   }, dispatch);
 }
 
-@firebaseConnect(['/tipOuts', '/people'])
+@firebaseConnect()
 @connect(mapPropsToState, mapDispatchToProps)
 export default class NewTipOut extends Component {
   static propTypes = {

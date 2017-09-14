@@ -71,4 +71,4 @@ function mapDispatchToProps(dispatch) {
   return bindActionCreators({ showDrawer, showView }, dispatch);
 }
 
-export default firebaseConnect([])(connect(mapStateToProps, mapDispatchToProps)(MainBar));
+export default firebaseConnect()(connect(mapStateToProps, mapDispatchToProps)(MainBar));

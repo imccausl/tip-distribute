@@ -64,7 +64,7 @@ export default class LoginBox extends Component {
     const actions = [
       <FlatButton
         disabled={!this.state.email && !this.state.password}
-        onTouchTap={() => {
+        onClick={() => {
           return this.props.firebase.login(
             {
               email: this.state.email,

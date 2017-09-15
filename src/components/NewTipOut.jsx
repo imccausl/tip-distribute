@@ -135,7 +135,7 @@ export default class NewTipOut extends Component {
     const cancelButton = [(<FlatButton
       label="Cancel"
       disabled={disabledButton}
-      onTouchTap={() => this.props.showModal('', false)}
+      onClick={() => this.props.showModal('', false)}
     />)];
 
     if ((!this.props.modalAction)) {
@@ -150,7 +150,7 @@ export default class NewTipOut extends Component {
           label="Create"
           primary={defaults}
           keyboardFocused={defaults.keyboardFocused}
-          onTouchTap={() => {
+          onClick={() => {
             // HANDLE CREATE NEW TIP OUT
             // TODO: move into its own function.
             // TODO: add record to people/store/person/belongsTo
@@ -210,7 +210,7 @@ export default class NewTipOut extends Component {
           label="Change"
           primary={defaults}
           keyboardFocused={defaults.keyboardFocused}
-          onTouchTap={() => {
+          onClick={() => {
             this.props.firebase.update(`/tipOuts/${this.props.currentTipOut.id}`,
               {
                 weekEnding: this.state.newDate,

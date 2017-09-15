@@ -70,7 +70,7 @@ export default class EditStorePeople extends Component {
             <ToolbarGroup>
               <IconButton
                 tooltip="Add person to store"
-                onTouchTap={() => {
+                onClick={() => {
                   const newPerson = {
                     belongsTo: [],
                     displayName: '',

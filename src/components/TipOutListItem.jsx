@@ -55,7 +55,7 @@ class TipOutListItem extends Component {
           secondaryText={`$${this.props.cash} | Hours: ${this.props.totalHours}`}
           secondaryTextLines={2}
           rightIcon={<NumPeopleBadge badgeContent={this.state.people} primary={true} />}
-          onTouchTap={this.props.click}
+          onClick={this.props.click}
         />
         <Divider inset={false} />
       </div>

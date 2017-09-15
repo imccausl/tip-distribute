@@ -29,7 +29,7 @@ class TipOutDrawer extends Component {
         <MenuItem
           primaryText="New Tip Out..."
           leftIcon={<CreateIcon />}
-          onTouchTap={
+          onClick={
             () => {
               this.props.showModal(true, 'ADD_NEW_TIP_OUT', 'Add New Tip Out');
             }}

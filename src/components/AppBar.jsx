@@ -27,7 +27,7 @@ class MainBar extends Component {
       >
         <MenuItem
           primaryText="Profile..."
-          onTouchTap={() => this.props.showView('SHOW_USER_PROFILE', null)}
+          onClick={() => this.props.showView('SHOW_USER_PROFILE', null)}
         />
         <Divider />
         <MenuItem
@@ -41,7 +41,7 @@ class MainBar extends Component {
         />
         <Divider />
         <MenuItem primaryText="Sign Out"
-          onTouchTap={() => this.props.firebase.logout()}
+          onClick={() => this.props.firebase.logout()}
         />
       </IconMenu>
     );

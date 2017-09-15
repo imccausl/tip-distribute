@@ -23,6 +23,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import { firebaseConnect } from 'react-redux-firebase';
 import { Toolbar, ToolbarGroup, ToolbarSeparator, ToolbarTitle } from 'material-ui/Toolbar';
 import IconButton from 'material-ui/IconButton';
 import IconMenu from 'material-ui/IconMenu';
@@ -39,6 +40,7 @@ import { showDrawer } from '../actions/drawerActions';
 import showModal from '../actions/modalActions';
 import selectPeople from '../actions/selectEmployees';
 import updateTipOuts from '../actions/updateTipOuts';
+import AddPersonMenu from './AddPersonMenu.jsx';
 import makeNewId from '../helpers/makeNewId';
 import parseDate from '../helpers/dateHelpers';
 
@@ -58,12 +60,13 @@ function mapDispatchToProps(dispatch) {
   }, dispatch);
 }
 
+@firebaseConnect()
 @connect(mapStateToProps, mapDispatchToProps)
 export default class TipAppBar extends Component {
   constructor(props) {
     super(props);
 
-    this.state = { distributionOpen: false };
+    this.state = { distributionOpen: false, addPersonOpen: false };
   }
 
   MainMenu() {
@@ -72,27 +75,27 @@ export default class TipAppBar extends Component {
     return (
       <div>
         <MenuItem
-          disabled={!(this.props.tipOut)}
+          disabled={!(this.props.viewModel)}
           primaryText="Distribute Tips"
           leftIcon={<MoneyIcon />}
-          onTouchTap={() => this.setState({ distributionOpen: true })}
+          onClick={() => this.setState({ distributionOpen: true })}
         />
         <Divider />
         <MenuItem
-          disabled={!(this.props.tipOut)}
+          disabled={!(this.props.viewModel)}
           primaryText="Edit..."
           leftIcon={<EditIcon />}
-          onTouchTap={
+          onClick={
             () => {
               this.props.showModal(true, 'EDIT_TIP_OUT_MODAL', 'Edit Tip Out');
             }
           }
         />
         <MenuItem
-          disabled={!(this.props.tipOut)}        
+          disabled={!(this.props.viewModel)}        
           primaryText="Delete..."
           leftIcon={<DeleteIcon />}
-          onTouchTap={
+          onClick={
             () => {
               this.props.showModal(true, 'MODAL_CONFIRM_DELETE', 'Delete Tip Out', { tipOut });
             }
@@ -123,23 +126,28 @@ export default class TipAppBar extends Component {
             <IconButton
               disabled={!(viewModel)}
               tooltip="Add person to tipout"
-              onTouchTap={() => {
-                // if you create a new person, it is not saved to firebase until
-                // you fill in the data -- either choosing a person who already has
-                // a people record, or creating a new people record for the person.
-                const newPerson = {
-                  [makeNewId()]: {
-                    belongsTo: viewModel.ref,
-                    id: '',
-                    name: '',
-                    hours: '',
-                  },
-                };
+              onClick={() => {
+                this.setState({ addPersonOpen: true });
+              //   const { push, update } = this.props.firebase;
+              //   // if you create a new person, it is not saved to firebase until
+              //   // you fill in the data -- either choosing a person who already has
+              //   // a people record, or creating a new people record for the person.
+              //   const newPerson = {
+              //     belongsTo: viewModel.id,
+              //     id: '',
+              //     name: '',
+              //     hours: '',
+              //   };
 
-                this.props.updateTipOuts(viewModel.ref, newPerson);
+              //   push(`/tipOuts/${viewModel.id}/people`, newPerson)
+              //     .then(snapshot => update(`/tipOuts/${viewModel.id}/people/${snapshot.key}`, { ref: snapshot.key}));
+              // }
               }}
             >
               <SvgIcon><ContentAdd /></SvgIcon>
+              <AddPersonMenu 
+                open={this.state.addPersonOpen}
+              />
             </IconButton>
             <IconMenu
               iconButtonElement={<IconButton><MoreVertIcon /></IconButton>}

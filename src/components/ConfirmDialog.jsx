@@ -75,7 +75,7 @@ export default class ConfirmDialog extends Component {
       <FlatButton
         label="Cancel"
         primary={false}
-        onTouchTap={() => this.props.showModal(false)}
+        onClick={() => this.props.showModal(false)}
       />,
     ];
     
@@ -93,7 +93,7 @@ export default class ConfirmDialog extends Component {
           label="Delete"
           backgroundColor="#ff0000"
           labelColor="#ffffff"
-          onTouchTap={
+          onClick={
             () => {
               const { storeRef, tipOutRef } = this.props.modalAction.data
               const { tipOuts } = this.props.tipOuts;
@@ -142,7 +142,7 @@ export default class ConfirmDialog extends Component {
           label="Delete"
           backgroundColor="#ff0000"
           labelColor="#ffffff"
-          onTouchTap={
+          onClick={
             () => {
               const { tipOutRef, personKey, personId } = this.props.modalAction.data;
               const { tipOuts, people } = this.props;

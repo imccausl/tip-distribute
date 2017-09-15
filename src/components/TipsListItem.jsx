@@ -51,7 +51,7 @@ class TipsListItem extends Component {
           secondaryText={`$${Math.round(this.state.tipMoney)} for ${this.props.hours} hours`}
           secondaryTextLines={2}
           rightIcon={<NewBadge badgeContent="!" primary={true} />}
-          onTouchTap={this.props.click}
+          onClick={this.props.click}
         />
         <Divider inset={false} />
       </div>

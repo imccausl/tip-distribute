@@ -241,7 +241,7 @@ export default class SinglePerson extends Component {
             top: '15px',
             margin: '5px 0',
           }}
-          onTouchTap={() => {
+          onClick={() => {
             // this.props.selectPerson({
             //   belongsTo: this.props.tipOut.id,
             //   name: this.props.name,

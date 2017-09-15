@@ -28,19 +28,19 @@ class BottomBar extends Component {
             <BottomNavigationItem
               label="Edit"
               icon={<EditIcon />}
-              onTouchTap={() => {
+              onClick={() => {
                 this.props.selectView('SHOW_EDIT_VIEW', 0, this.props.view.payload.key);
               }}
             />
             <BottomNavigationItem
               label="Distribute"
               icon={<MoneyIcon />}
-              onTouchTap={() => this.props.selectView('SHOW_DISTRIBUTE_TIPS', 1, this.props.view.payload.key)}
+              onClick={() => this.props.selectView('SHOW_DISTRIBUTE_TIPS', 1, this.props.view.payload.key)}
             />
             <BottomNavigationItem
               label="People"
               icon={<PeopleIcon />}
-              onTouchTap={() => this.props.selectView('SHOW_EDIT_PEOPLE', 2)}
+              onClick={() => this.props.selectView('SHOW_EDIT_PEOPLE', 2)}
             />
           </BottomNavigation>
         </Paper>

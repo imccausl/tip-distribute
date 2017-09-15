@@ -93,7 +93,7 @@ class Distribution extends Component {
       <FlatButton
         label="Close"
         primary={true}
-        onTouchTap={() => {
+        onClick={() => {
           
         }}
       />,

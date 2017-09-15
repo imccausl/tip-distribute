@@ -49,7 +49,7 @@ export default class EmployeeList extends Component {
 
     return (
       <div>
-        <TipOutToolbar viewModel={viewModel}/>
+        <TipOutToolbar viewModel={viewModel} />
         <List>
           {this.renderList()}
         </List>

@@ -40,9 +40,9 @@ import { showDrawer } from '../actions/drawerActions';
 import showModal from '../actions/modalActions';
 import selectPeople from '../actions/selectEmployees';
 import updateTipOuts from '../actions/updateTipOuts';
-import AddPersonMenu from './AddPersonMenu.jsx';
 import makeNewId from '../helpers/makeNewId';
 import parseDate from '../helpers/dateHelpers';
+import AddPersonMenu from './AddPersonMenu.jsx';
 
 function mapStateToProps(state) {
   return {
@@ -66,23 +66,26 @@ export default class TipAppBar extends Component {
   constructor(props) {
     super(props);
 
-    this.state = { distributionOpen: false, addPersonOpen: false };
+    this.state = {
+      addPersonOpen: false,
+      anchorEl: null,
+    };
   }
 
   MainMenu() {
-    const { tipOut } = this.props;
+    const { viewModel } = this.props;
 
     return (
       <div>
         <MenuItem
-          disabled={!(this.props.viewModel)}
+          disabled={!(viewModel)}
           primaryText="Distribute Tips"
           leftIcon={<MoneyIcon />}
           onClick={() => this.setState({ distributionOpen: true })}
         />
         <Divider />
         <MenuItem
-          disabled={!(this.props.viewModel)}
+          disabled={!(viewModel)}
           primaryText="Edit..."
           leftIcon={<EditIcon />}
           onClick={
@@ -92,12 +95,12 @@ export default class TipAppBar extends Component {
           }
         />
         <MenuItem
-          disabled={!(this.props.viewModel)}        
+          disabled={!(viewModel)}
           primaryText="Delete..."
           leftIcon={<DeleteIcon />}
           onClick={
             () => {
-              this.props.showModal(true, 'MODAL_CONFIRM_DELETE', 'Delete Tip Out', { tipOut });
+              this.props.showModal(true, 'MODAL_CONFIRM_DELETE', 'Delete Tip Out', { viewModel });
             }
           }
         />
@@ -126,28 +129,14 @@ export default class TipAppBar extends Component {
             <IconButton
               disabled={!(viewModel)}
               tooltip="Add person to tipout"
-              onClick={() => {
-                this.setState({ addPersonOpen: true });
-              //   const { push, update } = this.props.firebase;
-              //   // if you create a new person, it is not saved to firebase until
-              //   // you fill in the data -- either choosing a person who already has
-              //   // a people record, or creating a new people record for the person.
-              //   const newPerson = {
-              //     belongsTo: viewModel.id,
-              //     id: '',
-              //     name: '',
-              //     hours: '',
-              //   };
-
-              //   push(`/tipOuts/${viewModel.id}/people`, newPerson)
-              //     .then(snapshot => update(`/tipOuts/${viewModel.id}/people/${snapshot.key}`, { ref: snapshot.key}));
-              // }
+              tooltipPosition="top-center"
+              touch={true}
+              onClick={(event) => {
+                event.preventDefault();
+                this.setState({ addPersonOpen: true, anchorEl: event.currentTarget });
               }}
             >
               <SvgIcon><ContentAdd /></SvgIcon>
-              <AddPersonMenu 
-                open={this.state.addPersonOpen}
-              />
             </IconButton>
             <IconMenu
               iconButtonElement={<IconButton><MoreVertIcon /></IconButton>}
@@ -157,6 +146,11 @@ export default class TipAppBar extends Component {
               {this.MainMenu()}
             </IconMenu>
           </ToolbarGroup>
+          <AddPersonMenu
+            open={this.state.addPersonOpen}
+            anchorEl={this.state.anchorEl}
+            closeMenu={() => this.setState({ addPersonOpen: false })}
+          />
         </Toolbar>
       </div>
     );

@@ -110,7 +110,7 @@ export default class TipAppBar extends Component {
 
   render() {
     let headerText = '';
-    const { viewModel, peopleList } = this.props;
+    const { viewModel, peopleList, stores } = this.props;
 
     if (!viewModel) {
       headerText = 'No Tipout Selected';
@@ -152,6 +152,7 @@ export default class TipAppBar extends Component {
             closeMenu={() => this.setState({ addPersonOpen: false })}
             viewModel={viewModel}
             peopleList={peopleList}
+            stores={stores}
           />
         </Toolbar>
       </div>

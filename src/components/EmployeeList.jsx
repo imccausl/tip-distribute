@@ -44,12 +44,16 @@ export default class EmployeeList extends Component {
   }
 
   render() {
-    const { viewModel } = this.props;
+    const { viewModel, people, stores } = this.props;
     if (!viewModel) return null;
 
     return (
       <div>
-        <TipOutToolbar viewModel={viewModel} />
+        <TipOutToolbar
+          viewModel={viewModel}
+          peopleList={people}
+          stores={stores}
+        />
         <List>
           {this.renderList()}
         </List>

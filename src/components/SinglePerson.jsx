@@ -103,22 +103,6 @@ export default class SinglePerson extends Component {
     this.setState({ width: SinglePerson.getWindowDimensions() });
   }
 
-  editPersonName(style) {
-    return (
-      <AutoComplete
-        style={style}
-        hintText="Name"
-        dataSource={allowedUsers}
-        dataSourceConfig={autoCompleteConfig}
-        filter={AutoComplete.fuzzyFilter}
-        floatingLabelText="Name"
-        searchText={this.state.nameText}
-        openOnFocus={true}
-        maxSearchResults={5}
-      />
-    );
-  }
-
   viewPersonName(style) {
     const compStyle = {
       ...style,
@@ -168,13 +152,8 @@ export default class SinglePerson extends Component {
       margin: '0 10px',
     };
 
-    let NameComponent = null;
-    const { pushWithMeta } = this.props.firebase;
-    if (this.props.id) {
-      NameComponent = this.viewPersonName(nameStyle);
-    } else {
-      NameComponent = this.editPersonName(nameStyle, pushWithMeta);
-    }
+    const NameComponent = this.viewPersonName(nameStyle);
+    const { pushWithMeta } = this.props.firebase;     
 
     const deleteButton = () => {
       if (!this.state.myKey) {
@@ -190,12 +169,6 @@ export default class SinglePerson extends Component {
             margin: '5px 0',
           }}
           onClick={() => {
-            // this.props.selectPerson({
-            //   belongsTo: this.props.tipOut.id,
-            //   name: this.props.name,
-            //   id: this.props.id,
-            //   hours: this.props.hours,
-            // });
             this.props.showModal(true, 'MODAL_CONFIRM_DELETE_PERSON', 'Remove Person', { personKey: this.state.myKey, personId: this.state.personId, tipOutRef: this.props.belongsTo, storeRef: this.props.storeRef });
           }}
         >

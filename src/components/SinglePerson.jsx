@@ -153,7 +153,7 @@ export default class SinglePerson extends Component {
     };
 
     const NameComponent = this.viewPersonName(nameStyle);
-    const { pushWithMeta } = this.props.firebase;     
+    const { pushWithMeta } = this.props.firebase;
 
     const deleteButton = () => {
       if (!this.state.myKey) {
@@ -189,10 +189,11 @@ export default class SinglePerson extends Component {
           onFocus={() => this.setState({ canUpdate: true })}
           onBlur={
             (e) => {
+              const { viewModel } = this.props;
               if (this.state.canUpdate && this.state.newHours !== e.target.value) {
                 this.setState({ canUpdate: false, newHours: e.target.value });
                 update(
-                  `/tipOuts/${this.props.tipOut.id}/people/${this.state.myKey}`,
+                  `/tipOuts/${viewModel.id}/people/${this.state.myKey}`,
                   {
                     hours: e.target.value,
                   }).then(() => this.setState({ hasUpdated: true, updateType: 'Updated' }));

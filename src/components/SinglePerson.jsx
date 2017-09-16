@@ -103,42 +103,7 @@ export default class SinglePerson extends Component {
     this.setState({ width: SinglePerson.getWindowDimensions() });
   }
 
-  editPersonName(style, fbSet) {
-    const autoCompleteConfig = {
-      text: 'name',
-      value: 'id',
-    };
-
-    const { tipOut, peopleList } = this.state;
-
-    const currentlyAddedUsers = tpHelpers.getPeopleFromTipOut(tipOut);
-    const allowedUsers = tpHelpers.filterUsersAddedToTipOut(peopleList, currentlyAddedUsers);
-
-    const addPersonToTipOut = (id, name) => {
-      const addPerson = {
-        id,
-        name,
-        belongsTo: this.state.tipOut.id,
-        hours: this.state.newHours || '0',
-      };
-
-      this.setState({ nameText: name, personId: id });
-
-      fbSet(`/tipOuts/${addPerson.belongsTo}/people`, addPerson).then((snapshot) => {
-        this.setState({ hasUpdated: true, updateType: 'Added', myKey: snapshot.key });
-
-        const personBelongsToRecord = this.state.people[id].belongsTo;
-        const newPersonBelongsToRecord = personBelongsToRecord.concat({
-          id: this.state.tipOut.id,
-          isPending: true,
-          pickedUp: false,
-        });
-
-        this.props.firebase.set(`/people/${id}/belongsTo`, newPersonBelongsToRecord)
-          .catch(err => console.log(err)); // temporary error handling placeholder
-      }).catch(err => console.log(err)); // temporary error handling placeholder
-    };
-
+  editPersonName(style) {
     return (
       <AutoComplete
         style={style}
@@ -150,23 +115,6 @@ export default class SinglePerson extends Component {
         searchText={this.state.nameText}
         openOnFocus={true}
         maxSearchResults={5}
-        onNewRequest={
-          (e, arr) => {
-            if (arr === -1) {
-              const personIndex = tpHelpers.getIndexOfPerson(peopleList, e);
-              if (personIndex > -1) {
-                console.log("Personexists!");
-                this.setState({ nameText: peopleList[personIndex].name });
-              } else {
-                // person does not exist, create a new person record and add to current store
-                // TODO: Another case: person exists, but is not from the store (phantom case)
-              }
-            } else {
-              // Add user who already has a people record
-              addPersonToTipOut(e.id, e.name);
-            }
-          }
-        }
       />
     );
   }

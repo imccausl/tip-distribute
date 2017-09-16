@@ -35,8 +35,9 @@ export default class SearchMenu extends Component {
     const tipOutPeople = tpHelpers.getAllPeopleBelongingToTipOut(viewModel);
 
     if (arr === -1) { // enter pressed
-      const personIndex = tpHelpers.getIndexOfPerson(storePeopleList, e);
-      if (personIndex > -1) {
+      const personIndex = tpHelpers.doesPersonExist(storePeopleList, e);
+      console.log(personIndex);
+      if (personIndex) {
         // person exists in store record, but at this point could also be on the tip out so
         // get the person's id and displayName (so we can add their name in regular case)
         const personId = tpHelpers.getIdOfStorePersonFromName(

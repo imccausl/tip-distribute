@@ -3,9 +3,29 @@ export function getPeopleFromTipOut(tipOut) {
 }
 
 export function getIndexOfPerson(list, name) {
-  console.log( list, name)
   return list.map(person => person.displayName.toLowerCase().indexOf(name.toLowerCase()))
     .filter(value => value !== -1);
+}
+
+export function getIdOfStorePersonFromName(name, storeRef, stores, people) {
+  const storePeople = stores[storeRef].people;
+  let allStorePeople = {};
+
+  // make a people object from the storePeople array
+  storePeople.forEach((personId) => {
+    allStorePeople = {
+      ...allStorePeople,
+      [personId]: people[personId],
+    };
+  });
+
+  // get the key -- there should only be one, since we are searching by store people, 
+  // otherwise we're grabbing the first one. This *could* be potentially problematic,
+  // but this problem is an extreme edge case.
+  const personKey = Object.keys(allStorePeople)
+    .filter(key => allStorePeople[key].displayName.toLowerCase() === name.toLowerCase()).shift();
+
+  return personKey || null;
 }
 
 export function getAllPeopleBelongingToTipOut(tipOut) {

@@ -49,6 +49,10 @@ export function sortByLastName(people) {
 
 export function filterUsersAddedToTipOut(allUsers, usersAdded) {
   const compareTo = usersAdded.map(user => user.id);
-
-  return allUsers.filter(user => compareTo.indexOf(user.id) === -1);
+  // allUsers should be an array of people ids belonging to a store
+  // I switched this to get the ids of all users in the system for now
+  // because the end goal is to be able to add anyone to a tip out
+  // since anyone is a potential 'phantom' (sbux word for fill-in barista from another store)...
+  // .. maybe it's the ALS software's name for it. Whatever.
+  return Object.keys(allUsers).filter(user => compareTo.indexOf(user) === -1);
 }

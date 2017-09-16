@@ -40,7 +40,7 @@ class BottomBar extends Component {
             <BottomNavigationItem
               label="People"
               icon={<PeopleIcon />}
-              onClick={() => this.props.selectView('SHOW_EDIT_PEOPLE', 2)}
+              onClick={() => this.props.selectView('SHOW_EDIT_PEOPLE', 2, this.props.view.payload.key)}
             />
           </BottomNavigation>
         </Paper>

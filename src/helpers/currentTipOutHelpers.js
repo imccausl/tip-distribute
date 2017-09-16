@@ -3,7 +3,9 @@ export function getPeopleFromTipOut(tipOut) {
 }
 
 export function getIndexOfPerson(list, name) {
-  return list.map(person => person.name.toLowerCase()).indexOf(name.toLowerCase());
+  console.log( list, name)
+  return list.map(person => person.displayName.toLowerCase().indexOf(name.toLowerCase()))
+    .filter(value => value !== -1);
 }
 
 export function getAllPeopleBelongingToTipOut(tipOut) {

@@ -41,7 +41,12 @@ class ViewArea extends Component {
             />
           );
         case 'SHOW_EDIT_PEOPLE':
-          return <EditStorePeople />;
+          return <EditStorePeople
+            allPeople={this.props.people}
+            stores={this.props.stores}
+            profile={this.props.profile}
+            users={this.props.users}
+          />;
         default:
           return null;
       }

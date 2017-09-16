@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { firebaseConnect } from 'react-redux-firebase';
+import { firebaseConnect, isLoaded } from 'react-redux-firebase';
 import { Toolbar, ToolbarGroup, ToolbarSeparator, ToolbarTitle } from 'material-ui/Toolbar';
 import IconButton from 'material-ui/IconButton';
 import IconMenu from 'material-ui/IconMenu';
@@ -9,28 +9,19 @@ import SvgIcon from 'material-ui/SvgIcon';
 import ContentAdd from 'material-ui/svg-icons/social/person-add';
 import StorePerson from './StorePerson.jsx';
 
-function mapStateToProps(state) {
-  return {
-    people: state.firebase.data.people,
-    profile: state.firebase.profile,
-    stores: state.firebase.data.stores,
-    users: state.firebase.data.users,
-  };
-}
-
-@connect(mapStateToProps)
+@firebaseConnect()
 export default class EditStorePeople extends Component {
   constructor(props) {
     super(props);
 
-    const userPeopleRecord = this.props.people[this.props.profile.ref];
-    const userStore = this.props.stores[userPeopleRecord.storeRef];
+    const userPeopleRecord = this.props.allPeople[this.props.profile.ref]; // get the current user's people profile
+    const userStore = this.props.stores[userPeopleRecord.storeRef]; // get the current user's store
 
     this.state = { userStore, userPeopleRecord };
   }
 
   componentWillReceiveProps(newProps) {
-    const userPeopleRecord = newProps.people[newProps.profile.ref];
+    const userPeopleRecord = newProps.allPeople[newProps.profile.ref];
     const userStore = newProps.stores[userPeopleRecord.storeRef];
 
     this.setState({ userStore, userPeopleRecord });
@@ -40,8 +31,8 @@ export default class EditStorePeople extends Component {
     const renderPeople = () => {
       return this.state.userStore.people.map((person) => {
         let personEmail = null;
-        const personRecord = this.props.people[person];
-
+        const personRecord = this.props.allPeople[person];
+        console.log(personRecord);
         if (personRecord.userRef) {
           personEmail = this.props.users[personRecord.userRef].email;
         }

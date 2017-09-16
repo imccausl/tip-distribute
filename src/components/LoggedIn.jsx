@@ -13,6 +13,7 @@ function mapStateToProps(state) {
     tipOuts: state.firebase.data.tipOuts,
     people: state.firebase.data.people,
     stores: state.firebase.data.stores,
+    users: state.firebase.data.users,
     profile: state.firebase.profile,
   };
 }
@@ -21,7 +22,7 @@ function mapDispatchToProps(dispatch) {
 
 }
 
-@firebaseConnect(['tipOuts', 'people', 'stores'])
+@firebaseConnect(['tipOuts', 'people', 'stores', 'users'])
 @connect(mapStateToProps)
 export default class LoggedIn extends Component {
   constructor(props) {
@@ -69,7 +70,7 @@ export default class LoggedIn extends Component {
 
   render() {
     const { adminAppState, userAppState } = this.state;
-    const { people, stores } = this.props;
+    const { people, stores, profile, users } = this.props;
     return (
       <div>
           <TipOutDrawer
@@ -82,6 +83,8 @@ export default class LoggedIn extends Component {
             adminAppState={adminAppState}
             people={people}
             stores={stores}
+            profile={profile}
+            users={users}
           />
           <BottomBar />
       </div>

@@ -32,6 +32,14 @@ export default class EditStorePeople extends Component {
       return this.state.userStore.people.map((person) => {
         let personEmail = null;
         const personRecord = this.props.allPeople[person];
+
+        let isHidden = null;
+        if (!personRecord.hidden) {
+          isHidden = false;
+        } else {
+          isHidden = personRecord.hidden;
+        }
+
         console.log(personRecord);
         if (personRecord.userRef) {
           personEmail = this.props.users[personRecord.userRef].email;
@@ -44,6 +52,7 @@ export default class EditStorePeople extends Component {
             name={personRecord.displayName}
             partnerNum={personRecord.partnerNum}
             storeRef={this.state.userPeopleRecord.storeRef}
+            isHidden={isHidden}
             email={personEmail}
           />
         );

@@ -44,6 +44,7 @@ export default class StorePerson extends Component {
 
     this.doesPersonExist = this.doesPersonExist.bind(this);
     this.doesPartnerNumExist = this.doesPartnerNumExist.bind(this);
+    this.handleRemovePerson = this.handleRemovePerson.bind(this);
   }
 
   componentWillReceiveProps(newProps) {
@@ -71,7 +72,28 @@ export default class StorePerson extends Component {
     return false;
   }
 
+  handleRemovePerson() {
+    // when a person is removed from a store, it is presumed that they quit,
+    // so we don't want them showing up in any new tip outs
+    // however, they may still have pending tip outs so we flag them as 'hidden'
+    // until the previous tip outs they are are part of are removed, after which time,
+    // their person record is removed. So: handleRemovePerson handles the flagging of hidden,
+    // not the actual deletion of the person record. Since htis is the case, you should also
+    // be able to undo this change, so this function allows toggling the hidden flag.
+
+    const { update } = this.props.firebase;
+    const { id, isHidden } = this.props;
+    let hiddenStatus = isHidden;
+
+    if (!hiddenStatus) {
+      hiddenStatus = false;
+    }
+
+    update(`/people/${id}/`, { hidden: !hiddenStatus });
+  }
+
   render() {
+    const { isHidden } = this.props;
     const hasEmail = () => {
       if (this.state.personEmail) {
         return (
@@ -89,16 +111,31 @@ export default class StorePerson extends Component {
 
       return (
         <Chip>
-          <Avatar color="#444" icon={<WarnIcon />} />
+          <Avatar color="orange" icon={<WarnIcon />} />
           This person is not a registered user.
         </Chip>
       );
     };
 
+    let hiddenStatus = isHidden;
+    if (!hiddenStatus) {
+      hiddenStatus = false;
+    }
+
+    let RemovalFlag = () => null;
+    if (hiddenStatus) {
+      RemovalFlag = () => (
+        <Chip>
+          <Avatar color="orange" icon={<WarnIcon />} />
+          This person is flagged for removal.
+        </Chip>
+      );
+    }
+
     return (
       <Card style={{ maxWidth: '90%', margin: '5px auto' }}>
         <CardHeader
-          style={{ backgroundColor: 'lightgrey' }}
+          style={{ backgroundColor: (hiddenStatus) ? 'orange' : 'lightgrey' }}
           title={this.state.personName}
           subtitle={this.state.partnerNum}
           actAsExpander={true}
@@ -185,12 +222,15 @@ export default class StorePerson extends Component {
             <MenuItem />
           </SelectField>
           {hasEmail()}
+          <br />
+          {RemovalFlag()}
         </CardText>
         <Divider />
         <CardActions expandable={true}>
           <FlatButton
-            label="Remove User"
+            label={(!hiddenStatus) ? 'Flag for removal' : 'Unflag'}
             icon={<ContentRemove />}
+            onClick={this.handleRemovePerson}
           />
         </CardActions>
       </Card>

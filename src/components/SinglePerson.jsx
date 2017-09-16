@@ -189,11 +189,11 @@ export default class SinglePerson extends Component {
           onFocus={() => this.setState({ canUpdate: true })}
           onBlur={
             (e) => {
-              const { viewModel } = this.props;
+              const { belongsTo } = this.props;
               if (this.state.canUpdate && this.state.newHours !== e.target.value) {
                 this.setState({ canUpdate: false, newHours: e.target.value });
                 update(
-                  `/tipOuts/${viewModel.id}/people/${this.state.myKey}`,
+                  `/tipOuts/${belongsTo}/people/${this.state.myKey}`,
                   {
                     hours: e.target.value,
                   }).then(() => this.setState({ hasUpdated: true, updateType: 'Updated' }));

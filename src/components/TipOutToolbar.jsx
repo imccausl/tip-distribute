@@ -110,7 +110,7 @@ export default class TipAppBar extends Component {
 
   render() {
     let headerText = '';
-    const { viewModel } = this.props;
+    const { viewModel, peopleList } = this.props;
 
     if (!viewModel) {
       headerText = 'No Tipout Selected';
@@ -133,7 +133,7 @@ export default class TipAppBar extends Component {
               touch={true}
               onClick={(event) => {
                 event.preventDefault();
-                this.setState({ addPersonOpen: true, anchorEl: event.currentTarget });
+                this.setState({ addPersonOpen: !this.state.addPersonOpen, anchorEl: event.currentTarget });
               }}
             >
               <SvgIcon><ContentAdd /></SvgIcon>
@@ -150,6 +150,8 @@ export default class TipAppBar extends Component {
             open={this.state.addPersonOpen}
             anchorEl={this.state.anchorEl}
             closeMenu={() => this.setState({ addPersonOpen: false })}
+            viewModel={viewModel}
+            peopleList={peopleList}
           />
         </Toolbar>
       </div>

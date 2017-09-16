@@ -30,19 +30,25 @@ export default class SearchMenu extends Component {
 
   handleNewRequest(e, arr) {
     const { peopleList, viewModel } = this.state;
+    const { stores } = this.props;
+    const storePeopleIds = stores[viewModel.storeRef].people;
+    const storePeopleList = storePeopleIds.map(id => peopleList[id]);
 
-    if (arr === -1) {
-      const personIndex = tpHelpers.getIndexOfPerson(peopleList, e);
+    if (arr === -1) { // enter pressed
+      const personIndex = tpHelpers.getIndexOfPerson(storePeopleList, e);
+      console.log(personIndex);
       if (personIndex > -1) {
         console.log("Personexists!");
-        this.setState({ nameText: peopleList[personIndex].name });
       } else {
         // person does not exist, create a new person record and add to current store
+        this.createNewPerson(e);
+        this.props.closeMenu();
         // TODO: Another case: person exists, but is not from the store (phantom case)
       }
     } else {
       // Add user who already has a people record
       this.addPersonToTipOut(e.id, e.name);
+      this.props.closeMenu();
     }
   }
 
@@ -51,7 +57,6 @@ export default class SearchMenu extends Component {
     const { viewModel, peopleList } = this.state;
     const addPerson = {
       id,
-      name,
       belongsTo: viewModel.id,
       hours: '',
     };
@@ -60,7 +65,11 @@ export default class SearchMenu extends Component {
       // change to set off snackbar on employeelist
       // this.setState({ hasUpdated: true, updateType: 'Added', myKey: snapshot.key });
 
-      const personBelongsToRecord = peopleList[id].belongsTo;
+      let personBelongsToRecord = peopleList[id].belongsTo;
+      if (!personBelongsToRecord) {
+        personBelongsToRecord = [];
+      }
+
       const newPersonBelongsToRecord = personBelongsToRecord.concat({
         id: viewModel.id,
         isPending: true,
@@ -72,8 +81,23 @@ export default class SearchMenu extends Component {
     }).catch(err => console.log(err)); // temporary error handling placeholder
   }
 
-  createNewPerson() {
+  createNewPerson(name) {
+    // create a new person and return the id
 
+    const { pushWithMeta, set } = this.props.firebase;
+    const { viewModel } = this.state;
+
+    const newPerson = {
+      displayName: name,
+      partnerNum: '',
+      userRef: '',
+      storeRef: viewModel.storeRef,
+      totalHours: null,
+      belongsTo: [],
+    };
+
+    pushWithMeta('/people', newPerson)
+      .then(snapshot => this.addPersonToTipOut(snapshot.key, name));
   }
 
   render() {

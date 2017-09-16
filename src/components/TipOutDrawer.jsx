@@ -31,7 +31,7 @@ class TipOutDrawer extends Component {
           leftIcon={<CreateIcon />}
           onClick={
             () => {
-              this.props.showModal(true, 'ADD_NEW_TIP_OUT', 'Add New Tip Out');
+              this.props.showModal(true, 'ADD_NEW_TIP_OUT', 'Add New Tip Out', { currTipOutId: 'NEW_TIP_OUT' });
             }}
         />
         <MenuItem
@@ -51,9 +51,9 @@ class TipOutDrawer extends Component {
   }
 
   render() {
-    const { userAppState, adminAppState, people, users } = this.props;
+    const { userAppState, adminAppState, people, users, stores, profile, newTipOutOpen } = this.props;
 
-    if (!this.props.data) {
+    if (!adminAppState) {
       //this.props.showModal(true, 'ADD_NEW_TIP_OUT', 'Add New Tip Out');
     }
 
@@ -79,7 +79,13 @@ class TipOutDrawer extends Component {
             users={users}
           />
         </Drawer>
-        <NewTipOut people={people} open={this.props.newTipOutOpen} />
+        <NewTipOut
+          people={people}
+          profile={profile}
+          stores={stores}
+          adminAppState={adminAppState}
+          open={newTipOutOpen}
+        />
       </div>
     );
   }

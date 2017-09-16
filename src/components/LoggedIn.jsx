@@ -78,6 +78,7 @@ export default class LoggedIn extends Component {
             userAppState={userAppState}
             people={people}
             stores={stores}
+            profile={profile}
           />
           <ViewArea 
             adminAppState={adminAppState}

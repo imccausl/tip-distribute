@@ -90,7 +90,7 @@ export default class TipAppBar extends Component {
           leftIcon={<EditIcon />}
           onClick={
             () => {
-              this.props.showModal(true, 'EDIT_TIP_OUT_MODAL', 'Edit Tip Out');
+              this.props.showModal(true, 'EDIT_TIP_OUT_MODAL', 'Edit Tip Out', { currTipOutId: viewModal.id });
             }
           }
         />

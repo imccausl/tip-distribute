@@ -12,10 +12,8 @@ import SelectField from 'material-ui/SelectField';
 import FlatButton from 'material-ui/FlatButton';
 import TextField from 'material-ui/TextField';
 import DatePicker from 'material-ui/DatePicker';
-import addNewTipOut from '../actions/addNewTipOut';
 import makeNewId from '../helpers/makeNewId';
 import showModal from '../actions/modalActions';
-import editTipOut from '../actions/editTipOut';
 import tipOutShape from '../models/tipOut.model';
 import parseDate from '../helpers/dateHelpers';
 
@@ -24,8 +22,6 @@ const defaults = true;
 function mapPropsToState(state) {
   return {
     authId: state.firebase.auth.uid,
-    fbTipOuts: state.firebase.data.tipOuts,
-    profile: state.firebase.profile,
     modalAction: state.modalAction,
   };
 }
@@ -33,8 +29,6 @@ function mapPropsToState(state) {
 function mapDispatchToProps(dispatch) {
   return bindActionCreators({
     showModal,
-    addNewTipOut,
-    editTipOut,
   }, dispatch);
 }
 
@@ -49,6 +43,7 @@ export default class NewTipOut extends Component {
       modal: PropTypes.string,
       title: PropTypes.title,
       isOpen: PropTypes.boolean,
+      currTipOutId: PropTypes.string,
     }),
     currentTipOut: PropTypes.shape(tipOutShape),
   };
@@ -92,11 +87,28 @@ export default class NewTipOut extends Component {
 
   constructor(props) {
     super(props);
+    console.log(props.modalAction)
+    const { adminAppState, people, profile } = this.props;
+    let currTipOut = null;
+    let currTipOutId = null;
+
+    if (this.props.modalAction && this.props.modalAction.data) {
+      const tipOutId = this.props.modalAction.data.currTipOutId;
+
+      if (tipOutId !== 'NEW_TIP_OUT') { 
+        currTipOut = adminAppState[currTipOutId];
+        currTipOutId = tipOutId;
+      } else {
+        currTipOutId = null;
+      }
+    }
+
     this.state = {
       newDate: NewTipOut.getNearestWeekEnding(),
-      newWeekEnding: (!this.props.currentTipOut) ?
-        NewTipOut.getNearestWeekEnding() : this.props.currentTipOut.weekEnding,
-      newTotalCash: (!this.props.currentTipOut) ? '200' : this.props.currentTipOut.totalCash,
+      newWeekEnding: (!currTipOut) ?
+        NewTipOut.getNearestWeekEnding() : currTipOut.weekEnding,
+      newTotalCash: (!currTipOut) ? '200' : currTipOut.totalCash,
+      currTipOutId,
       newStore: '',
     };
 
@@ -105,9 +117,22 @@ export default class NewTipOut extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
+    const { adminAppState, people, profile } = nextProps;
+    let currTipOutId = null;
+    let currTipOut = null;
+
+    if (nextProps.modalAction && nextProps.modalAction.data) {
+      currTipOutId = nextProps.modalAction.data.currTipOutId;
+
+      if (currTipOutId !== 'NEW_TIP_OUT') {
+        currTipOut = adminAppState[currTipOutId];
+      }
+    }
+
     this.setState({
-      newTotalCash: (!nextProps.currentTipOut) ? '200' : nextProps.currentTipOut.totalCash,
-      newStore: (!nextProps.people || !nextProps.profile.ref) ? '' : nextProps.people[nextProps.profile.ref].storeRef,
+      currTipOutId,
+      newTotalCash: (!currTipOut) ? '200' : currTipOut.totalCash,
+      newStore: (!people || !profile.ref) ? '' : people[profile.ref].storeRef,
     });
   }
 
@@ -131,7 +156,7 @@ export default class NewTipOut extends Component {
   render() {
     let modalButton = null;
     let defaultDate = '';
-    const disabledButton = !(this.props.fbTipOuts);
+    const disabledButton = !(this.props.adminAppState);
     const cancelButton = [(<FlatButton
       label="Cancel"
       disabled={disabledButton}
@@ -159,21 +184,25 @@ export default class NewTipOut extends Component {
             let storePeople = {};
             
             newTipOutPeople.forEach((person) => {
+              const isHidden = this.props.people[person].hidden;
               const personBelongsToRecord = this.props.people[person].belongsTo;
               const newBelongsToRecord = personBelongsToRecord.concat({ id: tipOutId, pickedUp: false, isPending: true });
 
-              storePeople = {
-                ...storePeople,
-                [makeNewId()]: {
-                  belongsTo: tipOutId,
-                  id: person,
-                  hours: '',
-                },
-              };
+              // only add people to the tip out if they are not flagged for removal from store.
+              if (!isHidden) {
+                storePeople = {
+                  ...storePeople,
+                  [makeNewId()]: {
+                    belongsTo: tipOutId,
+                    id: person,
+                    hours: '',
+                  },
+                };
 
-              // create record for each person now belonging to tip out
-              console.log("Adding record:", newBelongsToRecord);
-              this.props.firebase.set(`/people/${person}/belongsTo`, newBelongsToRecord);
+                // create record for each person now belonging to tip out
+                console.log("Adding record:", newBelongsToRecord);
+                this.props.firebase.set(`/people/${person}/belongsTo`, newBelongsToRecord);
+              }
             });
 
             const newTipOut = {
@@ -203,7 +232,7 @@ export default class NewTipOut extends Component {
           }}
         />);
     } else if (this.props.modalAction.modal === 'EDIT_TIP_OUT_MODAL') {
-      defaultDate = this.props.currentTipOut.weekEnding;
+      defaultDate = this.state.currTipOut.weekEnding;
 
       modalButton = (
         <FlatButton
@@ -211,7 +240,7 @@ export default class NewTipOut extends Component {
           primary={defaults}
           keyboardFocused={defaults.keyboardFocused}
           onClick={() => {
-            this.props.firebase.update(`/tipOuts/${this.props.currentTipOut.id}`,
+            this.props.firebase.update(`/tipOuts/${this.state.currTipOutId}`,
               {
                 weekEnding: this.state.newDate,
                 totalCash: this.state.newTotalCash,

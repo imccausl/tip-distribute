@@ -12,6 +12,7 @@ export default class SearchMenu extends Component {
     this.state = {
       viewModel: this.props.viewModel,
       peopleList: this.props.peopleList,
+      errMsg: '',
     };
 
     this.handleNewRequest = this.handleNewRequest.bind(this);
@@ -50,7 +51,10 @@ export default class SearchMenu extends Component {
         if (currentTipOutIds.indexOf(personId) === -1) {
           // person doesn't belong to this tip out, so add them (otherwise do nothing)!
           this.addPersonToTipOut(personId, personName);
+        } else {
+          this.setState({ errMsg: `${personName} has already been added` });
         }
+
         this.props.closeMenu();
       } else {
         // person does not exist, create a new person record and add to current store
@@ -135,6 +139,8 @@ export default class SearchMenu extends Component {
         anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
         targetOrigin={{ horizontal: 'right', vertical: 'top' }}
         zDepth={3}
+        errorText={this.state.errMsg}
+        onUpdateInput={() => this.setState({ errMsg: '' })}
         onRequestClose={() => {
           this.props.closeMenu();
         }}

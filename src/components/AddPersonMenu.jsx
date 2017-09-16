@@ -33,12 +33,27 @@ export default class SearchMenu extends Component {
     const { stores } = this.props;
     const storePeopleIds = stores[viewModel.storeRef].people;
     const storePeopleList = storePeopleIds.map(id => peopleList[id]);
+    const tipOutPeople = tpHelpers.getAllPeopleBelongingToTipOut(viewModel);
 
     if (arr === -1) { // enter pressed
       const personIndex = tpHelpers.getIndexOfPerson(storePeopleList, e);
-      console.log(personIndex);
       if (personIndex > -1) {
-        console.log("Personexists!");
+        // person exists in store record, but at this point could also be on the tip out so
+        // get the person's id and displayName (so we can add their name in regular case)
+        const personId = tpHelpers.getIdOfStorePersonFromName(
+          e,
+          viewModel.storeRef,
+          stores,
+          peopleList,
+        );
+        const personName = peopleList[personId].displayName;
+        // check if this id already exists on the tip out
+        const currentTipOutIds = Object.keys(viewModel.people).map(key => viewModel.people[key].id);
+        if (currentTipOutIds.indexOf(personId) === -1) {
+          // person doesn't belong to this tip out, so add them (otherwise do nothing)!
+          this.addPersonToTipOut(personId, personName);
+        }
+        this.props.closeMenu();
       } else {
         // person does not exist, create a new person record and add to current store
         this.createNewPerson(e);

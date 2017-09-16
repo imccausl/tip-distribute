@@ -2,9 +2,15 @@ export function getPeopleFromTipOut(tipOut) {
   return Object.keys(tipOut.people).map(key => tipOut.people[key]);
 }
 
-export function getIndexOfPerson(list, name) {
-  return list.map(person => person.displayName.toLowerCase().indexOf(name.toLowerCase()))
+export function doesPersonExist(list, name) {
+  const personExists = list.map(person => person.displayName.toLowerCase()
+    .indexOf(name.toLowerCase()))
     .filter(value => value !== -1);
+  if (!personExists.toString()) {
+    return false;
+  }
+
+  return true;
 }
 
 export function getIdOfStorePersonFromName(name, storeRef, stores, people) {

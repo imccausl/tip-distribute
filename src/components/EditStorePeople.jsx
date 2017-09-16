@@ -39,7 +39,6 @@ export default class EditStorePeople extends Component {
           isHidden = personRecord.hidden;
         }
 
-        console.log(personRecord);
         if (personRecord.userRef) {
           personEmail = this.props.users[personRecord.userRef].email;
         }

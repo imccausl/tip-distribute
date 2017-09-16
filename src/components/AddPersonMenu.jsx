@@ -1,9 +1,7 @@
 import React, { Component } from 'react';
 import { firebaseConnect } from 'react-redux-firebase';
 import AutoComplete from 'material-ui/AutoComplete';
-import SuperSelectField from 'material-ui-superselectfield';
 import Popover from 'material-ui/Popover';
-import Subheader from 'material-ui/Subheader';
 import * as tpHelpers from '../helpers/currentTipOutHelpers';
 
 @firebaseConnect()

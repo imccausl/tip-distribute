@@ -35,9 +35,8 @@ export default class SearchMenu extends Component {
     const tipOutPeople = tpHelpers.getAllPeopleBelongingToTipOut(viewModel);
 
     if (arr === -1) { // enter pressed
-      const personIndex = tpHelpers.doesPersonExist(storePeopleList, e);
-      console.log(personIndex);
-      if (personIndex) {
+      const personExists = tpHelpers.doesPersonExist(storePeopleList, e);
+      if (personExists) {
         // person exists in store record, but at this point could also be on the tip out so
         // get the person's id and displayName (so we can add their name in regular case)
         const personId = tpHelpers.getIdOfStorePersonFromName(
@@ -100,10 +99,11 @@ export default class SearchMenu extends Component {
   }
 
   createNewPerson(name) {
-    // create a new person and return the id
+    // create a new person and then initiate adding them to tip out
 
     const { pushWithMeta, set } = this.props.firebase;
     const { viewModel } = this.state;
+    const { stores } = this.props;
 
     const newPerson = {
       displayName: name,
@@ -114,8 +114,18 @@ export default class SearchMenu extends Component {
       belongsTo: [],
     };
 
+    // add people record
     pushWithMeta('/people', newPerson)
-      .then(snapshot => this.addPersonToTipOut(snapshot.key, name));
+      .then((snapshot) => {
+        // add person to store people record
+        let storePeopleRecord = stores[viewModel.storeRef].people;
+        if (!storePeopleRecord) {
+          storePeopleRecord = [];
+        }
+        const newStorePeopleRecord = storePeopleRecord.concat(snapshot.key);
+        set(`/stores/${viewModel.storeRef}/people`, newStorePeopleRecord);
+        this.addPersonToTipOut(snapshot.key, name);
+      });
   }
 
   render() {

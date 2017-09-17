@@ -4,8 +4,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import { firebaseConnect } from 'react-redux-firebase';
 import { Card, CardActions, CardHeader, CardTitle, CardText } from 'material-ui/Card';
-import Checkbox from 'material-ui/Checkbox';
 import FlatButton from 'material-ui/FlatButton';
 import Divider from 'material-ui/Divider';
 import RaisedButton from 'material-ui/RaisedButton';
@@ -13,6 +13,7 @@ import { hideModal } from '../actions/modalActions';
 import { calculateWage } from '../helpers/populateStateHelpers';
 import parseDate from '../helpers/dateHelpers';
 
+@firebaseConnect()
 class Distribution extends Component {
   constructor(props) {
     super(props);
@@ -22,6 +23,8 @@ class Distribution extends Component {
       open: false,
       hourlyAmount: '',
     };
+
+    this.handleFinalizeTipOut = this.handleFinalizeTipOut.bind(this);
   }
 
   componentWillReceiveProps(newProps) {
@@ -38,7 +41,6 @@ class Distribution extends Component {
         return 0;
       }
 
-      // const totalHours = calculateTotalHours(this.props.tipOut);
       const hourlyAmount = calculateWage(this.props.viewModel);
       console.log("Hourly amount:", hourlyAmount);
 
@@ -85,6 +87,10 @@ class Distribution extends Component {
     )});
   }
 
+  handleFinalizeTipOut() {
+
+  }
+
   render() {
     if (!this.props.viewModel) return null;
     const actions = [
@@ -111,6 +117,7 @@ class Distribution extends Component {
         <RaisedButton
           label="Finalize"
           primary={true}
+          onClick={this.handleFinalizeTipOut}
         />
       </CardActions>
     </Card>

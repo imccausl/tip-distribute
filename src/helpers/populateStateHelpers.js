@@ -67,7 +67,7 @@ function calculateWage(tipOut) {
 
   wage = (parseFloat(totalCash) / parseFloat(totalHours)).toFixed(2);
 
-  return wage || 0;
+  return (wage === Infinity) ? 0 : wage;
 }
 
 

@@ -17,7 +17,11 @@ class Distribution extends Component {
   constructor(props) {
     super(props);
 
-    this.state = { people: (!this.props.viewModel) ? null : this.props.viewModel.people, open: false };
+    this.state = {
+      people: (!this.props.viewModel) ? null : this.props.viewModel.people,
+      open: false,
+      hourlyAmount: '',
+    };
   }
 
   componentWillReceiveProps(newProps) {
@@ -53,7 +57,7 @@ class Distribution extends Component {
         const wage = getTipOut(person.hours);
 
         const barStyle = {
-          width: `${((wage * this.props.viewModel.totalCash) / 100) + 20}px`,
+          width: `${((wage * this.props.viewModel.totalCash) / this.props.viewModel.totalCash) + 50}px`,
           maxWidth: '100%',
           backgroundColor: 'lightblue',
           fontSize: '20px',
@@ -77,12 +81,6 @@ class Distribution extends Component {
               {`$${wage}`}
               </div>
             </CardText>
-            <Divider />
-            <CardActions>
-              <Checkbox
-                label="Completed"
-              />
-            </CardActions>
             </Card>
     )});
   }
@@ -114,9 +112,6 @@ class Distribution extends Component {
           label="Finalize"
           primary={true}
         />
-        <FlatButton
-        label="Select All"
-      />
       </CardActions>
     </Card>
     );

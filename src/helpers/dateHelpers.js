@@ -16,6 +16,6 @@ export default function parseDate(date) {
     'December',
   ];
 
-  const tipOutMonth = months[dateObj.getMonth()];
+  const tipOutMonth = months[dateObj.getMonth()] || [];
   return tipOutMonth.concat(' ', dateObj.getDate());
 }

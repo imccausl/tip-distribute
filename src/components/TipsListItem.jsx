@@ -43,14 +43,24 @@ class TipsListItem extends Component {
   }
 
   render() {
+    let statusText = null;
+    let newIcon = null;
+
+    if (this.props.isDistributed) {
+      statusText = `$${Math.round(this.state.tipMoney)} for ${this.props.hours} hours`;
+      newIcon = <NewBadge badgeContent="!" primary={true} />;
+    } else {
+      statusText = 'In progress...';
+    }
+
     return (
       <div>
         <ListItem
           leftCheckbox={null}
           primaryText={`Week Ending ${parseDate(this.props.week)}`}
-          secondaryText={`$${Math.round(this.state.tipMoney)} for ${this.props.hours} hours`}
+          secondaryText={statusText}
           secondaryTextLines={2}
-          rightIcon={<NewBadge badgeContent="!" primary={true} />}
+          rightIcon={newIcon}
           onClick={this.props.click}
         />
         <Divider inset={false} />

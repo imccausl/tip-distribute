@@ -61,20 +61,20 @@ export default class TipOutList extends Component {
     const { userAppState } = this.props;
 
     if (userAppState) {
-      return Object.keys(userAppState).map((key) => (
+      return Object.keys(userAppState).map(key => (
         <TipsListItem
           key={key}
           week={userAppState[key].weekEnding}
           wage={userAppState[key].hourlyWage}
           hours={userAppState[key].people.hours}
+          isDistributed={userAppState[key].isDistributed}
           click={() => {
             // this.props.populateTipOutList({ tipOut: tipOuts[key], users: this.props.data.users, people: this.props.data.people });
             // this.props.selectView('SHOW_EDIT_VIEW', 0);
             // this.props.hideDrawer();
           }}
         />
-      ),
-      );
+      ));
     }
 
     return null;

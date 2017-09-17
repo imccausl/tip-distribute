@@ -109,6 +109,7 @@ export default class NewTipOut extends Component {
         NewTipOut.getNearestWeekEnding() : currTipOut.weekEnding,
       newTotalCash: (!currTipOut) ? '200' : currTipOut.totalCash,
       currTipOutId,
+      currTipOut,
       newStore: '',
     };
 
@@ -123,14 +124,12 @@ export default class NewTipOut extends Component {
 
     if (nextProps.modalAction && nextProps.modalAction.data) {
       currTipOutId = nextProps.modalAction.data.currTipOutId;
-
-      if (currTipOutId !== 'NEW_TIP_OUT') {
-        currTipOut = adminAppState[currTipOutId];
-      }
+      currTipOut = adminAppState[currTipOutId];
     }
 
     this.setState({
       currTipOutId,
+      currTipOut,
       newTotalCash: (!currTipOut) ? '200' : currTipOut.totalCash,
       newStore: (!people || !profile.ref) ? '' : people[profile.ref].storeRef,
     });
@@ -186,7 +185,7 @@ export default class NewTipOut extends Component {
             newTipOutPeople.forEach((person) => {
               const isHidden = this.props.people[person].hidden;
               const personBelongsToRecord = this.props.people[person].belongsTo;
-              const newBelongsToRecord = personBelongsToRecord.concat({ id: tipOutId, pickedUp: false, isPending: true });
+              const newBelongsToRecord = personBelongsToRecord.concat({ id: tipOutId, pickedUp: false });
 
               // only add people to the tip out if they are not flagged for removal from store.
               if (!isHidden) {
@@ -212,11 +211,12 @@ export default class NewTipOut extends Component {
                 totalHours: 0,
                 totalCash: this.state.newTotalCash,
                 storeRef: this.state.newStore,
+                isDistributed: false,
                 id: tipOutId,
                 people: storePeople,
-              }
-            }
-            
+              },
+            };
+
             this.props.firebase.update( '/tipOuts', newTipOut);
             const newTipOutsCreated = { id: tipOutId };
 

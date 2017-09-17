@@ -107,9 +107,6 @@ export default class TipOutList extends Component {
       <div>
         {populateList('Your Tips', this.renderTips)}
         {populateList('Tip Outs Created By You', this.renderTipOutsList)}
-        <List>
-          <Subheader>Combined Tip Outs</Subheader>
-        </List>
       </div>
     );
   }

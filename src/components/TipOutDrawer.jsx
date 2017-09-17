@@ -34,14 +34,7 @@ class TipOutDrawer extends Component {
               this.props.showModal(true, 'ADD_NEW_TIP_OUT', 'Add New Tip Out', { currTipOutId: 'NEW_TIP_OUT' });
             }}
         />
-        <MenuItem
-          primaryText="Edit People..."
-        />
         <Divider />
-        <MenuItem
-          leftIcon={<CombineIcon />}
-          primaryText="Combine Tip Outs..."
-        />
         <MenuItem
           leftIcon={<DeleteIcon />}
           primaryText="Delete Tip Outs..."

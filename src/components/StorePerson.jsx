@@ -216,11 +216,6 @@ export default class StorePerson extends Component {
               }
             }
           />
-          <SelectField
-            floatingLabelText="Store"
-          >
-            <MenuItem />
-          </SelectField>
           {hasEmail()}
           <br />
           {RemovalFlag()}

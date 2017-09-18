@@ -5,6 +5,7 @@ import ConfirmDialog from './ConfirmDialog.jsx';
 import UserProfile from './UserProfile.jsx';
 import DistributeTips from './DistributionReport.jsx';
 import EditStorePeople from './EditStorePeople.jsx';
+import EditStoreList from './EditStoreList.jsx';
 
 class ViewArea extends Component {
   render() {
@@ -41,12 +42,20 @@ class ViewArea extends Component {
             />
           );
         case 'SHOW_EDIT_PEOPLE':
-          return <EditStorePeople
-            allPeople={this.props.people}
-            stores={this.props.stores}
-            profile={this.props.profile}
-            users={this.props.users}
-          />;
+          return (
+            <EditStorePeople
+              allPeople={this.props.people}
+              stores={this.props.stores}
+              profile={this.props.profile}
+              users={this.props.users}
+            />
+          );
+        case 'SHOW_EDIT_STORES':
+          return (
+            <EditStoreList
+              stores={this.props.stores}
+            />
+          );
         default:
           return null;
       }

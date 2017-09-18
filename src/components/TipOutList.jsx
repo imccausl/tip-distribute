@@ -105,8 +105,8 @@ export default class TipOutList extends Component {
 
     return (
       <div>
+        {populateList('Tip Outs Created By You', this.renderTipOutsList)}      
         {populateList('Your Tips', this.renderTips)}
-        {populateList('Tip Outs Created By You', this.renderTipOutsList)}
       </div>
     );
   }

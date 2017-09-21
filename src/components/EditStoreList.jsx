@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { firebaseConnect, isLoaded } from 'react-redux-firebase';
 import { Toolbar, ToolbarGroup, ToolbarSeparator, ToolbarTitle } from 'material-ui/Toolbar';
 import IconButton from 'material-ui/IconButton';
 import IconMenu from 'material-ui/IconMenu';
@@ -8,7 +7,6 @@ import SvgIcon from 'material-ui/SvgIcon';
 import ContentAdd from 'material-ui/svg-icons/social/person-add';
 import StoreListItem from './StoreListItem.jsx';
 
-@firebaseConnect()
 export default class EditStoreList extends Component {
   constructor(props) {
     super(props);

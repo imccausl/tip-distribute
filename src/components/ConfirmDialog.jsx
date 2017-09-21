@@ -151,6 +151,7 @@ export default class ConfirmDialog extends Component {
               // tip out in the person database, so remove it too.
               if (personId) {
                 const belongsToRecord = people[personId].belongsTo;
+                const isHidden = people[personId].hidden;
                 let newBelongsToRecord = belongsToRecord.filter(record => record.id !== tipOutRef);
                 if (!newBelongsToRecord) {
                   newBelongsToRecord = [];
@@ -162,8 +163,7 @@ export default class ConfirmDialog extends Component {
               // remove person from tip out
               this.props.firebase.remove(`/tipOuts/${tipOutRef}/people/${personKey}`);
 
-              // delete person from redux store (currentTipOut)
-              // this.props.deletePersonFromTipOut(this.props.modalAction.data.personKey);
+              
               this.props.showModal(false);
             }
           }

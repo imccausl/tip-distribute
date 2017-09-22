@@ -1,4 +1,6 @@
-/* User Story #1: Admin should be able to associate people from the existing people list
+/* EditStoreList.jsx
+
+   User Story #1: Admin should be able to associate people from the existing people list
    with a store. If a person that is associated with one store is added to another store,
    the association to their previous store should be removed. This case is useful in the
    event that a person transfers to a different store.

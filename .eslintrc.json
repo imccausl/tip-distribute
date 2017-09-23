@@ -3,5 +3,8 @@
     "extends": ["airbnb"],
     "plugins": [
         "mocha"
-    ]
+    ],
+    "rules": {
+        "arrow-parens": ["error", "as-needed"]
+    }
 }

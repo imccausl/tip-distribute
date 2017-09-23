@@ -25,7 +25,13 @@ function mapStateToProps(state) {
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({ showModal, deleteTipOut, deletePerson, deletePersonFromTipOut, populateTipOutList }, dispatch);
+  return bindActionCreators({
+    showModal,
+    deleteTipOut,
+    deletePerson,
+    deletePersonFromTipOut,
+    populateTipOutList,
+  }, dispatch);
 }
 
 @firebaseConnect()
@@ -55,6 +61,9 @@ export default class ConfirmDialog extends Component {
       currentTipOut: null,
       currentPerson: null,
     };
+
+    this.handleConfirmDeletePerson = this.handleConfirmDeletePerson.bind(this);
+    this.handleConfirmDeleteTipOut = this.handleConfirmDeleteTipOut.bind(this);
   }
 
   componentWillReceiveProps(newProps) {
@@ -67,9 +76,70 @@ export default class ConfirmDialog extends Component {
     }
   }
 
+  handleConfirmDeleteTipOut() {
+    const { storeRef, tipOutRef } = this.props.modalAction.data
+    const { tipOuts, people } = this.props;
+    const { set, remove } = this.props.firebase;
+    const { tipOut } = this.props.modalAction.data;
+
+    // Remove the tipOut from firebase, and the tipOutsCreated record from profile,
+    // and the tipOut belongsTo records in each user that is a member of the tipOut.
+    const tipOutCreatedRecord = stores[storeRef].tipOuts[tipOutRef];
+    const allPeople = getAllPeopleBelongingToTipOut(tipOuts[tipOutRef]);
+
+    // remove tipOut from people's belongsTo record
+    allPeople.forEach(person => {
+      const belongsToRecord = people[person].belongsTo || null;
+
+      // there may not be a belongsTo record for the person 
+      // if the tip out hasn't been set as distributed. If it doesn't exist,
+      // ignore it and carry on erasing the tip out from existence.
+      if (belongsToRecord) {
+        const newBelongsToRecord = belongsToRecord.filter(record => record.id !== tipOut.id);
+
+        set(`/people/${person}/belongsTo/`, newBelongsToRecord)
+          .then(()=>console.log("Removed from:", people[person])); // temporary placeholder for confirmation logic
+      }
+    });
+
+    // remove tipOut from creator's tipOutsCreated record
+    remove(`/stores/${tipOut.storeRef}/tipOuts/${tipOut.ref}`);
+    // remove the tip out itself.
+    remove(`/tipOuts/${tipOut.id}`, () => {
+      // if deleting the tip out is successful, then remove it from the local
+      // in-memory redux store and then close the modal.
+      this.props.deleteTipOut(this.props.currentTipOut.id);
+      this.props.showModal(false);
+    });
+  }
+
+  handleConfirmDeletePerson() {
+    const { tipOutRef, personKey, personId } = this.props.modalAction.data;
+    const { people } = this.props;
+    const { set, remove } = this.props.firebase;
+
+    // if person is assigned an id, it means they have a record of belonging to this
+    // tip out in the person database, so remove it too.
+    if (personId) {
+      const belongsToRecord = people[personId].belongsTo;
+      const isHidden = people[personId].hidden;
+      let newBelongsToRecord = belongsToRecord.filter(record => record.id !== tipOutRef);
+      if (!newBelongsToRecord) {
+        newBelongsToRecord = [];
+      }
+
+      this.props.firebase.set(`/people/${personId}/belongsTo`, newBelongsToRecord);
+    }
+
+    // remove person from tip out
+    this.props.firebase.remove(`/tipOuts/${tipOutRef}/people/${personKey}`);
+    this.props.showModal(false);
+  }
+
   render() {
     let actions = [];
     let message = 'Are you sure?';
+    let clickHandler = this.handleConfirmDeletePerson;
 
     const cancel = [
       <FlatButton
@@ -78,105 +148,30 @@ export default class ConfirmDialog extends Component {
         onClick={() => this.props.showModal(false)}
       />,
     ];
-    
+
     if (!this.props.modalAction) {
       return null;
     }
 
     if (this.props.modalAction.modal === 'MODAL_CONFIRM_DELETE') {
-      const { tipOut } = this.props.modalAction.data;
-      const { set, remove } = this.props.firebase;
-      const { users, people, stores, tipOuts } = this.props;
-
-      const deleteConfirm = (
-        <RaisedButton
-          label="Delete"
-          backgroundColor="#ff0000"
-          labelColor="#ffffff"
-          onClick={
-            () => {
-              const { storeRef, tipOutRef } = this.props.modalAction.data
-              const { tipOuts } = this.props.tipOuts;
-
-              // Remove the tipOut from firebase, and the tipOutsCreated record from profile,
-              // and the tipOut belongsTo records in each user that is a member of the tipOut.
-              const tipOutCreatedRecord = stores[storeRef].tipOuts[tipOutRef];
-              const allPeople = getAllPeopleBelongingToTipOut(tipOuts[tipOutRef]);
-
-              // remove tipOut from people's belongsTo record
-              allPeople.forEach((person) => {
-                const belongsToRecord = people[person].belongsTo || null;
-
-                // there may not be a belongsTo record for the person 
-                // if the tip out hasn't been set as distributed. If it doesn't exist,
-                // ignore it and carry on erasing the tip out from existence.
-                if (belongsToRecord) {
-                  const newBelongsToRecord = belongsToRecord.filter(record => record.id !== tipOut.id);
-
-                  set(`/people/${person}/belongsTo/`, newBelongsToRecord)
-                    .then(()=>console.log("Removed from:", people[person])); // temporary placeholder for confirmation logic
-                }
-              });
-
-              // remove tipOut from creator's tipOutsCreated record
-              remove(`/stores/${tipOut.storeRef}/tipOuts/${tipOut.ref}`);
-              // remove the tip out itself.
-              remove(`/tipOuts/${tipOut.id}`, () => {
-                // if deleting the tip out is successful, then remove it from the local
-                // in-memory redux store and then close the modal.
-                this.props.deleteTipOut(this.props.currentTipOut.id);
-                this.props.showModal(false);
-              });
-            }
-          }
-        />
-      );
-
+      clickHandler = this.handleConfirmDeleteTipOut;
       message = `Are you sure you want to permanently delete this tip out of $${this.props.currentTipOut.totalCash} for the week ending ${parseDate(this.props.currentTipOut.weekEnding)}?`;
-      actions = cancel.concat(deleteConfirm);
     }
 
     if (this.props.modalAction.modal === 'MODAL_CONFIRM_DELETE_PERSON') {
-      const deleteConfirm = (
-        <RaisedButton
-          label="Delete"
-          backgroundColor="#ff0000"
-          labelColor="#ffffff"
-          onClick={
-            () => {
-              const { tipOutRef, personKey, personId } = this.props.modalAction.data;
-              const { tipOuts, people } = this.props;
-
-              // if person is assigned an id, it means they have a record of belonging to this
-              // tip out in the person database, so remove it too.
-              if (personId) {
-                const belongsToRecord = people[personId].belongsTo;
-                const isHidden = people[personId].hidden;
-                let newBelongsToRecord = belongsToRecord.filter(record => record.id !== tipOutRef);
-                if (!newBelongsToRecord) {
-                  newBelongsToRecord = [];
-                }
-
-                this.props.firebase.set(`/people/${personId}/belongsTo`, newBelongsToRecord);
-              }
-
-              // remove person from tip out
-              this.props.firebase.remove(`/tipOuts/${tipOutRef}/people/${personKey}`);
-
-              
-              this.props.showModal(false);
-            }
-          }
-        />
-      );
-
-      // if (!this.props.CurrentPerson) {
-      //   message = '';
-      // }
-      
       message = `Are you sure you want to permanently remove ${this.state.currentPerson.displayName} from this tip out?`;
-      actions = cancel.concat(deleteConfirm);
     }
+
+    const deleteConfirm = (
+      <RaisedButton
+        label="Delete"
+        backgroundColor="#ff0000"
+        labelColor="#ffffff"
+        onClick={clickHandler}
+      />
+    );
+
+    actions = cancel.concat(deleteConfirm);
 
     if (this.props.modalAction.modal === 'MODAL_CONFIRM_DELETE' || this.props.modalAction.modal === 'MODAL_CONFIRM_DELETE_PERSON') {
       return (

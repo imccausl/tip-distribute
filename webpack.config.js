@@ -13,17 +13,13 @@ module.exports = {
     filename: './assets/[name].bundle.js',
   },
   devtool: 'cheap-module-eval-source-map',
+  resolve: {
+    extensions: ['.js', '.jsx'],
+  },
   module: {
     rules: [
       {
-        test: /\.js$/,
-        exclude: [/node_modules/],
-        use: [{
-          loader: 'babel-loader',
-        }],
-      },
-      {
-        test: /\.jsx$/,
+        test: [/\.js$/, /\.jsx$/],
         exclude: [/node_modules/],
         use: [{
           loader: 'babel-loader',

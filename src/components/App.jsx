@@ -1,9 +1,9 @@
 import React from 'react';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import AppMain from './AppMain.jsx';
-import AppLogin from './AppLogin.jsx';
-import AppBar from './AppBar.jsx';
+import AppMain from './AppMain';
+import AppLogin from './AppLogin';
+import AppBar from './AppBar';
 
 const RouteLayout = () => (
   <main>

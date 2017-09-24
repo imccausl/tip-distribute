@@ -33,16 +33,14 @@ import SvgIcon from 'material-ui/SvgIcon';
 import MoreVertIcon from 'material-ui/svg-icons/navigation/arrow-drop-down';
 import DeleteIcon from 'material-ui/svg-icons/action/delete-forever';
 import EditIcon from 'material-ui/svg-icons/editor/mode-edit';
-import MenuIcon from 'material-ui/svg-icons/navigation/menu';
 import MoneyIcon from 'material-ui/svg-icons/editor/monetization-on';
 import ContentAdd from 'material-ui/svg-icons/social/person-add';
 import { showDrawer } from '../actions/drawerActions';
 import showModal from '../actions/modalActions';
 import selectPeople from '../actions/selectEmployees';
 import updateTipOuts from '../actions/updateTipOuts';
-import makeNewId from '../helpers/makeNewId';
 import parseDate from '../helpers/dateHelpers';
-import AddPersonMenu from './AddPersonMenu.jsx';
+import AddPersonMenu from './AddPersonMenu';
 
 function mapStateToProps(state) {
   return {
@@ -85,7 +83,7 @@ export default class TipAppBar extends Component {
         />
         <Divider />
         <MenuItem
-          disabled={!(viewModel)}
+          disabled={!viewModel || viewModel.isDistributed}
           primaryText="Edit..."
           leftIcon={<EditIcon />}
           onClick={
@@ -95,7 +93,7 @@ export default class TipAppBar extends Component {
           }
         />
         <MenuItem
-          disabled={!(viewModel)}
+          disabled={!viewModel}
           primaryText="Delete..."
           leftIcon={<DeleteIcon />}
           onClick={
@@ -127,7 +125,7 @@ export default class TipAppBar extends Component {
           <ToolbarSeparator />
           <ToolbarGroup>
             <IconButton
-              disabled={!(viewModel)}
+              disabled={!viewModel || viewModel.isDistributed}
               tooltip="Add person to tipout"
               tooltipPosition="top-center"
               touch={true}

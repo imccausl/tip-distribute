@@ -88,7 +88,14 @@ class Distribution extends Component {
   }
 
   handleFinalizeTipOut() {
+    const { update } = this.props.firebase;
+    const { id } = this.props.viewModel;
+    const updatedProperties = {
+      isDistributed: true,
+      finalizedOn: Date.now(),
+    };
 
+    update(`/tipOuts/${id}`, updatedProperties).then(() => console.log('Finalized!'));
   }
 
   render() {

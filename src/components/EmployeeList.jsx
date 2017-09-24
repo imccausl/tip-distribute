@@ -31,6 +31,7 @@ export default class EmployeeList extends Component {
         <SinglePerson
           id={sortedPeople[key].id}
           belongsTo={viewModel.id}
+          isDistributed={viewModel.isDistributed}
           name={name}
           hours={sortedPeople[key].hours}
           storePeopleList={getPeopleFromStore(viewModel.storeRef, stores, people)}

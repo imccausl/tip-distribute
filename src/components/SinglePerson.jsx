@@ -156,7 +156,7 @@ export default class SinglePerson extends Component {
     const { pushWithMeta } = this.props.firebase;
 
     const deleteButton = () => {
-      if (!this.state.myKey) {
+      if (!this.state.myKey || this.props.isDistributed) {
         return null;
       }
 
@@ -184,6 +184,9 @@ export default class SinglePerson extends Component {
         <TextField
           hintText="Hours"
           floatingLabelText="Hours"
+          disabled={this.props.isDistributed}
+          underlineShow={!this.props.isDistributed}
+          inputStyle={{ color: 'blue' }}
           defaultValue={this.props.hours}
           style={hoursStyle}
           onFocus={() => this.setState({ canUpdate: true })}

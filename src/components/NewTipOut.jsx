@@ -182,7 +182,7 @@ export default class NewTipOut extends Component {
             const tipOutId = makeNewId();
             let storePeople = {};
             
-            newTipOutPeople.forEach((person) => {
+            newTipOutPeople.forEach(person => {
               const isHidden = this.props.people[person].hidden;
               const personBelongsToRecord = this.props.people[person].belongsTo;
               const newBelongsToRecord = personBelongsToRecord.concat({ id: tipOutId, pickedUp: false });

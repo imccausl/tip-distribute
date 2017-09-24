@@ -28,7 +28,9 @@ class Distribution extends Component {
   }
 
   componentWillReceiveProps(newProps) {
-    this.setState({ people: (!newProps.viewModel) ? null : newProps.viewModel.people, open: newProps.isOpen });
+    this.setState({
+      people: (!newProps.viewModel) ? null : newProps.viewModel.people, open: newProps.isOpen,
+    });
   }
 
   makeRows() {
@@ -36,7 +38,7 @@ class Distribution extends Component {
       return null;
     }
 
-    const getTipOut = (hours) => {
+    const getTipOut = hours => {
       if (!hours || !this.state.people) {
         return 0;
       }
@@ -47,44 +49,44 @@ class Distribution extends Component {
       return Math.round(parseFloat(hours) * hourlyAmount);
     }
 
-    return Object.keys(this.state.people).map((key) =>
-      {
-        const person = this.state.people[key];
-        
-        if (!person) {
-          return null;
-        }
+    return Object.keys(this.state.people).map(key => {
+      const person = this.state.people[key];
 
-        const personName = this.props.allPeople[person.id].displayName;
-        const wage = getTipOut(person.hours);
+      if (!person) {
+        return null;
+      }
 
-        const barStyle = {
-          width: `${((wage * this.props.viewModel.totalCash) / this.props.viewModel.totalCash) + 50}px`,
-          maxWidth: '100%',
-          backgroundColor: 'lightblue',
-          fontSize: '20px',
-          padding: '5px',
-          margin: '0',
-          color: 'black',
-        };
+      const personName = this.props.allPeople[person.id].displayName;
+      const wage = getTipOut(person.hours);
 
-        return (
-          <Card style={{marginBottom: '5px'}} key={person.id}>
-            <CardHeader 
-              title={personName}
-              subtitle={`Worked ${person.hours} hours`}
-            />
-            <Divider />
-            <CardText>
-              <div
-                className="bar"
-                style={barStyle}
-              >
+      const barStyle = {
+        width: `${((wage * this.props.viewModel.totalCash) / this.props.viewModel.totalCash) + 50}px`,
+        maxWidth: '100%',
+        backgroundColor: 'lightblue',
+        fontSize: '20px',
+        padding: '5px',
+        margin: '0',
+        color: 'black',
+      };
+
+      return (
+        <Card style={{marginBottom: '5px'}} key={person.id}>
+          <CardHeader 
+            title={personName}
+            subtitle={`Worked ${person.hours} hours`}
+          />
+          <Divider />
+          <CardText>
+            <div
+              className="bar"
+              style={barStyle}
+            >
               {`$${wage}`}
-              </div>
-            </CardText>
-            </Card>
-    )});
+            </div>
+          </CardText>
+        </Card>
+      );
+    });
   }
 
   handleFinalizeTipOut() {
@@ -105,29 +107,29 @@ class Distribution extends Component {
         label="Close"
         primary={true}
         onClick={() => {
-          
+  
         }}
       />,
     ];
 
-  return (
-    <Card style={{ margin: '10px 5px 5px 5px' }}>
-      <CardHeader
-        title={`Week Ending ${parseDate(this.props.viewModel.weekEnding)}`}
-        subtitle={`$${this.props.viewModel.totalCash} earned for ${this.props.viewModel.totalHours} hours | ${parseFloat(this.props.viewModel.hourlyWage).toFixed(2)}/hour`}
-        style={{ backgroundColor: 'lightgrey' }}
-      />
-      <CardText>
-        {this.makeRows()}
-      </CardText>
-      <CardActions>
-        <RaisedButton
-          label="Finalize"
-          primary={true}
-          onClick={this.handleFinalizeTipOut}
+    return (
+      <Card style={{ margin: '10px 5px 5px 5px' }}>
+        <CardHeader
+          title={`Week Ending ${parseDate(this.props.viewModel.weekEnding)}`}
+          subtitle={`$${this.props.viewModel.totalCash} earned for ${this.props.viewModel.totalHours} hours | ${parseFloat(this.props.viewModel.hourlyWage).toFixed(2)}/hour`}
+          style={{ backgroundColor: 'lightgrey' }}
         />
-      </CardActions>
-    </Card>
+        <CardText>
+          {this.makeRows()}
+        </CardText>
+        <CardActions>
+          <RaisedButton
+            label="Finalize"
+            primary={true}
+            onClick={this.handleFinalizeTipOut}
+          />
+        </CardActions>
+      </Card>
     );
   }
 }

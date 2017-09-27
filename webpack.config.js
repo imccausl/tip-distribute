@@ -6,7 +6,18 @@ module.exports = {
   context: path.join(__dirname, 'src'),
   entry: {
     app: './app.jsx',
-    vendor: ['react', 'react-dom', 'material-ui', 'react-tap-event-plugin', 'redux', 'react-redux'],
+    vendor: [
+      'react',
+      'react-dom',
+      'material-ui',
+      'react-tap-event-plugin',
+      'redux',
+      'react-redux',
+      'react-redux-firebase',
+      'react-router',
+      'react-router-dom',
+      'firebase',
+    ],
   },
   output: {
     path: path.join(__dirname, 'dist'),
@@ -21,9 +32,11 @@ module.exports = {
       {
         test: [/\.js$/, /\.jsx$/],
         exclude: [/node_modules/],
-        use: [{
-          loader: 'babel-loader',
-        }],
+        use: [
+          {
+            loader: 'babel-loader',
+          },
+        ],
       },
     ],
   },

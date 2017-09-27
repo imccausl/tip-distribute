@@ -27,35 +27,33 @@ export default class EditStorePeople extends Component {
   }
 
   render() {
-    const renderPeople = () => {
-      return this.state.userStore.people.map((person) => {
-        let personEmail = null;
-        const personRecord = this.props.allPeople[person];
+    const renderPeople = () => this.state.userStore.people.map(person => {
+      let personEmail = null;
+      const personRecord = this.props.allPeople[person];
 
-        let isHidden = null;
-        if (!personRecord.hidden) {
-          isHidden = false;
-        } else {
-          isHidden = personRecord.hidden;
-        }
+      let isHidden = null;
+      if (!personRecord.hidden) {
+        isHidden = false;
+      } else {
+        isHidden = personRecord.hidden;
+      }
 
-        if (personRecord.userRef) {
-          personEmail = this.props.users[personRecord.userRef].email;
-        }
+      if (personRecord.userRef) {
+        personEmail = this.props.users[personRecord.userRef].email;
+      }
 
-        return (
-          <StorePerson
-            key={person}
-            id={person}
-            name={personRecord.displayName}
-            partnerNum={personRecord.partnerNum}
-            storeRef={this.state.userPeopleRecord.storeRef}
-            isHidden={isHidden}
-            email={personEmail}
-          />
-        );
-      });
-    };
+      return (
+        <StorePerson
+          key={person}
+          id={person}
+          name={personRecord.displayName}
+          partnerNum={personRecord.partnerNum}
+          storeRef={this.state.userPeopleRecord.storeRef}
+          isHidden={isHidden}
+          email={personEmail}
+        />
+      );
+    });
 
     return (
       <div>
@@ -77,28 +75,33 @@ export default class EditStorePeople extends Component {
                     userRef: null,
                   };
 
-                  this.props.firebase.pushWithMeta('/people/', newPerson)
-                    .then((snapshot) => {
-                      const updatedStorePeople = this.state.userStore.people.concat(snapshot.key);
-                      this.props.firebase.set(`/stores/${this.state.userPeopleRecord.storeRef}/people`, updatedStorePeople);
-                    });
+                  this.props.firebase.pushWithMeta('/people/', newPerson).then(snapshot => {
+                    const updatedStorePeople = this.state.userStore.people.concat(snapshot.key);
+                    this.props.firebase.set(
+                      `/stores/${this.state.userPeopleRecord.storeRef}/people`,
+                      updatedStorePeople,
+                    );
+                  });
                 }}
               >
-                <SvgIcon><ContentAdd /></SvgIcon>
+                <SvgIcon>
+                  <ContentAdd />
+                </SvgIcon>
               </IconButton>
               <IconMenu
-                iconButtonElement={<IconButton><MoreVertIcon /></IconButton>}
+                iconButtonElement={
+                  <IconButton>
+                    <MoreVertIcon />
+                  </IconButton>
+                }
                 targetOrigin={{ horizontal: 'right', vertical: 'top' }}
                 anchorOrigin={{ horizontal: 'right', vertical: 'top' }}
-              >
-              </IconMenu>
+              />
             </ToolbarGroup>
           </Toolbar>
         </div>
 
-        <div style={{ margin: '120px 0 0 0' }}>
-          {renderPeople()}
-        </div>
+        <div style={{ margin: '120px 0 0 0' }}>{renderPeople()}</div>
       </div>
     );
   }

@@ -31,12 +31,16 @@ import IconMenu from 'material-ui/IconMenu';
 import MoreVertIcon from 'material-ui/svg-icons/navigation/arrow-drop-down';
 import SvgIcon from 'material-ui/SvgIcon';
 import ContentAdd from 'material-ui/svg-icons/social/person-add';
-import StoreListItem from './StoreListItem.jsx';
+import StoreListItem from './StoreListItem';
+import StoreDialog from './StoreDialog';
 
 export default class EditStoreList extends Component {
   constructor(props) {
     super(props);
 
+    this.state = {
+      open: false,
+    };
   }
 
   componentWillReceiveProps(newProps) {
@@ -48,7 +52,6 @@ export default class EditStoreList extends Component {
       const { stores } = this.props;
 
       return Object.keys(stores).map(key => {
-
         return (
           <StoreListItem
             key={key}
@@ -69,11 +72,7 @@ export default class EditStoreList extends Component {
             <ToolbarGroup>
               <IconButton
                 tooltip="Add new store"
-                onClick={() => {
-                  const newStore = {
-                   
-                  };
-                }}
+                onClick={() => this.setState({ open: true })}
               >
                 <SvgIcon><ContentAdd /></SvgIcon>
               </IconButton>
@@ -84,6 +83,7 @@ export default class EditStoreList extends Component {
         <div style={{ margin: '120px 0 0 0' }}>
           {renderStores()}
         </div>
+        <StoreDialog isOpen={this.state.open} handleClose={() => this.setState({ open: false })} />
       </div>
     );
   }

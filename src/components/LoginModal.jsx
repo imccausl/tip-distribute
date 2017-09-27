@@ -28,9 +28,12 @@ function mapStateToProps(state) {
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({
-    populateState,
-  }, dispatch);
+  return bindActionCreators(
+    {
+      populateState,
+    },
+    dispatch,
+  );
 }
 
 @firebaseConnect()
@@ -46,7 +49,6 @@ export default class LoginBox extends Component {
     // const {
     //   tipOuts,
     // } = this.props.data;
-
     // const {
     //   populateState,
     //   profile,
@@ -55,38 +57,28 @@ export default class LoginBox extends Component {
   }
 
   render() {
-    const {
-      profile,
-      authError,
-      auth,
-    } = this.props;
+    const { profile, authError, auth } = this.props;
 
     const actions = [
       <FlatButton
         disabled={!this.state.email && !this.state.password}
-        onClick={() => {
-          return this.props.firebase.login(
-            {
-              email: this.state.email,
-              password: this.state.password,
-            })
-            .catch((error) => {
-              this.setState({ email: '', password: '' });
-              console.log("Error!!!!", error, authError)
-            });
-        }}
+        onClick={() => this.props.firebase
+          .login({
+            email: this.state.email,
+            password: this.state.password,
+          })
+          .catch(error => {
+            this.setState({ email: '', password: '' });
+            console.log('Error!!!!', error, authError);
+          })}
         label="Login"
-        primary={true}
+        primary
       />,
     ];
 
     return (
-      <Dialog
-        actions={actions}
-        open={this.state.isOpen}
-        modal={true}
-      >
-        <TextField 
+      <Dialog actions={actions} open={this.state.isOpen} modal>
+        <TextField
           hintText="Email"
           floatingLabelText="Email"
           type="text"

@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { firebaseConnect } from 'react-redux-firebase';
+import { Tabs, Tab } from 'material-ui/Tabs';
+import SelectField from 'material-ui/SelectField';
+import MenuItem from 'material-ui/MenuItem';
 import Dialog from 'material-ui/Dialog';
 import TextField from 'material-ui/TextField';
 import FlatButton from 'material-ui/FlatButton';
@@ -14,8 +17,7 @@ export default class StoreDialog extends Component {
     firebase: PropTypes.shape({
       pushWithMeta: PropTypes.func.isRequired,
     }).isRequired,
-
-  }
+  };
 
   constructor(props) {
     super(props);
@@ -60,43 +62,55 @@ export default class StoreDialog extends Component {
 
   render() {
     const actions = [
-      <FlatButton
-        label="Cancel"
-        onClick={this.handleClose}
-      />,
-      <RaisedButton
-        label="Create"
-        primary={true}
-        onClick={this.handleCreateNewStore}
-      />,
+      <FlatButton label="Cancel" onClick={this.handleClose} />,
+      <RaisedButton label="Create" primary onClick={this.handleCreateNewStore} />,
     ];
 
     return (
       <Dialog
-        title="Create New Store"
+        autoScrollBodyContent
         open={this.props.isOpen}
         onRequestClose={this.handleClose}
         modal={false}
         actions={actions}
       >
-        <TextField
-          floatingLabelText="Store Name"
-          hintText="Bay & Cumberland"
-          onChange={(event, value) => this.setState({ storeName: value })}
-        />
-        <TextField
-          floatingLabelText="Store Number"
-          onChange={(event, value) => this.setState({ storeNumber: value })}
-        />
-        <TextField
-          floatingLabelText="Store Phone Number"
-          hintText="(XXX) XXX-XXXX"
-          onChange={(event, value) => this.setState({ storePhone: value })}
-        />
-        <TextField
-          floatingLabelText="Store Address"
-          onChange={(event, value) => this.setState({ storeAddress: value })}          
-        />
+        <Tabs>
+          <Tab label="Info">
+            <TextField
+              floatingLabelText="Store Name"
+              hintText="Bay & Cumberland"
+              onChange={(event, value) => this.setState({ storeName: value })}
+            />
+            <TextField
+              floatingLabelText="Store Number"
+              onChange={(event, value) => this.setState({ storeNumber: value })}
+            />
+            <TextField
+              floatingLabelText="Store Phone Number"
+              hintText="(XXX) XXX-XXXX"
+              onChange={(event, value) => this.setState({ storePhone: value })}
+            />
+            <TextField
+              floatingLabelText="Store Address"
+              onChange={(event, value) => this.setState({ storeAddress: value })}
+            />
+          </Tab>
+          <Tab label="Options">
+            <SelectField floatingLabelText="Tip Outs Expire After">
+              <MenuItem value={0} primaryText="Never" />
+              <MenuItem value={30} primaryText="30 Days" />
+              <MenuItem value={60} primaryText="60 Days" />
+              <MenuItem value={90} primaryText="90 Days" />
+            </SelectField>
+            <SelectField floatingLabelText="Round Tip Outs To Nearest">
+              <MenuItem value={'EXACT'} primaryText="Exact" />
+              <MenuItem value={'NICKEL'} primaryText="Nickel" />
+              <MenuItem value={'DIME'} primaryText="Dime" />
+              <MenuItem value={'QUARTER'} primaryText="Quarter" />
+              <MenuItem value={'DOLLAR'} primaryText="Dollar" />
+            </SelectField>
+          </Tab>
+        </Tabs>
       </Dialog>
     );
   }

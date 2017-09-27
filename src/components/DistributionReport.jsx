@@ -5,7 +5,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { firebaseConnect } from 'react-redux-firebase';
-import { Card, CardActions, CardHeader, CardTitle, CardText } from 'material-ui/Card';
+import { Card, CardActions, CardHeader, CardText } from 'material-ui/Card';
 import FlatButton from 'material-ui/FlatButton';
 import Divider from 'material-ui/Divider';
 import RaisedButton from 'material-ui/RaisedButton';
@@ -19,7 +19,7 @@ class Distribution extends Component {
     super(props);
 
     this.state = {
-      people: (!this.props.viewModel) ? null : this.props.viewModel.people,
+      people: !this.props.viewModel ? null : this.props.viewModel.people,
       open: false,
       hourlyAmount: '',
     };
@@ -29,7 +29,8 @@ class Distribution extends Component {
 
   componentWillReceiveProps(newProps) {
     this.setState({
-      people: (!newProps.viewModel) ? null : newProps.viewModel.people, open: newProps.isOpen,
+      people: !newProps.viewModel ? null : newProps.viewModel.people,
+      open: newProps.isOpen,
     });
   }
 
@@ -44,10 +45,10 @@ class Distribution extends Component {
       }
 
       const hourlyAmount = calculateWage(this.props.viewModel);
-      console.log("Hourly amount:", hourlyAmount);
+      console.log('Hourly amount:', hourlyAmount);
 
       return Math.round(parseFloat(hours) * hourlyAmount);
-    }
+    };
 
     return Object.keys(this.state.people).map(key => {
       const person = this.state.people[key];
@@ -60,7 +61,7 @@ class Distribution extends Component {
       const wage = getTipOut(person.hours);
 
       const barStyle = {
-        width: `${((wage * this.props.viewModel.totalCash) / this.props.viewModel.totalCash) + 50}px`,
+        width: `${wage * this.props.viewModel.totalCash / this.props.viewModel.totalCash + 50}px`,
         maxWidth: '100%',
         backgroundColor: 'lightblue',
         fontSize: '20px',
@@ -70,17 +71,11 @@ class Distribution extends Component {
       };
 
       return (
-        <Card style={{marginBottom: '5px'}} key={person.id}>
-          <CardHeader 
-            title={personName}
-            subtitle={`Worked ${person.hours} hours`}
-          />
+        <Card style={{ marginBottom: '5px' }} key={person.id}>
+          <CardHeader title={personName} subtitle={`Worked ${person.hours} hours`} />
           <Divider />
           <CardText>
-            <div
-              className="bar"
-              style={barStyle}
-            >
+            <div className="bar" style={barStyle}>
               {`$${wage}`}
             </div>
           </CardText>
@@ -102,32 +97,19 @@ class Distribution extends Component {
 
   render() {
     if (!this.props.viewModel) return null;
-    const actions = [
-      <FlatButton
-        label="Close"
-        primary={true}
-        onClick={() => {
-  
-        }}
-      />,
-    ];
+    const actions = [<FlatButton label="Close" primary onClick={() => {}} />];
 
     return (
       <Card style={{ margin: '10px 5px 5px 5px' }}>
         <CardHeader
           title={`Week Ending ${parseDate(this.props.viewModel.weekEnding)}`}
-          subtitle={`$${this.props.viewModel.totalCash} earned for ${this.props.viewModel.totalHours} hours | ${parseFloat(this.props.viewModel.hourlyWage).toFixed(2)}/hour`}
+          subtitle={`$${this.props.viewModel.totalCash} earned for ${this.props.viewModel
+            .totalHours} hours | ${parseFloat(this.props.viewModel.hourlyWage).toFixed(2)}/hour`}
           style={{ backgroundColor: 'lightgrey' }}
         />
-        <CardText>
-          {this.makeRows()}
-        </CardText>
+        <CardText>{this.makeRows()}</CardText>
         <CardActions>
-          <RaisedButton
-            label="Finalize"
-            primary={true}
-            onClick={this.handleFinalizeTipOut}
-          />
+          <RaisedButton label="Finalize" primary onClick={this.handleFinalizeTipOut} />
         </CardActions>
       </Card>
     );

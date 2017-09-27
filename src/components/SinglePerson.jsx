@@ -19,7 +19,6 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { firebaseConnect } from 'react-redux-firebase';
-import AutoComplete from 'material-ui/AutoComplete';
 import TextField from 'material-ui/TextField';
 import Snackbar from 'material-ui/Snackbar';
 import IconButton from 'material-ui/IconButton';
@@ -53,10 +52,12 @@ export default class SinglePerson extends Component {
     firebase: PropTypes.shape({
       pushWithMeta: PropTypes.func.isRequired,
     }).isRequired,
-    storePeopleList: PropTypes.arrayOf(PropTypes.shape({
-      id: PropTypes.string,
-      name: PropTypes.string,
-    })).isRequired,
+    storePeopleList: PropTypes.arrayOf(
+      PropTypes.shape({
+        id: PropTypes.string,
+        name: PropTypes.string,
+      }),
+    ).isRequired,
     // updatePerson: PropTypes.func.isRequired,
     selectPerson: PropTypes.func.isRequired,
     showModal: PropTypes.func.isRequired,
@@ -67,10 +68,10 @@ export default class SinglePerson extends Component {
     name: '',
     id: '',
     personRef: null,
-  }
+  };
 
   static getWindowDimensions() {
-    return (window.innerWidth >= 500) ? 500 : window.innerWidth;
+    return window.innerWidth >= 500 ? 500 : window.innerWidth;
   }
 
   constructor(props) {
@@ -114,7 +115,7 @@ export default class SinglePerson extends Component {
         hintText="Name"
         floatingLabelText="Name"
         value={this.state.nameText}
-        disabled={true}
+        disabled
         underlineShow={false}
         inputStyle={{ color: 'black' }}
         style={compStyle}
@@ -129,7 +130,7 @@ export default class SinglePerson extends Component {
     const medium = window.matchMedia('(min-width: 375px)');
     const large = window.matchMedia('(max-width: 445px)');
     const nameStyle = {
-      width: `${(this.state.width / 1.4) - 60}px`,
+      width: `${this.state.width / 1.4 - 60}px`,
       margin: '0 10px',
     };
 
@@ -169,10 +170,17 @@ export default class SinglePerson extends Component {
             margin: '5px 0',
           }}
           onClick={() => {
-            this.props.showModal(true, 'MODAL_CONFIRM_DELETE_PERSON', 'Remove Person', { personKey: this.state.myKey, personId: this.state.personId, tipOutRef: this.props.belongsTo, storeRef: this.props.storeRef });
+            this.props.showModal(true, 'MODAL_CONFIRM_DELETE_PERSON', 'Remove Person', {
+              personKey: this.state.myKey,
+              personId: this.state.personId,
+              tipOutRef: this.props.belongsTo,
+              storeRef: this.props.storeRef,
+            });
           }}
         >
-          <SvgIcon><ContentRemove /></SvgIcon>
+          <SvgIcon>
+            <ContentRemove />
+          </SvgIcon>
         </IconButton>
       );
     };
@@ -190,19 +198,15 @@ export default class SinglePerson extends Component {
           defaultValue={this.props.hours}
           style={hoursStyle}
           onFocus={() => this.setState({ canUpdate: true })}
-          onBlur={
-            (e) => {
-              const { belongsTo } = this.props;
-              if (this.state.canUpdate && this.state.newHours !== e.target.value) {
-                this.setState({ canUpdate: false, newHours: e.target.value });
-                update(
-                  `/tipOuts/${belongsTo}/people/${this.state.myKey}`,
-                  {
-                    hours: e.target.value,
-                  }).then(() => this.setState({ hasUpdated: true, updateType: 'Updated' }));
-              }
+          onBlur={e => {
+            const { belongsTo } = this.props;
+            if (this.state.canUpdate && this.state.newHours !== e.target.value) {
+              this.setState({ canUpdate: false, newHours: e.target.value });
+              update(`/tipOuts/${belongsTo}/people/${this.state.myKey}`, {
+                hours: e.target.value,
+              }).then(() => this.setState({ hasUpdated: true, updateType: 'Updated' }));
             }
-          }
+          }}
         />
         <Snackbar
           open={this.state.hasUpdated}

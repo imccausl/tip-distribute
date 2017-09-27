@@ -13,15 +13,17 @@ import MoreIcon from 'material-ui/svg-icons/navigation/more-vert';
 import { showDrawer } from '../actions/drawerActions';
 import showView from '../actions/viewAction';
 
-const Login = () => (
-  <FlatButton label="Login" />
-);
+const Login = () => <FlatButton label="Login" />;
 
 class MainBar extends Component {
   render() {
     const Logged = () => (
       <IconMenu
-        iconButtonElement={<IconButton style={{ padding: '0' }}><Avatar>P</Avatar></IconButton>}
+        iconButtonElement={
+          <IconButton style={{ padding: '0' }}>
+            <Avatar>P</Avatar>
+          </IconButton>
+        }
         targetOrigin={{ horizontal: 'right', vertical: 'top' }}
         anchorOrigin={{ horizontal: 'right', vertical: 'top' }}
       >
@@ -30,9 +32,7 @@ class MainBar extends Component {
           onClick={() => this.props.showView('SHOW_USER_PROFILE', null)}
         />
         <Divider />
-        <MenuItem
-          primaryText="Users & Permissions..."
-        />
+        <MenuItem primaryText="Users & Permissions..." />
         <MenuItem
           primaryText="Stores..."
           onClick={() => this.props.showView('SHOW_EDIT_STORES', null)}
@@ -40,29 +40,32 @@ class MainBar extends Component {
         <MenuItem
           primaryText="People..."
           onClick={() => this.props.showView('SHOW_EDIT_PEOPLE', 2, this.props.view.payload.key)}
-            />
-            <Divider />
-            <MenuItem primaryText="Sign Out"
-              onClick={() => this.props.firebase.logout()}
-            />
+        />
+        <Divider />
+        <MenuItem primaryText="Sign Out" onClick={() => this.props.firebase.logout()} />
       </IconMenu>
     );
 
     return (
       <div style={{ position: 'fixed', zIndex: 3, width: '100%', top: 0, left: 0 }}>
-          <AppBar
-            title={`${((this.props.auth.isEmpty && this.props.auth.isLoaded) || this.props.profile.name === undefined) ? 'Tip Management' : `${this.props.profile.name}`}`}
-            onLeftIconButtonTouchTap={this.props.showDrawer}
-            iconElementRight={(!this.props.auth.isEmpty && this.props.auth.isLoaded) ? <Logged /> : <Login />}
-          />
-        </div>
-        );
+        <AppBar
+          title={`${(this.props.auth.isEmpty && this.props.auth.isLoaded) ||
+          this.props.profile.name === undefined
+            ? 'Tip Management'
+            : `${this.props.profile.name}`}`}
+          onLeftIconButtonTouchTap={this.props.showDrawer}
+          iconElementRight={
+            !this.props.auth.isEmpty && this.props.auth.isLoaded ? <Logged /> : <Login />
+          }
+        />
+      </div>
+    );
   }
 }
 
 function mapStateToProps(state) {
   return {
-          showDrawer: state.showDrawer,
+    showDrawer: state.showDrawer,
     view: state.activeView,
     auth: state.firebase.auth,
     profile: state.firebase.profile,
@@ -70,7 +73,7 @@ function mapStateToProps(state) {
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({showDrawer, showView }, dispatch);
+  return bindActionCreators({ showDrawer, showView }, dispatch);
 }
 
 export default firebaseConnect()(connect(mapStateToProps, mapDispatchToProps)(MainBar));

@@ -27,9 +27,12 @@ function mapPropsToState(state) {
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({
-    showModal,
-  }, dispatch);
+  return bindActionCreators(
+    {
+      showModal,
+    },
+    dispatch,
+  );
 }
 
 @firebaseConnect()
@@ -87,7 +90,7 @@ export default class NewTipOut extends Component {
 
   constructor(props) {
     super(props);
-    console.log(props.modalAction)
+    console.log(props.modalAction);
     const { adminAppState, people, profile } = this.props;
     let currTipOut = null;
     let currTipOutId = null;
@@ -95,7 +98,7 @@ export default class NewTipOut extends Component {
     if (this.props.modalAction && this.props.modalAction.data) {
       const tipOutId = this.props.modalAction.data.currTipOutId;
 
-      if (tipOutId !== 'NEW_TIP_OUT') { 
+      if (tipOutId !== 'NEW_TIP_OUT') {
         currTipOut = adminAppState[currTipOutId];
         currTipOutId = tipOutId;
       } else {
@@ -105,9 +108,8 @@ export default class NewTipOut extends Component {
 
     this.state = {
       newDate: NewTipOut.getNearestWeekEnding(),
-      newWeekEnding: (!currTipOut) ?
-        NewTipOut.getNearestWeekEnding() : currTipOut.weekEnding,
-      newTotalCash: (!currTipOut) ? '200' : currTipOut.totalCash,
+      newWeekEnding: !currTipOut ? NewTipOut.getNearestWeekEnding() : currTipOut.weekEnding,
+      newTotalCash: !currTipOut ? '200' : currTipOut.totalCash,
       currTipOutId,
       currTipOut,
       newStore: '',
@@ -130,22 +132,17 @@ export default class NewTipOut extends Component {
     this.setState({
       currTipOutId,
       currTipOut,
-      newTotalCash: (!currTipOut) ? '200' : currTipOut.totalCash,
-      newStore: (!people || !profile.ref) ? '' : people[profile.ref].storeRef,
+      newTotalCash: !currTipOut ? '200' : currTipOut.totalCash,
+      newStore: !people || !profile.ref ? '' : people[profile.ref].storeRef,
     });
   }
 
   populateStoreMenu() {
     const { stores } = this.props;
 
-    return Object.keys(stores)
-      .map(key => (
-        <MenuItem
-          key={key}
-          value={key}
-          primaryText={stores[key].storeNum}
-        />
-      ));
+    return Object.keys(stores).map(key => (
+      <MenuItem key={key} value={key} primaryText={stores[key].storeNum} />
+    ));
   }
 
   handleStoreSelectorChange(e, i, v) {
@@ -155,14 +152,16 @@ export default class NewTipOut extends Component {
   render() {
     let modalButton = null;
     let defaultDate = '';
-    const disabledButton = !(this.props.adminAppState);
-    const cancelButton = [(<FlatButton
-      label="Cancel"
-      disabled={disabledButton}
-      onClick={() => this.props.showModal('', false)}
-    />)];
+    const disabledButton = !this.props.adminAppState;
+    const cancelButton = [
+      <FlatButton
+        label="Cancel"
+        disabled={disabledButton}
+        onClick={() => this.props.showModal('', false)}
+      />,
+    ];
 
-    if ((!this.props.modalAction)) {
+    if (!this.props.modalAction) {
       return null;
     }
 
@@ -181,11 +180,14 @@ export default class NewTipOut extends Component {
             const newTipOutPeople = this.props.stores[this.state.newStore].people;
             const tipOutId = makeNewId();
             let storePeople = {};
-            
+
             newTipOutPeople.forEach(person => {
               const isHidden = this.props.people[person].hidden;
               const personBelongsToRecord = this.props.people[person].belongsTo;
-              const newBelongsToRecord = personBelongsToRecord.concat({ id: tipOutId, pickedUp: false });
+              const newBelongsToRecord = personBelongsToRecord.concat({
+                id: tipOutId,
+                pickedUp: false,
+              });
 
               // only add people to the tip out if they are not flagged for removal from store.
               if (!isHidden) {
@@ -199,7 +201,7 @@ export default class NewTipOut extends Component {
                 };
 
                 // create record for each person now belonging to tip out
-                console.log("Adding record:", newBelongsToRecord);
+                console.log('Adding record:', newBelongsToRecord);
                 this.props.firebase.set(`/people/${person}/belongsTo`, newBelongsToRecord);
               }
             });
@@ -217,20 +219,22 @@ export default class NewTipOut extends Component {
               },
             };
 
-            this.props.firebase.update( '/tipOuts', newTipOut);
+            this.props.firebase.update('/tipOuts', newTipOut);
             const newTipOutsCreated = { id: tipOutId };
 
-            // create record of new tip out in tipOuts key of store 
+            // create record of new tip out in tipOuts key of store
             console.log(newTipOutsCreated);
-            this.props.firebase.pushWithMeta(`/stores/${this.state.newStore}/tipOuts`, newTipOutsCreated)
-              .then((snapshot) => {
-                console.log("Do I ever get here?", snapshot.key);
+            this.props.firebase
+              .pushWithMeta(`/stores/${this.state.newStore}/tipOuts`, newTipOutsCreated)
+              .then(snapshot => {
+                console.log('Do I ever get here?', snapshot.key);
                 this.props.firebase.update(`/tipOuts/${tipOutId}/`, { ref: snapshot.key });
               });
 
             this.props.showModal(false);
           }}
-        />);
+        />
+      );
     } else if (this.props.modalAction.modal === 'EDIT_TIP_OUT_MODAL') {
       defaultDate = this.state.currTipOut.weekEnding;
 
@@ -240,18 +244,21 @@ export default class NewTipOut extends Component {
           primary={defaults}
           keyboardFocused={defaults.keyboardFocused}
           onClick={() => {
-            this.props.firebase.update(`/tipOuts/${this.state.currTipOutId}`,
-              {
-                weekEnding: this.state.newDate,
-                totalCash: this.state.newTotalCash,
-              });
+            this.props.firebase.update(`/tipOuts/${this.state.currTipOutId}`, {
+              weekEnding: this.state.newDate,
+              totalCash: this.state.newTotalCash,
+            });
 
             this.props.showModal(false);
           }}
-        />);
+        />
+      );
     }
 
-    if (this.props.modalAction.modal === 'EDIT_TIP_OUT_MODAL' || this.props.modalAction.modal === 'ADD_NEW_TIP_OUT') {
+    if (
+      this.props.modalAction.modal === 'EDIT_TIP_OUT_MODAL' ||
+      this.props.modalAction.modal === 'ADD_NEW_TIP_OUT'
+    ) {
       const actions = cancelButton.concat(modalButton);
 
       return (
@@ -291,4 +298,3 @@ export default class NewTipOut extends Component {
     return null;
   }
 }
-

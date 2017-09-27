@@ -33,12 +33,16 @@ export default class StoreListItem extends Component {
     return (
       <Card style={{ maxWidth: '90%', margin: '5px auto' }}>
         <CardHeader
-          title={storeData.address}
+          title={storeData.storeName}
           subtitle={storeData.storeNum}
         />
+        <CardText>
+          {storeData.address}<br />
+          {storeData.storePhone}
+        </CardText>
         <CardActions>
           <FlatButton
-            label={'Delete'}
+            label="Remove"
             icon={<ContentRemove />}
             onClick={this.handleRemoveStore}
           />

@@ -123,15 +123,18 @@ export default class NewTipOut extends Component {
     const { adminAppState, people, profile } = nextProps;
     let currTipOutId = null;
     let currTipOut = null;
+    let newDate = null;
 
     if (nextProps.modalAction && nextProps.modalAction.data) {
       currTipOutId = nextProps.modalAction.data.currTipOutId;
       currTipOut = adminAppState[currTipOutId];
+      newDate = currTipOut ? currTipOut.weekEnding : NewTipOut.getNearestWeekEnding();
     }
 
     this.setState({
       currTipOutId,
       currTipOut,
+      newDate,
       newTotalCash: !currTipOut ? '200' : currTipOut.totalCash,
       newStore: !people || !profile.ref ? '' : people[profile.ref].storeRef,
     });
@@ -183,7 +186,7 @@ export default class NewTipOut extends Component {
 
             newTipOutPeople.forEach(person => {
               const isHidden = this.props.people[person].hidden;
-              const personBelongsToRecord = this.props.people[person].belongsTo;
+              const personBelongsToRecord = this.props.people[person].belongsTo || [];
               const newBelongsToRecord = personBelongsToRecord.concat({
                 id: tipOutId,
                 pickedUp: false,
@@ -237,7 +240,7 @@ export default class NewTipOut extends Component {
       );
     } else if (this.props.modalAction.modal === 'EDIT_TIP_OUT_MODAL') {
       defaultDate = this.state.currTipOut.weekEnding;
-
+      console.log(this.state.currTipOut.weekEnding);
       modalButton = (
         <FlatButton
           label="Change"

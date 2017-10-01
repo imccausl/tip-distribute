@@ -10,7 +10,6 @@ module.exports = {
       'react',
       'react-dom',
       'material-ui',
-      'react-tap-event-plugin',
       'redux',
       'react-redux',
       'react-redux-firebase',

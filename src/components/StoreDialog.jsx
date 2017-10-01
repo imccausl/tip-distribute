@@ -31,11 +31,15 @@ export default class StoreDialog extends Component {
       errStoreName: null,
       errStoreAddress: null,
       errStorePhone: null,
+      expireLength: 90,
+      roundToNearest: 'DOLLAR',
       hasError: false,
     };
 
     this.handleClose = this.handleClose.bind(this);
     this.handleCreateNewStore = this.handleCreateNewStore.bind(this);
+    this.handleExpireSelect = this.handleExpireSelect.bind(this);
+    this.handleRoundingSelect = this.handleRoundingSelect.bind(this);
   }
 
   handleClose() {
@@ -58,6 +62,15 @@ export default class StoreDialog extends Component {
         this.handleClose();
       });
     }
+  }
+
+  handleExpireSelect(e, i, value) {
+    console.log(value);
+    this.setState({ expireLength: value });
+  }
+
+  handleRoundingSelect(e, i, value) {
+    this.setState({ roundToNearest: value });
   }
 
   render() {
@@ -96,13 +109,21 @@ export default class StoreDialog extends Component {
             />
           </Tab>
           <Tab label="Options">
-            <SelectField floatingLabelText="Tip Outs Expire After">
+            <SelectField
+              floatingLabelText="Tip Outs Expire After"
+              value={this.state.expireLength}
+              onChange={this.handleExpireSelect}
+            >
               <MenuItem value={0} primaryText="Never" />
               <MenuItem value={30} primaryText="30 Days" />
               <MenuItem value={60} primaryText="60 Days" />
               <MenuItem value={90} primaryText="90 Days" />
             </SelectField>
-            <SelectField floatingLabelText="Round Tip Outs To Nearest">
+            <SelectField
+              floatingLabelText="Round Tip Outs To Nearest"
+              value={this.state.roundToNearest}
+              onChange={this.handleRoundingSelect}
+            >
               <MenuItem value={'EXACT'} primaryText="Exact" />
               <MenuItem value={'NICKEL'} primaryText="Nickel" />
               <MenuItem value={'DIME'} primaryText="Dime" />

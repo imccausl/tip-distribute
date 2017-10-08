@@ -28,7 +28,7 @@ describe('filterUsersAddedToTipOut', () => {
   ];
 
   it('should not show users already added to the current tip out', () => {
-    let newArray = filterUsersAddedToTipOut(allUsersStub, usersAddedStub);
+    const newArray = filterUsersAddedToTipOut(allUsersStub, usersAddedStub);
     expect(newArray).to.deep.equal(result);
   });
 });

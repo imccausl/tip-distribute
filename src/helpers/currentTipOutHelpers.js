@@ -3,8 +3,8 @@ export function getPeopleFromTipOut(tipOut) {
 }
 
 export function doesPersonExist(list, name) {
-  const personExists = list.map(person => person.displayName.toLowerCase()
-    .indexOf(name.toLowerCase()))
+  const personExists = list
+    .map(person => person.displayName.toLowerCase().indexOf(name.toLowerCase()))
     .filter(value => value !== -1);
   if (!personExists.toString()) {
     return false;
@@ -18,18 +18,19 @@ export function getIdOfStorePersonFromName(name, storeRef, stores, people) {
   let allStorePeople = {};
 
   // make a people object from the storePeople array
-  storePeople.forEach((personId) => {
+  storePeople.forEach(personId => {
     allStorePeople = {
       ...allStorePeople,
       [personId]: people[personId],
     };
   });
 
-  // get the key -- there should only be one, since we are searching by store people, 
+  // get the key -- there should only be one, since we are searching by store people,
   // otherwise we're grabbing the first one. This *could* be potentially problematic,
   // but this problem is an extreme edge case.
   const personKey = Object.keys(allStorePeople)
-    .filter(key => allStorePeople[key].displayName.toLowerCase() === name.toLowerCase()).shift();
+    .filter(key => allStorePeople[key].displayName.toLowerCase() === name.toLowerCase())
+    .shift();
 
   return personKey || null;
 }
@@ -41,16 +42,14 @@ export function getAllPeopleBelongingToTipOut(tipOut) {
 }
 
 export function getPeopleFromStore(storeNum, stores, people) {
-  return stores[storeNum].people.map((id) => {
-    return {
-      id,
-      name: people[id].displayName,
-    };
-  });
+  return stores[storeNum].people.map(id => ({
+    id,
+    name: people[id].displayName,
+  }));
 }
 
 export function sortByLastName(people) {
-  const getLastName = (name) => {
+  const getLastName = name => {
     // TODO: Get the last word in a name to use as last name, identify and flag phantoms for separate sorting"
     // This is a VERY rudientary sorting agorithm at the moment, and I intend to replace it with something better.
     const nameParts = name.split(' ');
@@ -68,7 +67,7 @@ export function sortByLastName(people) {
 
   const sortedPeople = {};
 
-  sortedKeys.forEach((key) => {
+  sortedKeys.forEach(key => {
     sortedPeople[key] = people[key];
   });
 
@@ -83,4 +82,15 @@ export function filterUsersAddedToTipOut(allUsers, usersAdded) {
   // since anyone is a potential 'phantom' (sbux word for fill-in barista from another store)...
   // .. maybe it's the ALS software's name for it. Whatever.
   return Object.keys(allUsers).filter(user => compareTo.indexOf(user) === -1);
+}
+
+export function calculateExpiry(dateCreated, daysTillExpired) {
+  // get current date, subtract from expiry date and return how many days until tip out expires.
+  const today = Date.now();
+  const timePassed = today - Date.parse(dateCreated);
+  // TODO: account for daylight savings time and other oddities.
+  // milliseconds / seconds / minutes / hours-in-a-day
+  const daysPassed = timePassed / 1000 / 60 / 60 / 24;
+
+  return Math.ceil(daysTillExpired - daysPassed);
 }

@@ -9,6 +9,8 @@ import { Card, CardActions, CardHeader, CardText } from 'material-ui/Card';
 import FlatButton from 'material-ui/FlatButton';
 import Divider from 'material-ui/Divider';
 import RaisedButton from 'material-ui/RaisedButton';
+import { Toolbar, ToolbarGroup } from 'material-ui/Toolbar';
+import GenericAvatar from 'material-ui/svg-icons/action/face';
 import { hideModal } from '../actions/modalActions';
 import { calculateWage } from '../helpers/populateStateHelpers';
 import parseDate from '../helpers/dateHelpers';
@@ -45,6 +47,8 @@ class Distribution extends Component {
       }
 
       const hourlyAmount = calculateWage(this.props.viewModel);
+      // calculating the hourly amount here is expensive: it does it for every single person.
+      // move to componentWillReceiveProps() and do it once, only if/when props (ie. viewModel) change.
       console.log('Hourly amount:', hourlyAmount);
 
       return Math.round(parseFloat(hours) * hourlyAmount);
@@ -72,7 +76,11 @@ class Distribution extends Component {
 
       return (
         <Card style={{ marginBottom: '5px' }} key={person.id}>
-          <CardHeader title={personName} subtitle={`Worked ${person.hours} hours`} />
+          <CardHeader
+            title={personName}
+            subtitle={`Worked ${person.hours} hours`}
+            avatar={<GenericAvatar />}
+          />
           <Divider />
           <CardText>
             <div className="bar" style={barStyle}>
@@ -100,18 +108,27 @@ class Distribution extends Component {
     const actions = [<FlatButton label="Close" primary onClick={() => {}} />];
 
     return (
-      <Card style={{ margin: '10px 5px 5px 5px' }}>
-        <CardHeader
-          title={`Week Ending ${parseDate(this.props.viewModel.weekEnding)}`}
-          subtitle={`$${this.props.viewModel.totalCash} earned for ${this.props.viewModel
-            .totalHours} hours | ${parseFloat(this.props.viewModel.hourlyWage).toFixed(2)}/hour`}
-          style={{ backgroundColor: 'lightgrey' }}
-        />
-        <CardText>{this.makeRows()}</CardText>
-        <CardActions>
-          <RaisedButton label="Finalize" primary onClick={this.handleFinalizeTipOut} />
-        </CardActions>
-      </Card>
+      <div>
+        <Toolbar style={{ position: 'fixed', left: '0', top: '60px', width: '100%', zIndex: '5' }}>
+          <ToolbarGroup firstChild>
+            <div style={{ fontFamily: 'Roboto', paddingLeft: '25px' }}>
+              <div style={{ fontSize: '16px', fontWeight: 'bold' }}>
+                {`Week Ending ${parseDate(this.props.viewModel.weekEnding)}`}
+              </div>
+              <div style={{ fontSize: '14px', fontWeight: 'normal' }}>
+                {`$${this.props.viewModel.totalCash} | ${this.props.viewModel
+                  .totalHours} hours | ${parseFloat(this.props.viewModel.hourlyWage).toFixed(
+                  2,
+                )}/hour`}
+              </div>
+            </div>
+          </ToolbarGroup>
+          <ToolbarGroup lastChild>
+            <RaisedButton label="Finalize" primary onClick={this.handleFinalizeTipOut} />
+          </ToolbarGroup>
+        </Toolbar>
+        <div style={{ margin: '120px 5px 5px 5px' }}>{this.makeRows()}</div>
+      </div>
     );
   }
 }

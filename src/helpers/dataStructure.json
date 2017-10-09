@@ -1,6 +1,6 @@
 {
   "users": {
-      "uK5mp44wMxMGB3ELS1taXbSutZO2": {
+    "uK5mp44wMxMGB3ELS1taXbSutZO2": {
       "ref": "0u",
       "photoURL": null,
       "email": "imccausl@gmail.com",
@@ -26,16 +26,14 @@
     "1u": {
       "displayName": "Sam C",
       "partnerNum": "",
-      "storeRef": "1s",      
+      "storeRef": "1s",
       "totalHours": null,
-      "belongsTo": [
-        { "id": "2z", "pickedUp": false }
-      ]
+      "belongsTo": [{ "id": "2z", "pickedUp": false }]
     },
     "2u": {
       "displayName": "Susan",
       "totalHours": null,
-      "storeRef": "1s",      
+      "storeRef": "1s",
       "belongsTo": [
         { "id": "1z", "pickedUp": false },
         { "id": "2z", "pickedUp": false }
@@ -52,7 +50,7 @@
     "4u": {
       "displayName": "Jun hee",
       "totalHours": null,
-      "storeRef": "1s",      
+      "storeRef": "1s",
       "belongsTo": [
         { "id": "1z", "pickedUp": false },
         { "id": "2z", "pickedUp": false }
@@ -61,7 +59,7 @@
     "5u": {
       "displayName": "Kathleen",
       "totalHours": null,
-      "storeRef": "1s",      
+      "storeRef": "1s",
       "belongsTo": [
         { "id": "1z", "pickedUp": false },
         { "id": "2z", "pickedUp": false }
@@ -70,7 +68,7 @@
     "6u": {
       "displayName": "Tina",
       "totalHours": null,
-      "storeRef": "1s",      
+      "storeRef": "1s",
       "belongsTo": [
         { "id": "1z", "pickedUp": false },
         { "id": "2z", "pickedUp": false }
@@ -79,7 +77,7 @@
     "7u": {
       "displayName": "Jung ah",
       "totalHours": null,
-      "storeRef": "1s",      
+      "storeRef": "1s",
       "belongsTo": [
         { "id": "1z", "pickedUp": false },
         { "id": "2z", "pickedUp": false }
@@ -95,7 +93,7 @@
     },
     "9u": {
       "displayName": "Shikha",
-      "storeRef": "1s",      
+      "storeRef": "1s",
       "belongsTo": [
         { "id": "1z", "pickedUp": false },
         { "id": "2z", "pickedUp": false }
@@ -104,7 +102,7 @@
     "10u": {
       "displayName": "Jeanyoung",
       "totalHours": null,
-      "storeRef": "1s",      
+      "storeRef": "1s",
       "belongsTo": [
         { "id": "1z", "pickedUp": false },
         { "id": "2z", "pickedUp": false }
@@ -113,7 +111,7 @@
     "11u": {
       "displayName": "Giselle",
       "totalHours": null,
-      "storeRef": "1s",      
+      "storeRef": "1s",
       "belongsTo": [
         { "id": "1z", "pickedUp": false },
         { "id": "2z", "pickedUp": false }
@@ -122,7 +120,7 @@
     "12u": {
       "displayName": "Kirsten",
       "totalHours": null,
-      "storeRef": "1s",      
+      "storeRef": "1s",
       "belongsTo": [
         { "id": "1z", "pickedUp": false },
         { "id": "2z", "pickedUp": false }
@@ -131,7 +129,7 @@
     "13u": {
       "displayName": "Drishti",
       "totalHours": null,
-      "storeRef": "1s",      
+      "storeRef": "1s",
       "belongsTo": [
         { "id": "1z", "pickedUp": false },
         { "id": "2z", "pickedUp": false }
@@ -140,16 +138,16 @@
     "14u": {
       "displayName": "Khavy",
       "totalHours": null,
-      "storeRef": "1s",      
+      "storeRef": "1s",
       "belongsTo": [
-          { "id": "1z", "pickedUp": false },
-          { "id": "2z", "pickedUp": false }
+        { "id": "1z", "pickedUp": false },
+        { "id": "2z", "pickedUp": false }
       ]
     },
     "15u": {
       "displayName": "Olachi",
       "totalHours": null,
-      "storeRef": "1s",      
+      "storeRef": "1s",
       "belongsTo": [
         { "id": "1z", "pickedUp": false },
         { "id": "2z", "pickedUp": false }
@@ -158,7 +156,7 @@
     "16u": {
       "displayName": "Trevor",
       "totalHours": null,
-      "storeRef": "1s",      
+      "storeRef": "1s",
       "belongsTo": [
         { "id": "1z", "pickedUp": false },
         { "id": "2z", "pickedUp": false }
@@ -167,44 +165,32 @@
     "17u": {
       "displayName": "Phantom 1371141",
       "totalHours": null,
-      "belongsTo": [
-        { "id": "2z", "pickedUp": false }
-      ]
+      "belongsTo": [{ "id": "2z", "pickedUp": false }]
     },
     "18u": {
       "displayName": "Phantom 2083962",
       "totalHours": null,
-      "belongsTo": [
-        { "id": "2z", "pickedUp": false }
-      ]
+      "belongsTo": [{ "id": "2z", "pickedUp": false }]
     },
     "19u": {
       "displayName": "Phantom 2112628",
       "totalHours": null,
-      "belongsTo": [
-        { "id": "2z", "pickedUp": false }
-      ]
+      "belongsTo": [{ "id": "2z", "pickedUp": false }]
     },
     "20u": {
       "displayName": "Phantom 2237721",
       "totalHours": null,
-      "belongsTo": [
-        { "id": "2z", "pickedUp": false }
-      ]
+      "belongsTo": [{ "id": "2z", "pickedUp": false }]
     },
     "21u": {
       "displayName": "Phantom 2282726",
       "totalHours": null,
-      "belongsTo": [
-        { "id": "2z", "pickedUp": false }
-      ]
+      "belongsTo": [{ "id": "2z", "pickedUp": false }]
     },
     "22u": {
       "displayName": "Phantom 2354731",
       "totalHours": null,
-      "belongsTo": [
-        { "id": "2z", "pickedUp": false }
-      ]
+      "belongsTo": [{ "id": "2z", "pickedUp": false }]
     }
   },
   "roles": {
@@ -221,7 +207,11 @@
   "stores": {
     "1s": {
       "storeNum": "4402",
+      "storeName": "Bay & Cumberland",
       "address": "1250 Bay Street Toronto, ON",
+      "storePhone": "xxxxxxxxxx",
+      "expireLengthDays": "90",
+      "roundToNearest": "QUARTER",
       "tipOuts": {
         "zz4402-001": {
           "createdBy": "uK5mp44wMxMGB3ELS1taXbSutZO2",
@@ -257,20 +247,12 @@
     "2s": {
       "storeNum": "22841",
       "address": "Cumberland & Critchley Lane Toronto, ON",
-      "people": [
-        "17u",
-        "18u",
-        "19u",
-        "20u",
-        "21u",
-        "22u"
-      ]
+      "people": ["17u", "18u", "19u", "20u", "21u", "22u"]
     },
     "0s": {
       "storeNum": "000000",
       "address": "Unassigned",
-      "people": [
-      ]
+      "people": []
     }
   },
   "tipOuts": {

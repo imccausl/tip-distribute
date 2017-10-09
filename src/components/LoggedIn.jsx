@@ -3,9 +3,9 @@ import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { firebaseConnect, isLoaded, isEmpty } from 'react-redux-firebase';
-import ViewArea from './ViewArea.jsx';
-import BottomBar from './BottomBar.jsx';
-import TipOutDrawer from './TipOutDrawer.jsx';
+import ViewArea from './ViewArea';
+import BottomBar from './BottomBar';
+import TipOutDrawer from './TipOutDrawer';
 import initializeMainState from '../helpers/populateStateHelpers';
 
 function mapStateToProps(state) {
@@ -18,9 +18,7 @@ function mapStateToProps(state) {
   };
 }
 
-function mapDispatchToProps(dispatch) {
-
-}
+function mapDispatchToProps(dispatch) {}
 
 @firebaseConnect(['tipOuts', 'people', 'stores', 'users'])
 @connect(mapStateToProps)
@@ -46,12 +44,7 @@ export default class LoggedIn extends Component {
       return null;
     }
 
-    const {
-      tipOuts,
-      people,
-      stores,
-      profile,
-    } = newState;
+    const { tipOuts, people, stores, profile } = newState;
 
     if (isLoaded(tipOuts, people, stores, profile)) {
       const INIT_TYPE = 'USER_TIPS';
@@ -73,21 +66,21 @@ export default class LoggedIn extends Component {
     const { people, stores, profile, users } = this.props;
     return (
       <div>
-          <TipOutDrawer
-            adminAppState={adminAppState}
-            userAppState={userAppState}
-            people={people}
-            stores={stores}
-            profile={profile}
-          />
-          <ViewArea 
-            adminAppState={adminAppState}
-            people={people}
-            stores={stores}
-            profile={profile}
-            users={users}
-          />
-          <BottomBar />
+        <TipOutDrawer
+          adminAppState={adminAppState}
+          userAppState={userAppState}
+          people={people}
+          stores={stores}
+          profile={profile}
+        />
+        <ViewArea
+          adminAppState={adminAppState}
+          people={people}
+          stores={stores}
+          profile={profile}
+          users={users}
+        />
+        <BottomBar />
       </div>
     );
   }

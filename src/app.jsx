@@ -4,7 +4,7 @@ import { Provider } from 'react-redux';
 import { createStore, compose } from 'redux';
 import { reactReduxFirebase } from 'react-redux-firebase';
 import * as firebase from 'firebase';
-import App from './components/App.jsx';
+import App from './components/App';
 import rootReducer from './reducers/index';
 import firebaseConfig from './config/firebaseConfig';
 

@@ -13,7 +13,7 @@ const RouteLayout = () => (
 );
 
 const App = () => (
-  <div style={{ maxWidth: '700px', margin: '0 auto' }}>
+  <div>
     <MuiThemeProvider>
       <AppBar />
     </MuiThemeProvider>

@@ -10,6 +10,7 @@ import FlatButton from 'material-ui/FlatButton';
 import Divider from 'material-ui/Divider';
 import RaisedButton from 'material-ui/RaisedButton';
 import { Toolbar, ToolbarGroup } from 'material-ui/Toolbar';
+import Avatar from 'material-ui/Avatar';
 import GenericAvatar from 'material-ui/svg-icons/action/face';
 import { hideModal } from '../actions/modalActions';
 import { calculateWage } from '../helpers/populateStateHelpers';
@@ -79,7 +80,11 @@ class Distribution extends Component {
           <CardHeader
             title={personName}
             subtitle={`Worked ${person.hours} hours`}
-            avatar={<GenericAvatar />}
+            avatar={
+              <Avatar>
+                <GenericAvatar />
+              </Avatar>
+            }
           />
           <Divider />
           <CardText>

@@ -48,12 +48,22 @@ export default class StoreDialog extends Component {
 
   handleCreateNewStore() {
     const { pushWithMeta } = this.props.firebase;
-    const { storeNumber, storeName, storeAddress, storePhone, hasError } = this.state;
+    const {
+      storeNumber,
+      storeName,
+      storeAddress,
+      storePhone,
+      hasError,
+      expireLength,
+      roundToNearest,
+    } = this.state;
     const newStore = {
       storeNum: storeNumber,
       storeName,
       address: storeAddress,
       storePhone,
+      expireLengthDays: expireLength,
+      roundToNearest,
     };
 
     if (!hasError) {
@@ -65,7 +75,6 @@ export default class StoreDialog extends Component {
   }
 
   handleExpireSelect(e, i, value) {
-    console.log(value);
     this.setState({ expireLength: value });
   }
 

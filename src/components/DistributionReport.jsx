@@ -71,7 +71,7 @@ class Distribution extends Component {
         backgroundColor: 'lightblue',
         fontSize: '20px',
         padding: '5px',
-        margin: '0',
+        margin: '5px 0 0 58px',
         color: 'black',
       };
 
@@ -85,13 +85,14 @@ class Distribution extends Component {
                 <GenericAvatar />
               </Avatar>
             }
-          />
-          <Divider />
-          <CardText>
+            actAsExpander
+          >
             <div className="bar" style={barStyle}>
               {`$${wage}`}
             </div>
-          </CardText>
+          </CardHeader>
+          <Divider />
+          <CardText expandable />
         </Card>
       );
     });

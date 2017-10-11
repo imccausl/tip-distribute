@@ -4,8 +4,8 @@ import { withRouter } from 'react-router-dom';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import darkBaseTheme from 'material-ui/styles/baseThemes/darkBaseTheme';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
-import LoggedIn from './LoggedIn.jsx';
-import UserIsAuthenticated from './UserIsAuthenticated.jsx';
+import LoggedIn from './LoggedIn';
+import UserIsAuthenticated from './UserIsAuthenticated';
 
 @UserIsAuthenticated
 class AppMain extends Component {

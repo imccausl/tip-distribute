@@ -1,6 +1,11 @@
 /* Distribution.jsx
- * Display the total tipout for each employee
+ * Display the total tipout for each employee and
+ * allows for the attaching of messages and checking of status.
+ * 
+ * TODO: Add character restriction to message (240 char).
+ * TODO: Pull out individual person card view into its own component.
  */
+
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';

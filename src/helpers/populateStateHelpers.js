@@ -14,10 +14,8 @@ function matchPeopleToTipOuts(tipOut, allPeople) {
     tipOutPeopleWithNames = {
       ...tipOutPeopleWithNames,
       [person]: {
-        belongsTo: personObj.belongsTo,
-        id: personId,
+        ...personObj,
         name: displayName,
-        hours: personObj.hours,
       },
     };
   });

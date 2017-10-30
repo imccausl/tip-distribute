@@ -1,5 +1,5 @@
 /* Distribution.jsx
- * Display the total tipout for each employee 
+ * Display the total tipout for each employee
  */
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
@@ -25,18 +25,32 @@ class Distribution extends Component {
 
     this.state = {
       people: !this.props.viewModel ? null : this.props.viewModel.people,
+      tipOutId: !this.props.viewModel.id ? null : this.props.viewModel.id,
       open: false,
+      canUpdateMessage: false,
       hourlyAmount: '',
     };
 
     this.handleFinalizeTipOut = this.handleFinalizeTipOut.bind(this);
+    this.handleMessageChange = this.handleMessageChange.bind(this);
   }
 
   componentWillReceiveProps(newProps) {
     this.setState({
       people: !newProps.viewModel ? null : newProps.viewModel.people,
+      tipOutId: !this.props.viewModel.id ? null : this.props.viewModel.id,
+      canUpdateMessage: false,
       open: newProps.isOpen,
     });
+  }
+
+  handleMessageChange(person, message) {
+    const { update } = this.props.firebase;
+    const { tipOutId } = this.state;
+
+    update(`/tipOuts/${tipOutId}/people/${person}`, { message }).then(() =>
+      console.log('Updated message.'),
+    );
   }
 
   makeRows() {
@@ -70,7 +84,7 @@ class Distribution extends Component {
 
       const personName = this.props.allPeople[person.id].displayName;
       const wage = getTipOut(person.hours);
-
+      console.log(person);
       const barStyle = {
         width: `${wage * this.props.viewModel.totalCash / this.props.viewModel.totalCash + 50}px`,
         maxWidth: '100%',
@@ -100,17 +114,30 @@ class Distribution extends Component {
           </CardHeader>
           <Divider />
           <CardText expandable>
-            <TextField
-              multiLine
-              floatingLabelText="Message"
-              style={{ padding: '0 5px', width: '90%' }}
-              rows={3}
-            />
+            <div>
+              <h2>Message</h2>
+              <TextField
+                multiLine
+                hintText="Attach a message to this tip out by typing it here."
+                style={{ padding: '0 5px', width: '90%' }}
+                rows={3}
+                defaultValue={person.message || ''}
+                // onFocus={() => this.setState({ canUpdateMessage: true })}
+                onBlur={event => {
+                  if (this.state.canUpdateMessage) {
+                    this.setState({ canUpdateMessage: false });
+                    this.handleMessageChange(key, event.target.value);
+                  }
+                }}
+                onChange={() => this.setState({ canUpdateMessage: true })}
+              />
+            </div>
           </CardText>
           <Divider />
           <CardText expandable>
+            <h2>Status</h2>
             <Chip style={tipChipStyle}>Tip Out Expires in XX Days</Chip>
-            <Chip stype={tipChipStyle}>Tip Out Status</Chip>
+            <Chip stype={tipChipStyle}>{`${personName} hasn't picked up this tip out yet`}</Chip>
           </CardText>
         </Card>
       );
@@ -142,9 +169,7 @@ class Distribution extends Component {
               </div>
               <div style={{ fontSize: '14px', fontWeight: 'normal' }}>
                 {`$${this.props.viewModel.totalCash} | ${this.props.viewModel
-                  .totalHours} hours | $${parseFloat(this.props.viewModel.hourlyWage).toFixed(
-                  2,
-                )}/hour`}
+                  .totalHours} hrs | $${parseFloat(this.props.viewModel.hourlyWage).toFixed(2)}/hr`}
               </div>
             </div>
           </ToolbarGroup>

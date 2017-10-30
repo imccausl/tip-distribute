@@ -34,7 +34,9 @@ export default class StorePerson extends Component {
       prevName: null,
       prevEmail: null,
       prevPartnerNum: null,
-      storePeople: storePeopleArr.map(person => this.props.people[person].displayName.toLowerCase()),
+      storePeople: storePeopleArr.map(person =>
+        this.props.people[person].displayName.toLowerCase(),
+      ),
       storePartnerNums: storePeopleArr.map(person => this.props.people[person].partnerNum),
       nameError: '',
       partnerNumError: '',
@@ -100,11 +102,9 @@ export default class StorePerson extends Component {
           <TextField
             floatingLabelText="Email"
             defaultValue={this.state.personEmail}
-            onChange={
-              (e) => {
-                this.setState({ personEmail: e.target.value });
-              }
-            }
+            onChange={e => {
+              this.setState({ personEmail: e.target.value });
+            }}
           />
         );
       }
@@ -135,95 +135,83 @@ export default class StorePerson extends Component {
     return (
       <Card style={{ maxWidth: '90%', margin: '5px auto' }}>
         <CardHeader
-          style={{ backgroundColor: (hiddenStatus) ? 'orange' : 'lightgrey' }}
+          style={{ backgroundColor: hiddenStatus ? 'orange' : 'lightgrey' }}
           title={this.state.personName}
           subtitle={this.state.partnerNum}
-          actAsExpander={true}
-          showExpandableButton={true}
+          actAsExpander
+          showExpandableButton
         />
-        <CardText expandable={true}>
+        <CardText expandable>
           <TextField
             floatingLabelText="Name"
             defaultValue={this.state.personName}
             errorText={this.state.nameError}
             onFocus={e => this.setState({ prevName: e.target.value })}
-            onChange={
-              (e) => {
-                this.setState({ personName: e.target.value, canUpdate: true, nameError: '' });
+            onChange={e => {
+              this.setState({ personName: e.target.value, canUpdate: true, nameError: '' });
+              if (this.doesPersonExist(e.target.value)) {
+                this.setState({
+                  canUpdate: false,
+                  nameError: 'This person already exists',
+                });
+              }
+            }}
+            onBlur={e => {
+              if (this.state.canUpdate) {
+                this.setState({ canUpdate: false });
                 if (this.doesPersonExist(e.target.value)) {
-                  this.setState({
-                    canUpdate: false,
-                    nameError: 'This person already exists',
-                  });
+                  this.setState({ personName: this.state.prevName });
+                  return false;
                 }
-              }
-            }
-            onBlur={
-              (e) => {
-                if (this.state.canUpdate) {
-                  this.setState({ canUpdate: false });
-                  if (this.doesPersonExist(e.target.value)) {
-                    this.setState({ personName: this.state.prevName });
-                    return false;
-                  }
 
-                  this.props.firebase.update(`/people/${this.props.id}`,
-                    {
-                      displayName: e.target.value,
-                    },
-                  );
-                  return true;
-                }
-                return false;
+                this.props.firebase.update(`/people/${this.props.id}`, {
+                  displayName: e.target.value,
+                });
+                return true;
               }
-            }
+              return false;
+            }}
           />
           <TextField
             floatingLabelText="Partner Number"
             defaultValue={this.state.partnerNum}
             errorText={this.state.partnerNumError}
-            onChange={
-              (e) => {
-                this.setState({ partnerNum: e.target.value, canUpdate: true, partnerNumError: '' });
+            onChange={e => {
+              this.setState({ partnerNum: e.target.value, canUpdate: true, partnerNumError: '' });
+              if (this.doesPartnerNumExist(e.target.value)) {
+                this.setState({
+                  canUpdate: false,
+                  partnerNumError: 'This partner number already exists',
+                });
+              }
+            }}
+            onBlur={e => {
+              if (this.state.canUpdate) {
                 if (this.doesPartnerNumExist(e.target.value)) {
                   this.setState({
                     canUpdate: false,
-                    partnerNumError: 'This partner number already exists',
+                    partnerNum: this.state.prevPartnerNum,
                   });
+                  return false;
                 }
-              }
-            }
-            onBlur={
-              (e) => {
-                if (this.state.canUpdate) {
-                  if (this.doesPartnerNumExist(e.target.value)) {
-                    this.setState({
-                      canUpdate: false,
-                      partnerNum: this.state.prevPartnerNum,
-                    });
-                    return false;
-                  }
 
-                  this.setState({ canUpdate: false });
-                  this.props.firebase.update(`/people/${this.props.id}`,
-                    {
-                      partnerNum: e.target.value,
-                    },
-                  );
-                  return true;
-                }
-                return false;
+                this.setState({ canUpdate: false });
+                this.props.firebase.update(`/people/${this.props.id}`, {
+                  partnerNum: e.target.value,
+                });
+                return true;
               }
-            }
+              return false;
+            }}
           />
           {hasEmail()}
           <br />
           {RemovalFlag()}
         </CardText>
         <Divider />
-        <CardActions expandable={true}>
+        <CardActions expandable>
           <FlatButton
-            label={(!hiddenStatus) ? 'Flag for removal' : 'Unflag'}
+            label={!hiddenStatus ? 'Flag for removal' : 'Unflag'}
             icon={<ContentRemove />}
             onClick={this.handleRemovePerson}
           />

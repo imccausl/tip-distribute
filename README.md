@@ -2,10 +2,7 @@
 (C) 2017 Ian McCausland. This App can be freely distributed and is open source according to the MIT license. If you like it, share it, fork it, submit a pull request, etc. Although I use it for Starbucks, I tried to generalize it as much as I could in order to make it useful to other contexts.
 
 # Installation
-Installation is relatively straightforward. You must create an account/app with Firebase and then edit the boilerplate config file with the information provided from Firebase. After that, it is a matter of installing the node dependencies and then deploying to firebase.
-
-## Step-by-step instructions:
-
+The app is not yet ready for installing to your own Firebase account for individual use, but it will be once I get the data structure solidified. 
 
 # About
 ## Technology Stack
@@ -35,6 +32,4 @@ You don't always get a chance to see everyone who works at your store every week
 ### 2) notifying people who filled-in for someone, but work at a different store:
 There are times when someone from another store substitutes for a person at their home store. Tracking these people tends to be impossible. They are known only by a uniquely idenfiable ID number that can't really be looked up in any easy way. Although they earn tips for the time they worked, it's never easy to notify them that they are ready for pick-up, or figure out when/if they will even pick them up in the first place. At the bottom of every Starbucks safe, there are unclaimed tips that sit neglected for a non-standardized amount of time.
 
-Here, I track who the substitute person is, how long their tips have been waiting and when they are due to expire. (The administrator can set an expiration time.)
-
-## Challenges
+Here, I track who the substitute/temporary worker is, how long their tips have been waiting and when they are due to expire. (The administrator can set an expiration time.)

@@ -22,6 +22,7 @@ import GenericAvatar from 'material-ui/svg-icons/action/face';
 import { hideModal } from '../actions/modalActions';
 import { calculateWage } from '../helpers/populateStateHelpers';
 import parseDate from '../helpers/dateHelpers';
+import { sortByLastName } from '../helpers/currentTipOutHelpers';
 
 @firebaseConnect()
 class Distribution extends Component {
@@ -80,7 +81,7 @@ class Distribution extends Component {
       return Math.round(parseFloat(hours) * hourlyAmount);
     };
 
-    return Object.keys(this.state.people).map(key => {
+    return Object.keys(sortByLastName(this.state.people)).map(key => {
       const person = this.state.people[key];
 
       if (!person) {

@@ -2,7 +2,7 @@
 (C) 2017 Ian McCausland. This App can be freely distributed and is open source according to the MIT license. If you like it, share it, fork it, submit a pull request, etc. Although I use it for Starbucks, I tried to generalize it as much as I could in order to make it useful to other contexts.
 
 # Installation
-The app is not yet ready for installing to your own Firebase account for individual use, but it will be once I get the data structure solidified and built out the first-run experience. I will update this area with detailed installation instructions as soon as it is ready.
+The app is not yet ready for installing to your own Firebase account for individual use, but it will be once I get the data structure solidified and build out the first-run experience. I will update this area with detailed installation instructions as soon as it is ready.
 
 # About
 ## Technology Stack

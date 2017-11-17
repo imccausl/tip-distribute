@@ -49,11 +49,21 @@ export function getPeopleFromStore(storeNum, stores, people) {
 }
 
 export function sortByLastName(people) {
-  const getLastName = name => {
+  if (!Object.prototype.toString.call()) {
+    throw new Error('Invalid argument: must be an object');
+  }
+
+  function getLastName(name) {
     // TODO: Get the last word in a name to use as last name, identify and flag phantoms for separate sorting
     const nameParts = name.split(' ');
-    return nameParts.pop();
-  };
+    let lastName = nameParts.pop();
+
+    if (lastName.search(/(Jr\.?|Sr\.?|\bI{1,3}\b|\bIV\b|\bV\b)/) !== -1) {
+      lastName = nameParts.pop();
+    }
+
+    return lastName;
+  }
 
   const sortedKeys = Object.keys(people).sort((a, b) => {
     const lastName1 = getLastName(people[a].name);

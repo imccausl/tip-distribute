@@ -68,6 +68,31 @@ function calculateWage(tipOut) {
   return wage === Infinity ? 0 : wage;
 }
 
+function roundTipOutToNearest(wage, hours, toNearest) {
+  const roundTo = toNearest || 'DOLLAR';
+  const tipOutAmount = parseFloat(wage * hours);
+
+  function findClosestCoinValue(num, value) {
+    const distanceFromValue = parseFloat(num % value);
+    return num - distanceFromValue;
+  }
+
+  function convertToCoinAmount(toNearestName) {
+    switch (toNearestName) {
+      case 'NICKEL':
+        return 0.05;
+      case 'DIME':
+        return 0.10;
+      case 'QUARTER':
+        return 0.25;
+      default:
+        return 1;
+    }
+  }
+
+  return parseFloat(findClosestCoinValue(tipOutAmount, convertToCoinAmount(roundTo)).toFixed(2));
+}
+
 function getTipOutsBelongingToStore(storeRef, stores, tipOuts) {
   const tipOutsBelongingToStore = stores[storeRef].tipOuts;
   const storeTipOuts = {};
@@ -154,5 +179,6 @@ export {
   getTipsBelongingToUser,
   calculateTotalHours,
   calculateWage,
+  roundTipOutToNearest,
   mapObj,
 };

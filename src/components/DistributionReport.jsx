@@ -1,7 +1,7 @@
 /* Distribution.jsx
  * Display the total tipout for each employee and
  * allows for the attaching of messages and checking of status.
- * 
+ *
  * TODO: Add character restriction to message (240 char).
  * TODO: Pull out individual person card view into its own component.
  */
@@ -23,6 +23,7 @@ import { hideModal } from '../actions/modalActions';
 import { calculateWage } from '../helpers/populateStateHelpers';
 import parseDate from '../helpers/dateHelpers';
 import { sortByLastName } from '../helpers/currentTipOutHelpers';
+import { roundTipOutToNearest } from '../helpers/populateStateHelpers';
 
 @firebaseConnect()
 class Distribution extends Component {
@@ -73,12 +74,13 @@ class Distribution extends Component {
         return 0;
       }
 
+      const roundTo = 'DIME';
       const hourlyAmount = calculateWage(this.props.viewModel);
       // calculating the hourly amount here is expensive: it does it for every single person.
       // move to componentWillReceiveProps() and do it once, only if/when props (ie. viewModel) change.
       console.log('Hourly amount:', hourlyAmount);
 
-      return Math.round(parseFloat(hours) * hourlyAmount);
+      return roundTipOutToNearest(hourlyAmount, parseFloat(hours), roundTo);
     };
 
     return Object.keys(sortByLastName(this.state.people)).map(key => {

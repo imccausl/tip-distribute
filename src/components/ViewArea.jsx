@@ -1,15 +1,15 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import EmployeeList from './EmployeeList.jsx';
-import ConfirmDialog from './ConfirmDialog.jsx';
-import UserProfile from './UserProfile.jsx';
-import DistributeTips from './DistributionReport.jsx';
-import EditStorePeople from './EditStorePeople.jsx';
-import EditStoreList from './EditStoreList.jsx';
+import EmployeeList from './EmployeeList';
+import ConfirmDialog from './ConfirmDialog';
+import UserProfile from './UserProfile';
+import DistributeTips from './DistributionReport';
+import EditStorePeople from './EditStorePeople';
+import EditStoreList from './EditStoreList';
 
 class ViewArea extends Component {
   render() {
-    const adjustMargin = (view) => {
+    const adjustMargin = view => {
       const viewStyle = {
         margin: '60px 0',
         zIndex: '0',
@@ -20,7 +20,7 @@ class ViewArea extends Component {
       }
 
       return viewStyle;
-    }
+    };
 
     const viewArea = () => {
       switch (this.props.view.type) {
@@ -39,6 +39,7 @@ class ViewArea extends Component {
             <DistributeTips
               viewModel={this.props.adminAppState[this.props.view.payload.key]}
               allPeople={this.props.people}
+              stores={this.props.stores}
             />
           );
         case 'SHOW_EDIT_PEOPLE':
@@ -59,14 +60,14 @@ class ViewArea extends Component {
         default:
           return null;
       }
-    } 
+    };
 
     return (
       <div>
         <div style={adjustMargin(this.props.view.payload.selection)}>
           {viewArea()}
         </div>
-        <ConfirmDialog />        
+        <ConfirmDialog />
       </div>
     );
   }

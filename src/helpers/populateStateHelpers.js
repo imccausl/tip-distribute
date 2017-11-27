@@ -90,7 +90,7 @@ function roundTipOutToNearest(wage, hours, toNearest) {
     }
   }
 
-  return parseFloat(findClosestCoinValue(tipOutAmount, convertToCoinAmount(roundTo)).toFixed(2));
+  return parseFloat(findClosestCoinValue(tipOutAmount, convertToCoinAmount(roundTo))).toFixed(2);
 }
 
 function getTipOutsBelongingToStore(storeRef, stores, tipOuts) {

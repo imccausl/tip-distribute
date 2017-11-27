@@ -20,10 +20,9 @@ import TextField from 'material-ui/TextField';
 import Chip from 'material-ui/Chip';
 import GenericAvatar from 'material-ui/svg-icons/action/face';
 import { hideModal } from '../actions/modalActions';
-import { calculateWage } from '../helpers/populateStateHelpers';
+import { calculateWage, roundTipOutToNearest } from '../helpers/populateStateHelpers';
 import parseDate from '../helpers/dateHelpers';
 import { sortByLastName } from '../helpers/currentTipOutHelpers';
-import { roundTipOutToNearest } from '../helpers/populateStateHelpers';
 
 @firebaseConnect()
 class Distribution extends Component {
@@ -33,6 +32,7 @@ class Distribution extends Component {
     this.state = {
       people: !this.props.viewModel ? null : this.props.viewModel.people,
       tipOutId: !this.props.viewModel.id ? null : this.props.viewModel.id,
+      storeData: !this.props.viewModel.storeRef ? null : this.props.stores[this.props.viewModel.storeRef],
       open: false,
       canUpdateMessage: false,
       hourlyAmount: '',
@@ -74,7 +74,8 @@ class Distribution extends Component {
         return 0;
       }
 
-      const roundTo = 'DIME';
+      const roundTo = this.state.storeData.roundToNearest;
+      console.log('ROUND TO:', roundTo);
       const hourlyAmount = calculateWage(this.props.viewModel);
       // calculating the hourly amount here is expensive: it does it for every single person.
       // move to componentWillReceiveProps() and do it once, only if/when props (ie. viewModel) change.

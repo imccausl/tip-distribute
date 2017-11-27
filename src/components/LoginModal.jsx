@@ -8,7 +8,7 @@ import FlatButton from 'material-ui/FlatButton';
 import { populateState } from '../actions/tipOutActions';
 /* 
  WHAT NEEDS TO BE DONE IMMEDIATELY AFTER A USER LOGS IN:
-  - Once a user logs in, we have to check for tip outs the user created, and/or belongs to.
+  - Once a user logs in, we have to check for tip outs that were created for the store, and/or belongs to.
   - We have to check the user's type
   - If the user is type 1, supervisor, the user has access to all tip outs from his/her store,
     so they should be added to the list.

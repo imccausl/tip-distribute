@@ -110,11 +110,8 @@ class Distribution extends Component {
 
       function displayStatus() {
         if (!finalizedOn) return null;
-        const testDate = Date.parse(new Date('AUGUST 30 2017'));
 
-        const expiresIn = calculateExpiry(testDate, expireLengthDays);
-
-        console.log(expiresIn < 10);
+        const expiresIn = calculateExpiry(finalizedOn, expireLengthDays);
 
         if (expiresIn < 10) {
           tipChipStyle.backgroundColor = 'orange';

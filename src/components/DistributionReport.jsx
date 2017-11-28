@@ -22,7 +22,7 @@ import GenericAvatar from 'material-ui/svg-icons/action/face';
 import { hideModal } from '../actions/modalActions';
 import { calculateWage, roundTipOutToNearest } from '../helpers/populateStateHelpers';
 import parseDate from '../helpers/dateHelpers';
-import { sortByLastName } from '../helpers/currentTipOutHelpers';
+import { sortByLastName, calculateExpiry } from '../helpers/currentTipOutHelpers';
 
 @firebaseConnect()
 class Distribution extends Component {
@@ -45,7 +45,8 @@ class Distribution extends Component {
   componentWillReceiveProps(newProps) {
     this.setState({
       people: !newProps.viewModel ? null : newProps.viewModel.people,
-      tipOutId: !this.props.viewModel.id ? null : this.props.viewModel.id,
+      tipOutId: !newProps.viewModel.id ? null : newProps.viewModel.id,
+      storeData: !newProps.viewModel.storeRef ? null : newProps.stores[newProps.viewModel.storeRef],
       canUpdateMessage: false,
       open: newProps.isOpen,
     });
@@ -61,12 +62,16 @@ class Distribution extends Component {
   }
 
   makeRows() {
+    const { finalizedOn } = this.props.viewModel;
+    const { expireLengthDays } = this.state.storeData;
+
     if (!this.state.people) {
       return null;
     }
 
     const tipChipStyle = {
       margin: '5px',
+      backgroundColor: 'green',
     };
 
     const getTipOut = hours => {
@@ -75,7 +80,6 @@ class Distribution extends Component {
       }
 
       const roundTo = this.state.storeData.roundToNearest;
-      console.log('ROUND TO:', roundTo);
       const hourlyAmount = calculateWage(this.props.viewModel);
       // calculating the hourly amount here is expensive: it does it for every single person.
       // move to componentWillReceiveProps() and do it once, only if/when props (ie. viewModel) change.
@@ -93,7 +97,7 @@ class Distribution extends Component {
 
       const personName = this.props.allPeople[person.id].displayName;
       const wage = getTipOut(person.hours);
-      console.log(person);
+
       const barStyle = {
         width: `${wage * this.props.viewModel.totalCash / this.props.viewModel.totalCash + 50}px`,
         maxWidth: '100%',
@@ -103,6 +107,31 @@ class Distribution extends Component {
         margin: '5px 0 0 58px',
         color: 'black',
       };
+
+      function displayStatus() {
+        if (!finalizedOn) return null;
+        const testDate = Date.parse(new Date('AUGUST 30 2017'));
+
+        const expiresIn = calculateExpiry(testDate, expireLengthDays);
+
+        console.log(expiresIn < 10);
+
+        if (expiresIn < 10) {
+          tipChipStyle.backgroundColor = 'orange';
+        }
+
+        if (expiresIn <= 0) {
+          tipChipStyle.backgroundColor = 'red';
+        }
+
+        return (
+          <CardText expandable>
+            <h2>Status</h2>
+            <Chip style={tipChipStyle}>Tip Out {(expiresIn <= 0) ? 'Has Expired!' : `Expires in ${expiresIn} Days`}</Chip>
+            <Chip style={tipChipStyle}>{`${personName} hasn't picked up this tip out yet`}</Chip>
+          </CardText>
+        );
+      }
 
       return (
         <Card style={{ marginBottom: '5px' }} key={person.id}>
@@ -143,11 +172,7 @@ class Distribution extends Component {
             </div>
           </CardText>
           <Divider />
-          <CardText expandable>
-            <h2>Status</h2>
-            <Chip style={tipChipStyle}>Tip Out Expires in XX Days</Chip>
-            <Chip stype={tipChipStyle}>{`${personName} hasn't picked up this tip out yet`}</Chip>
-          </CardText>
+          {displayStatus()}
         </Card>
       );
     });

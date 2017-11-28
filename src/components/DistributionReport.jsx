@@ -71,7 +71,7 @@ class Distribution extends Component {
 
     const tipChipStyle = {
       margin: '5px',
-      backgroundColor: 'green',
+      backgroundColor: 'lightgreen',
     };
 
     const getTipOut = hours => {

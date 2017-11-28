@@ -93,13 +93,25 @@ export function filterUsersAddedToTipOut(allUsers, usersAdded) {
   return Object.keys(allUsers).filter(user => compareTo.indexOf(user) === -1);
 }
 
-export function calculateExpiry(dateCreated, daysTillExpired) {
+export function calculateExpiry(dateFinalized, daysTillExpired) {
   // get current date, subtract from expiry date and return how many days until tip out expires.
+  let whenExpires = daysTillExpired;
+  let startDate = dateFinalized;
+
+  if (typeof daysTillExpired === 'string') {
+    whenExpires = parseInt(daysTillExpired, 10);
+  }
+
+  if (typeof dateFinalized !== 'number') {
+    startDate = Date.parse(dateFinalized);
+  }
+
   const today = Date.now();
-  const timePassed = today - Date.parse(dateCreated);
+  const timePassed = today - startDate;
   // TODO: account for daylight savings time and other oddities.
   // milliseconds / seconds / minutes / hours-in-a-day
   const daysPassed = timePassed / 1000 / 60 / 60 / 24;
+  const expiresIn = Math.ceil(whenExpires - daysPassed);
 
-  return Math.ceil(daysTillExpired - daysPassed);
+  return (expiresIn >= 0) ? expiresIn : 0;
 }

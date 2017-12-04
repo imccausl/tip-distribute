@@ -85,8 +85,8 @@ export default class TipOutList extends Component {
       adminAppState,
       userAppState,
     } = this.props;
-    
-    if (!adminAppState || !userAppState) {
+
+    if (!adminAppState && !userAppState) {
       return <LoadingSpinner />;
     }
 
@@ -101,11 +101,11 @@ export default class TipOutList extends Component {
       }
 
       return null;
-    }
+    };
 
     return (
       <div>
-        {populateList('Your Store\'s Tip Outs', this.renderTipOutsList)}      
+        {populateList('Your Store\'s Tip Outs', this.renderTipOutsList)}
         {populateList('Your Tips', this.renderTips)}
       </div>
     );

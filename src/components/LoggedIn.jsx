@@ -48,12 +48,15 @@ export default class LoggedIn extends Component {
 
     if (isLoaded(tipOuts, people, stores, profile)) {
       const INIT_TYPE = 'USER_TIPS';
-
-      const userAppState = initializeMainState(profile, tipOuts, people, stores, INIT_TYPE);
       let adminAppState = null;
+      let userAppState = null;
+
+      if (profile.ref) {
+        userAppState = initializeMainState(profile, tipOuts, people, stores, INIT_TYPE);
+      }
 
       // is user admin?
-      if (profile.role === '1r') {
+      if (profile.role === 'TIP_CREATOR') {
         adminAppState = initializeMainState(profile, tipOuts, people, stores);
       }
 

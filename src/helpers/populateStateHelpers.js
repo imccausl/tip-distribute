@@ -141,9 +141,6 @@ function addHoursAndWageToTipOuts(tipOuts) {
   return newState;
 }
 
-function getUsersStore(profile, people) {
-  return people[profile.ref].storeRef;
-}
 // TODO: Object as param instead of a million variables in a specific order?
 export default function initializeMainState(
   profile,
@@ -153,7 +150,8 @@ export default function initializeMainState(
   type = 'TIP_OUTS',
 ) {
   let newState = {};
-  const userStore = getUsersStore(profile, allPeople);
+  // A store that the user belongs to should be directly wired to the user's profile.
+  const userStore = profile.storeRef;
 
   newState = addHoursAndWageToTipOuts(tipOuts);
   newState = matchStoreToTipOuts(newState, stores);

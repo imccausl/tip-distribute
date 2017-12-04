@@ -83,7 +83,7 @@ class Distribution extends Component {
       const hourlyAmount = calculateWage(this.props.viewModel);
       // calculating the hourly amount here is expensive: it does it for every single person.
       // move to componentWillReceiveProps() and do it once, only if/when props (ie. viewModel) change.
-      console.log('Hourly amount:', hourlyAmount);
+      console.log('Hourly amount:', hourlyAmount); // I keep this here to remind me to make this calculation more performant
 
       return roundTipOutToNearest(hourlyAmount, parseFloat(hours), roundTo);
     };

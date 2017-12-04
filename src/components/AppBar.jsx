@@ -18,6 +18,22 @@ const Login = () => <FlatButton label="Login" />;
 
 class MainBar extends Component {
   render() {
+    const superUserFunctions = () => {
+      if (this.props.profile.superuser) {
+        return (
+          <div>
+            <Divider />
+            <MenuItem primaryText="Users & Permissions..." />
+            <MenuItem
+              primaryText="Stores..."
+              onClick={() => this.props.showView('SHOW_EDIT_STORES', null)}
+            />
+          </div>
+        );
+      }
+
+      return null;
+    };
     const Logged = () => (
       <IconMenu
         iconButtonElement={
@@ -31,17 +47,12 @@ class MainBar extends Component {
         anchorOrigin={{ horizontal: 'right', vertical: 'top' }}
       >
         <MenuItem
-          primaryText="Profile..."
+          primaryText="Profile"
           onClick={() => this.props.showView('SHOW_USER_PROFILE', null)}
         />
-        <Divider />
-        <MenuItem primaryText="Users & Permissions..." />
+        {superUserFunctions()}
         <MenuItem
-          primaryText="Stores..."
-          onClick={() => this.props.showView('SHOW_EDIT_STORES', null)}
-        />
-        <MenuItem
-          primaryText="People..."
+          primaryText="Edit & Add People"
           onClick={() => this.props.showView('SHOW_EDIT_PEOPLE', 2, this.props.view.payload.key)}
         />
         <Divider />

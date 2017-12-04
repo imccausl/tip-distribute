@@ -136,7 +136,7 @@ export default class NewTipOut extends Component {
       currTipOut,
       newDate,
       newTotalCash: !currTipOut ? '200' : currTipOut.totalCash,
-      newStore: !people || !profile.ref ? '' : people[profile.ref].storeRef,
+      newStore: !profile.storeRef ? '' : this.props.profile.storeRef,
     });
   }
 
@@ -274,6 +274,7 @@ export default class NewTipOut extends Component {
           {/* Choosing store for admins only? */}
           <SelectField
             floatingLabelText="Store"
+            disabled={!this.props.profile.superuser}
             value={this.state.newStore}
             onChange={this.handleStoreSelectorChange}
           >

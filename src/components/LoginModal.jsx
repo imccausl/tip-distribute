@@ -76,7 +76,7 @@ export default class LoginBox extends Component {
               this.setState({ user: '', password: '' });
               console.log('Error!!!!', error, authError);
             })}
-          label="Login"
+          label="Log in"
           primary
         />
         <FlatButton

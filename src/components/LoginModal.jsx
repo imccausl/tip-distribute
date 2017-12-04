@@ -92,8 +92,8 @@ export default class LoginBox extends Component {
         <div style={{ position: 'relative', minWidth: '250px', maxWidth: '320px', margin: '0 auto' }}>
           <TextField
             style={{ display: 'block', width: '100%' }}
-            hintText="User Name"
-            floatingLabelText="User Name"
+            hintText="Email"
+            floatingLabelText="Email"
             type="text"
             onChange={e => this.setState({ user: e.target.value })}
           />

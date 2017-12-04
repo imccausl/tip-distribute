@@ -2,11 +2,12 @@ import React, { Component } from 'react';
 import { firebaseConnect } from 'react-redux-firebase';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import Dialog from 'material-ui/Dialog';
+import Paper from 'material-ui/Paper';
 import TextField from 'material-ui/TextField';
+import RaisedButton from 'material-ui/RaisedButton';
 import FlatButton from 'material-ui/FlatButton';
 import { populateState } from '../actions/tipOutActions';
-/* 
+/*
  WHAT NEEDS TO BE DONE IMMEDIATELY AFTER A USER LOGS IN:
   - Once a user logs in, we have to check for tip outs that were created for the store, and/or belongs to.
   - We have to check the user's type
@@ -42,7 +43,7 @@ export default class LoginBox extends Component {
   constructor(props) {
     super(props);
 
-    this.state = { isOpen: true, email: '', password: '' };
+    this.state = { isOpen: true, user: '', password: '' };
   }
 
   handlePostLogin(arg) {
@@ -58,39 +59,55 @@ export default class LoginBox extends Component {
 
   render() {
     const { profile, authError, auth } = this.props;
-
-    const actions = [
-      <FlatButton
-        disabled={!this.state.email && !this.state.password}
-        onClick={() => this.props.firebase
-          .login({
-            email: this.state.email,
-            password: this.state.password,
-          })
-          .catch(error => {
-            this.setState({ email: '', password: '' });
-            console.log('Error!!!!', error, authError);
-          })}
-        label="Login"
-        primary
-      />,
-    ];
+    const loginStyle = {
+      margin: '80px 5px 5px 5px',
+    };
+    const actions = () => (
+      <div>
+        <RaisedButton
+          style={{ display: 'block', marginTop: '20px' }}
+          disabled={!this.state.user && !this.state.password}
+          onClick={() => this.props.firebase
+            .login({
+              email: this.state.user,
+              password: this.state.password,
+            })
+            .catch(error => {
+              this.setState({ user: '', password: '' });
+              console.log('Error!!!!', error, authError);
+            })}
+          label="Login"
+          primary
+        />
+        <FlatButton
+          style={{ display: 'block', marginTop: '10px', width: '100%' }}
+          label="Sign Up"
+          secondary
+        />
+      </div>
+    );
 
     return (
-      <Dialog actions={actions} open={this.state.isOpen} modal>
-        <TextField
-          hintText="Email"
-          floatingLabelText="Email"
-          type="text"
-          onChange={e => this.setState({ email: e.target.value })}
-        />
-        <TextField
-          hintText="Password"
-          floatingLabelText="Password"
-          type="password"
-          onChange={e => this.setState({ password: e.target.value })}
-        />
-      </Dialog>
+      <Paper style={loginStyle} zDepth={0}>
+        <div style={{ position: 'relative', minWidth: '250px', maxWidth: '320px', margin: '0 auto' }}>
+          <TextField
+            style={{ display: 'block', width: '100%' }}
+            hintText="User Name"
+            floatingLabelText="User Name"
+            type="text"
+            onChange={e => this.setState({ user: e.target.value })}
+          />
+          <TextField
+            style={{ display: 'block', width: '100%' }}
+            hintText="Password"
+            floatingLabelText="Password"
+            type="password"
+            onChange={e => this.setState({ password: e.target.value })}
+          />
+          {actions()}
+        </div>
+      </Paper>
+
     );
   }
 }

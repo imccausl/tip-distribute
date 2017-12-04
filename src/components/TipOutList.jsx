@@ -49,7 +49,13 @@ export default class TipOutList extends Component {
           totalHours={adminAppState[key].totalHours}
           people={adminAppState[key].people}
           click={() => {
-            this.props.selectView('SHOW_EDIT_VIEW', 0, key);
+            let whichViewToShow = 'SHOW_EDIT_VIEW';
+
+            if (adminAppState[key].isDistributed) {
+              whichViewToShow = 'SHOW_DISTRIBUTE_TIPS';
+            }
+
+            this.props.selectView(whichViewToShow, 0, key);
             this.props.hideDrawer();
           }}
         />

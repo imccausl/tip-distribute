@@ -21,25 +21,16 @@ import { hideDrawer } from '../actions/drawerActions';
 class TipOutDrawer extends Component {
   tipOutsMenu() {
     return (
-      <IconMenu
-        iconButtonElement={<IconButton><MoreVertIcon /></IconButton>}
-        anchorOrigin={{ horizontal: 'left', vertical: 'top' }}
-        targetOrigin={{ horizontal: 'left', vertical: 'top' }}
+      <IconButton
+        tooltip="New Tip Out..."
+        onClick={
+          () => {
+            this.props.showModal(true, 'ADD_NEW_TIP_OUT', 'Add New Tip Out', { currTipOutId: 'NEW_TIP_OUT' });
+          }}
       >
-        <MenuItem
-          primaryText="New Tip Out..."
-          leftIcon={<CreateIcon />}
-          onClick={
-            () => {
-              this.props.showModal(true, 'ADD_NEW_TIP_OUT', 'Add New Tip Out', { currTipOutId: 'NEW_TIP_OUT' });
-            }}
-        />
-        <Divider />
-        <MenuItem
-          leftIcon={<DeleteIcon />}
-          primaryText="Delete Tip Outs..."
-        />
-      </IconMenu>
+        <CreateIcon />
+      </IconButton>
+
     );
   }
 
@@ -47,7 +38,7 @@ class TipOutDrawer extends Component {
     const { userAppState, adminAppState, people, users, stores, profile, newTipOutOpen } = this.props;
 
     if (!adminAppState) {
-      //this.props.showModal(true, 'ADD_NEW_TIP_OUT', 'Add New Tip Out');
+      // this.props.showModal(true, 'ADD_NEW_TIP_OUT', 'Add New Tip Out');
     }
 
     return (
@@ -61,7 +52,6 @@ class TipOutDrawer extends Component {
           <Toolbar>
             <ToolbarTitle text="Tips" />
             <ToolbarGroup>
-              <IconButton><SelectIcon /></IconButton>
               {this.tipOutsMenu()}
             </ToolbarGroup>
           </Toolbar>

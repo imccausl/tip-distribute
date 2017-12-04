@@ -14,14 +14,14 @@ export default class EditStorePeople extends Component {
     super(props);
 
     const userPeopleRecord = this.props.allPeople[this.props.profile.ref]; // get the current user's people profile
-    const userStore = this.props.stores[userPeopleRecord.storeRef]; // get the current user's store
+    const userStore = this.props.stores[this.props.profile.storeRef]; // get the current user's store
 
     this.state = { userStore, userPeopleRecord };
   }
 
   componentWillReceiveProps(newProps) {
     const userPeopleRecord = newProps.allPeople[newProps.profile.ref];
-    const userStore = newProps.stores[userPeopleRecord.storeRef];
+    const userStore = newProps.stores[newProps.profile.storeRef];
 
     this.setState({ userStore, userPeopleRecord });
   }
@@ -48,7 +48,7 @@ export default class EditStorePeople extends Component {
           id={person}
           name={personRecord.displayName}
           partnerNum={personRecord.partnerNum}
-          storeRef={this.state.userPeopleRecord.storeRef}
+          storeRef={this.props.profile.storeRef}
           isHidden={isHidden}
           email={personEmail}
         />
@@ -71,14 +71,14 @@ export default class EditStorePeople extends Component {
                     belongsTo: [],
                     displayName: '',
                     partnerNum: '',
-                    storeRef: this.state.userPeopleRecord.storeRef,
+                    storeRef: this.props.profile.storeRef,
                     userRef: null,
                   };
 
                   this.props.firebase.pushWithMeta('/people/', newPerson).then(snapshot => {
                     const updatedStorePeople = this.state.userStore.people.concat(snapshot.key);
                     this.props.firebase.set(
-                      `/stores/${this.state.userPeopleRecord.storeRef}/people`,
+                      `/stores/${this.props.profile.storeRef}/people`,
                       updatedStorePeople,
                     );
                   });
@@ -88,15 +88,6 @@ export default class EditStorePeople extends Component {
                   <ContentAdd />
                 </SvgIcon>
               </IconButton>
-              <IconMenu
-                iconButtonElement={
-                  <IconButton>
-                    <MoreVertIcon />
-                  </IconButton>
-                }
-                targetOrigin={{ horizontal: 'right', vertical: 'top' }}
-                anchorOrigin={{ horizontal: 'right', vertical: 'top' }}
-              />
             </ToolbarGroup>
           </Toolbar>
         </div>

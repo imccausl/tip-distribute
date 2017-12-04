@@ -50,12 +50,14 @@ export default class TipOutList extends Component {
           people={adminAppState[key].people}
           click={() => {
             let whichViewToShow = 'SHOW_EDIT_VIEW';
+            let viewSelector = 0;
 
             if (adminAppState[key].isDistributed) {
               whichViewToShow = 'SHOW_DISTRIBUTE_TIPS';
+              viewSelector = 1;
             }
 
-            this.props.selectView(whichViewToShow, 0, key);
+            this.props.selectView(whichViewToShow, viewSelector, key);
             this.props.hideDrawer();
           }}
         />

@@ -83,6 +83,27 @@ export function sortByLastName(people) {
   return sortedPeople;
 }
 
+export function sortTipOutByDate(tipOuts) {
+  return Object.keys(tipOuts).sort((a, b) => {
+    let compareDate1 = tipOuts[a].weekEnding;
+    let compareDate2 = tipOuts[b].weekEnding;
+
+    if (typeof compareDate1 !== 'number') {
+      compareDate1 = Date.parse(compareDate1);
+    }
+
+    if (typeof compareDate2 !== 'number') {
+      compareDate2 = Date.parse(compareDate2);
+    }
+
+    if (compareDate1 < compareDate2) {
+      return 1;
+    }
+
+    return -1;
+  });
+}
+
 export function filterUsersAddedToTipOut(allUsers, usersAdded) {
   const compareTo = usersAdded.map(user => user.id);
   // allUsers should be an array of people ids belonging to a store

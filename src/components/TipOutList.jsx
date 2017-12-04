@@ -11,6 +11,7 @@ import { populateTipOutList } from '../actions/tipOutActions';
 import selectView from '../actions/viewAction';
 import LoadingSpinner from './LoadingSpinner.jsx';
 import * as stateHelpers from '../helpers/populateStateHelpers';
+import { sortTipOutByDate } from '../helpers/currentTipOutHelpers';
 
 function mapStateToProps(state) {
   return {
@@ -37,8 +38,10 @@ export default class TipOutList extends Component {
 
   renderTipOutsList() {
     const { adminAppState, people } = this.props;
+    const sortedTipOuts = sortTipOutByDate(adminAppState);
+
     if (adminAppState) {
-      return Object.keys(adminAppState).map(key => (
+      return sortedTipOuts.map(key => (
         <TipOutListItem
           key={key}
           week={adminAppState[key].weekEnding}
@@ -61,7 +64,9 @@ export default class TipOutList extends Component {
     const { userAppState } = this.props;
 
     if (userAppState) {
-      return Object.keys(userAppState).map(key => (
+      const sortedTipOuts = sortTipOutByDate(userAppState);
+
+      return sortedTipOuts.map(key => (
         <TipsListItem
           key={key}
           week={userAppState[key].weekEnding}

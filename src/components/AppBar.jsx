@@ -8,8 +8,6 @@ import Avatar from 'material-ui/Avatar';
 import Divider from 'material-ui/Divider';
 import IconMenu from 'material-ui/IconMenu';
 import MenuItem from 'material-ui/MenuItem';
-import FlatButton from 'material-ui/FlatButton';
-import MoreIcon from 'material-ui/svg-icons/navigation/more-vert';
 import GenericProfileIcon from 'material-ui/svg-icons/action/account-circle';
 import { showDrawer } from '../actions/drawerActions';
 import showView from '../actions/viewAction';

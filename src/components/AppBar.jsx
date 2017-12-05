@@ -14,8 +14,6 @@ import GenericProfileIcon from 'material-ui/svg-icons/action/account-circle';
 import { showDrawer } from '../actions/drawerActions';
 import showView from '../actions/viewAction';
 
-const Login = () => <FlatButton label="Login" />;
-
 class MainBar extends Component {
   render() {
     const superUserFunctions = () => {
@@ -69,7 +67,7 @@ class MainBar extends Component {
             : `${this.props.profile.name}`}`}
           onLeftIconButtonTouchTap={this.props.showDrawer}
           iconElementRight={
-            !this.props.auth.isEmpty && this.props.auth.isLoaded ? <Logged /> : <Login />
+            !this.props.auth.isEmpty && this.props.auth.isLoaded ? <Logged /> : null
           }
         />
       </div>
